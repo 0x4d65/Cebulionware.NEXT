@@ -1,0 +1,32 @@
+package net.minecraft.world.gen.structure;
+
+import java.util.Random;
+import net.minecraft.world.IWorldEventListener;
+
+public class StructureNetherBridgePieces extends MapGenVillage {
+   private StructureMineshaftStart.a c;
+
+   public StructureNetherBridgePieces() {
+   }
+
+   public StructureNetherBridgePieces(IWorldEventListener p_i1919_1_, Random p_i1919_2_, int p_i1919_3_, int p_i1919_4_, StructureMineshaftStart.a p_i1919_5_) {
+      super(p_i1919_3_, p_i1919_4_);
+      this.c = p_i1919_5_;
+      MapGenNetherBridge.d mapgennetherbridge$d = new MapGenNetherBridge.d(0, p_i1919_2_, (p_i1919_3_ << 4) + 2, (p_i1919_4_ << 4) + 2, this.c);
+      this.field_78742_a.add(mapgennetherbridge$d);
+      mapgennetherbridge$d.a(mapgennetherbridge$d, this.field_78742_a, p_i1919_2_);
+      this.d();
+      if (p_i1919_5_ == StructureMineshaftStart.a.b) {
+         int i = -5;
+         int j = p_i1919_1_.M() - this.field_78741_b.field_186206_f + this.field_78741_b.d() / 2 - -5;
+         this.field_78741_b.a(0, j, 0);
+
+         for(StructureComponentTemplate structurecomponenttemplate : this.field_78742_a) {
+            structurecomponenttemplate.func_181138_a(0, j, 0);
+         }
+      } else {
+         this.a(p_i1919_1_, p_i1919_2_, 10);
+      }
+
+   }
+}

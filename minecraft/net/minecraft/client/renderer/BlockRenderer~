@@ -1,0 +1,12 @@
+package net.minecraft.client.renderer;
+
+import net.minecraft.block.BlockBone;
+import net.minecraft.init.Items;
+
+public class BlockRendererDispatcher {
+   public void a(BlockBone p_a_1_, float p_a_2_) {
+      ItemRenderer.c(p_a_2_, p_a_2_, p_a_2_, 1.0F);
+      ItemRenderer.b(90.0F, 0.0F, 1.0F, 0.0F);
+      EntityRenderer.field_78517_a.a(new Items(p_a_1_));
+   }
+}

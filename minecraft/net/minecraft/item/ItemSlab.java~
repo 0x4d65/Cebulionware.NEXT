@@ -1,0 +1,9 @@
+package net.minecraft.item;
+
+import net.minecraft.init.Items;
+
+public class ItemSlab extends ItemStack {
+   public boolean f_(Items p_f__1_) {
+      return true;
+   }
+}

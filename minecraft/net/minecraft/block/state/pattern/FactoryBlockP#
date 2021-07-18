@@ -1,0 +1,17 @@
+***************
+*** 41,47 ****
+  
+                 for(char c0 : s.toCharArray()) {
+                    if (!this.field_177666_c.containsKey(Character.valueOf(c0))) {
+-                      this.field_177666_c.put(Character.valueOf(c0), (Object)null);
+                    }
+                 }
+              }
+--- 41,47 ----
+  
+                 for(char c0 : s.toCharArray()) {
+                    if (!this.field_177666_c.containsKey(Character.valueOf(c0))) {
++                      this.field_177666_c.put(Character.valueOf(c0), null);
+                    }
+                 }
+              }

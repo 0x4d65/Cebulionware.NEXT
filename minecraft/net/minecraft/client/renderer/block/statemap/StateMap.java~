@@ -1,0 +1,59 @@
+package net.minecraft.client.renderer.block.statemap;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import net.minecraft.block.BlockBone;
+import net.minecraft.client.renderer.block.model.SimpleBakedModel;
+import net.minecraft.client.renderer.tileentity.TileEntityBannerRenderer;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.src.awt;
+
+public class StateMap {
+   private final Map<BlockBone, TileEntityBannerRenderer> field_178142_a = Maps.<BlockBone, TileEntityBannerRenderer>newIdentityHashMap();
+   private final Set<BlockBone> b = Sets.<BlockBone>newIdentityHashSet();
+
+   public void a(BlockBone p_a_1_, TileEntityBannerRenderer p_a_2_) {
+      this.field_178142_a.put(p_a_1_, p_a_2_);
+   }
+
+   public void a(BlockBone... p_a_1_) {
+      Collections.addAll(this.b, p_a_1_);
+   }
+
+   public Map<awt, SimpleBakedModel> a() {
+      Map<awt, SimpleBakedModel> map = Maps.<awt, SimpleBakedModel>newIdentityHashMap();
+
+      for(BlockBone blockbone : BlockBone.h) {
+         map.putAll(this.b(blockbone));
+      }
+
+      return map;
+   }
+
+   public Set<BehaviorProjectileDispense> a(BlockBone p_a_1_) {
+      if (this.b.contains(p_a_1_)) {
+         return Collections.<BehaviorProjectileDispense>emptySet();
+      } else {
+         TileEntityBannerRenderer tileentitybannerrenderer = this.field_178142_a.get(p_a_1_);
+         if (tileentitybannerrenderer == null) {
+            return Collections.<BehaviorProjectileDispense>singleton(BlockBone.h.func_177774_c(p_a_1_));
+         } else {
+            Set<BehaviorProjectileDispense> set = Sets.<BehaviorProjectileDispense>newHashSet();
+
+            for(SimpleBakedModel simplebakedmodel : tileentitybannerrenderer.a(p_a_1_).values()) {
+               set.add(new BehaviorProjectileDispense(simplebakedmodel.b(), simplebakedmodel.a()));
+            }
+
+            return set;
+         }
+      }
+   }
+
+   public Map<awt, SimpleBakedModel> b(BlockBone p_b_1_) {
+      return this.b.contains(p_b_1_) ? Collections.emptyMap() : ((TileEntityBannerRenderer)MoreObjects.firstNonNull(this.field_178142_a.get(p_b_1_), new IStateMapper())).a(p_b_1_);
+   }
+}

@@ -1,0 +1,17 @@
+***************
+*** 116,122 ****
+     protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_) throws Exception {
+        if (this.field_150746_k.isOpen()) {
+           try {
+-             p_channelRead0_2_.func_148833_a(this.field_150744_m);
+           } catch (ThreadQuickExitException var4) {
+              ;
+           }
+--- 116,122 ----
+     protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_) throws Exception {
+        if (this.field_150746_k.isOpen()) {
+           try {
++             ((Packet<INetHandler>)p_channelRead0_2_).func_148833_a(this.field_150744_m);
+           } catch (ThreadQuickExitException var4) {
+              ;
+           }

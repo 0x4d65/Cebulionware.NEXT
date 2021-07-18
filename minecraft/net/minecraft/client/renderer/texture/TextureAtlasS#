@@ -1,0 +1,17 @@
+***************
+*** 278,284 ****
+     private void func_130099_d(int p_130099_1_) {
+        if (this.field_110976_a.size() <= p_130099_1_) {
+           for(int i = this.field_110976_a.size(); i <= p_130099_1_; ++i) {
+-             this.field_110976_a.add((Object)null);
+           }
+  
+        }
+--- 278,284 ----
+     private void func_130099_d(int p_130099_1_) {
+        if (this.field_110976_a.size() <= p_130099_1_) {
+           for(int i = this.field_110976_a.size(); i <= p_130099_1_; ++i) {
++             this.field_110976_a.add(null);
+           }
+  
+        }

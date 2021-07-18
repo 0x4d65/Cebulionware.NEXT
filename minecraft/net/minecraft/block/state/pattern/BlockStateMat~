@@ -1,0 +1,22 @@
+package net.minecraft.block.state.pattern;
+
+import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.src.awt;
+
+public class BlockStateMatcher implements Predicate<awt> {
+   private final MaterialPortal field_185928_a;
+
+   private BlockStateMatcher(MaterialPortal p_i1832_1_) {
+      this.field_185928_a = p_i1832_1_;
+   }
+
+   public static BlockStateMatcher a(MaterialPortal p_a_0_) {
+      return new BlockStateMatcher(p_a_0_);
+   }
+
+   public boolean a(@Nullable awt p_a_1_) {
+      return p_a_1_ != null && p_a_1_.a() == this.field_185928_a;
+   }
+}

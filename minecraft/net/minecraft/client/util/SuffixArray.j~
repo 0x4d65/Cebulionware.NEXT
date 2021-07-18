@@ -1,0 +1,33 @@
+package net.minecraft.client.util;
+
+import com.google.common.collect.Maps;
+import java.util.Map;
+import net.minecraft.client.gui.recipebook.IRecipeShownListener;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.LegacyV2Adapter;
+import net.minecraft.init.Items;
+import net.minecraft.src.cgy;
+
+public class SuffixArray implements LegacyV2Adapter {
+   public static final SuffixArray.a<Items> field_194061_a = new SuffixArray.a<Items>();
+   public static final SuffixArray.a<IRecipeShownListener> field_194062_b = new SuffixArray.a<IRecipeShownListener>();
+   private final Map<SuffixArray.a<?>, ISearchTree<?>> field_194063_c = Maps.<SuffixArray.a<?>, ISearchTree<?>>newHashMap();
+
+   public void a(IResourcePack p_a_1_) {
+      for(ISearchTree<?> isearchtree : this.field_194063_c.values()) {
+         isearchtree.a();
+      }
+
+   }
+
+   public <T> void a(SuffixArray.a<T> p_a_1_, ISearchTree<T> p_a_2_) {
+      this.field_194063_c.put(p_a_1_, p_a_2_);
+   }
+
+   public <T> cgy<T> a(SuffixArray.a<T> p_a_1_) {
+      return (cgy)this.field_194063_c.get(p_a_1_);
+   }
+
+   public static class a<T> {
+   }
+}

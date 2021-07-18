@@ -1,0 +1,16 @@
+***************
+*** 74,79 ****
+        return iblockstate;
+     }
+  
+     public int func_176201_c(IBlockState p_176201_1_) {
+        int i = 0;
+        i = i | ((BlockPlanks.EnumType)p_176201_1_.func_177229_b(field_176301_b)).func_176839_a();
+--- 74,80 ----
+        return iblockstate;
+     }
+  
++    @SuppressWarnings("incomplete-switch")
+     public int func_176201_c(IBlockState p_176201_1_) {
+        int i = 0;
+        i = i | ((BlockPlanks.EnumType)p_176201_1_.func_177229_b(field_176301_b)).func_176839_a();

@@ -1,0 +1,19 @@
+package net.minecraft.block;
+
+import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.src.awt;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
+
+public class BlockNewLog extends BlockBone {
+   public BlockNewLog() {
+      super(MaterialPortal.e);
+      this.a(ItemDoor.b);
+   }
+
+   public EnumPushReaction c(awt p_c_1_, EnumSkyBlock p_c_2_, BlockPos p_c_3_) {
+      return EnumPushReaction.L;
+   }
+}

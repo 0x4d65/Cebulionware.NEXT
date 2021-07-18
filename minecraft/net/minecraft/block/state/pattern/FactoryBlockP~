@@ -1,0 +1,53 @@
+package net.minecraft.block.state.pattern;
+
+import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
+import net.minecraft.src.awt;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldEventListener;
+
+public class FactoryBlockPattern {
+   private final IWorldEventListener field_177667_a;
+   private final BlockPos field_177665_b;
+   private final boolean field_177666_c;
+   private awt field_177663_d;
+   private TileEntityChest field_177664_e;
+   private boolean f;
+
+   public FactoryBlockPattern(IWorldEventListener p_i1828_1_, BlockPos p_i1828_2_, boolean p_i1828_3_) {
+      this.field_177667_a = p_i1828_1_;
+      this.field_177665_b = p_i1828_2_;
+      this.field_177666_c = p_i1828_3_;
+   }
+
+   public awt a() {
+      if (this.field_177663_d == null && (this.field_177666_c || this.field_177667_a.e(this.field_177665_b))) {
+         this.field_177663_d = this.field_177667_a.o(this.field_177665_b);
+      }
+
+      return this.field_177663_d;
+   }
+
+   @Nullable
+   public TileEntityChest b() {
+      if (this.field_177664_e == null && !this.f) {
+         this.field_177664_e = this.field_177667_a.r(this.field_177665_b);
+         this.f = true;
+      }
+
+      return this.field_177664_e;
+   }
+
+   public BlockPos d() {
+      return this.field_177665_b;
+   }
+
+   public static Predicate<FactoryBlockPattern> a(final Predicate<awt> p_a_0_) {
+      return new Predicate<FactoryBlockPattern>() {
+         public boolean a(@Nullable FactoryBlockPattern p_a_1_) {
+            return p_a_1_ != null && p_a_0_.apply(p_a_1_.a());
+         }
+      };
+   }
+}

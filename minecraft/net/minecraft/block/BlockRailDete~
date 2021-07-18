@@ -1,0 +1,142 @@
+package net.minecraft.block;
+
+import java.util.Random;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.block.state.BlockWorldState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.src.awt;
+import net.minecraft.src.axi;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.Teleporter;
+import net.minecraft.world.border.IBorderListener;
+
+public class BlockRailDetector extends BlockRailBase {
+   public static final axi a = axi.a("power", 0, 15);
+   protected static final Vec2f b = new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D);
+   private final boolean c;
+
+   public BlockRailDetector(boolean p_i1706_1_) {
+      super(MaterialPortal.d);
+      this.c = p_i1706_1_;
+      this.w(this.A.b().a(a, Integer.valueOf(0)));
+      this.a(ItemDoor.d);
+      this.c(0.2F);
+      this.a(BlockStainedGlass.field_176547_a);
+      this.c("daylightDetector");
+   }
+
+   public Vec2f b(awt p_b_1_, EnumSkyBlock p_b_2_, BlockPos p_b_3_) {
+      return b;
+   }
+
+   public int b(awt p_b_1_, EnumSkyBlock p_b_2_, BlockPos p_b_3_, EnumFacing p_b_4_) {
+      return ((Integer)p_b_1_.c(a)).intValue();
+   }
+
+   public void c(IWorldEventListener p_c_1_, BlockPos p_c_2_) {
+      if (p_c_1_.s.m()) {
+         awt awt = p_c_1_.o(p_c_2_);
+         int i = p_c_1_.b(Teleporter.field_85192_a, p_c_2_) - p_c_1_.ah();
+         float f = p_c_1_.d(1.0F);
+         if (this.c) {
+            i = 15 - i;
+         }
+
+         if (i > 0 && !this.c) {
+            float f1 = f < 3.1415927F ? 0.0F : 6.2831855F;
+            f = f + (f1 - f) * 0.2F;
+            i = Math.round((float)i * IProgressUpdate.b(f));
+         }
+
+         i = IProgressUpdate.a(i, 0, 15);
+         if (((Integer)awt.c(a)).intValue() != i) {
+            p_c_1_.a(p_c_2_, awt.a(a, Integer.valueOf(i)), 3);
+         }
+
+      }
+   }
+
+   public boolean a(IWorldEventListener p_a_1_, BlockPos p_a_2_, awt p_a_3_, RecipeItemHelper p_a_4_, EnumActionResult p_a_5_, EnumFacing p_a_6_, float p_a_7_, float p_a_8_, float p_a_9_) {
+      if (p_a_4_.dk()) {
+         if (p_a_1_.G) {
+            return true;
+         } else {
+            if (this.c) {
+               p_a_1_.a(p_a_2_, IGrowable.cl.t().a(a, p_a_3_.c(a)), 4);
+               IGrowable.cl.c(p_a_1_, p_a_2_);
+            } else {
+               p_a_1_.a(p_a_2_, IGrowable.cm.t().a(a, p_a_3_.c(a)), 4);
+               IGrowable.cm.c(p_a_1_, p_a_2_);
+            }
+
+            return true;
+         }
+      } else {
+         return super.a(p_a_1_, p_a_2_, p_a_3_, p_a_4_, p_a_5_, p_a_6_, p_a_7_, p_a_8_, p_a_9_);
+      }
+   }
+
+   public ItemStack a(awt p_a_1_, Random p_a_2_, int p_a_3_) {
+      return ItemStack.a(IGrowable.cl);
+   }
+
+   public Items a(IWorldEventListener p_a_1_, BlockPos p_a_2_, awt p_a_3_) {
+      return new Items(IGrowable.cl);
+   }
+
+   public boolean c(awt p_c_1_) {
+      return false;
+   }
+
+   public boolean b(awt p_b_1_) {
+      return false;
+   }
+
+   public BlockRotatedPillar a(awt p_a_1_) {
+      return BlockRotatedPillar.d;
+   }
+
+   public boolean g(awt p_g_1_) {
+      return true;
+   }
+
+   public TileEntityChest a(IWorldEventListener p_a_1_, int p_a_2_) {
+      return new TileEntityDropper();
+   }
+
+   public awt a(int p_a_1_) {
+      return this.t().a(a, Integer.valueOf(p_a_1_));
+   }
+
+   public int e(awt p_e_1_) {
+      return ((Integer)p_e_1_.c(a)).intValue();
+   }
+
+   protected BlockWorldState b() {
+      return new BlockWorldState(this, new IBorderListener[]{a});
+   }
+
+   public void a(ItemDoor p_a_1_, NonNullList<Items> p_a_2_) {
+      if (!this.c) {
+         super.a(p_a_1_, p_a_2_);
+      }
+
+   }
+
+   public IBlockState a(EnumSkyBlock p_a_1_, awt p_a_2_, BlockPos p_a_3_, EnumFacing p_a_4_) {
+      return p_a_4_ == EnumFacing.DOWN ? IBlockState.a : IBlockState.i;
+   }
+}

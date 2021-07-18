@@ -1,0 +1,150 @@
+package net.minecraft.client.renderer.entity;
+
+import net.minecraft.client.model.ModelSilverfish;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.layers.LayerSlimeGel;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.src.brs;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+
+public class RenderSkeleton extends RenderOcelot<EntitySkeleton> {
+   public static final BehaviorProjectileDispense[] field_110862_k = new BehaviorProjectileDispense[]{new BehaviorProjectileDispense("textures/entity/shulker/shulker_white.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_orange.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_magenta.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_light_blue.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_yellow.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_lime.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_pink.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_gray.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_silver.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_cyan.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_purple.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_blue.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_brown.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_green.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_red.png"), new BehaviorProjectileDispense("textures/entity/shulker/shulker_black.png")};
+
+   public RenderSkeleton(RenderEvokerFangs p_i521_1_) {
+      super(p_i521_1_, new ModelSilverfish(), 0.0F);
+      this.a(new RenderSkeleton.a());
+   }
+
+   public ModelSilverfish h() {
+      return (ModelSilverfish)super.b();
+   }
+
+   public void a(EntitySkeleton p_a_1_, double p_a_2_, double p_a_4_, double p_a_6_, float p_a_8_, float p_a_9_) {
+      int i = p_a_1_.do();
+      if (i > 0 && p_a_1_.dq()) {
+         BlockPos blockpos = p_a_1_.dm();
+         BlockPos blockpos1 = p_a_1_.dp();
+         double d0 = (double)((float)i - p_a_9_) / 6.0D;
+         d0 = d0 * d0;
+         double d1 = (double)(blockpos.func_177958_n() - blockpos1.func_177958_n()) * d0;
+         double d2 = (double)(blockpos.func_177956_o() - blockpos1.func_177956_o()) * d0;
+         double d3 = (double)(blockpos.func_177952_p() - blockpos1.func_177952_p()) * d0;
+         super.a(p_a_1_, p_a_2_ - d1, p_a_4_ - d2, p_a_6_ - d3, p_a_8_, p_a_9_);
+      } else {
+         super.a(p_a_1_, p_a_2_, p_a_4_, p_a_6_, p_a_8_, p_a_9_);
+      }
+
+   }
+
+   public boolean a(EntitySkeleton p_a_1_, Frustum p_a_2_, double p_a_3_, double p_a_5_, double p_a_7_) {
+      if (super.a(p_a_1_, p_a_2_, p_a_3_, p_a_5_, p_a_7_)) {
+         return true;
+      } else {
+         if (p_a_1_.do() > 0 && p_a_1_.dq()) {
+            BlockPos blockpos = p_a_1_.dp();
+            BlockPos blockpos1 = p_a_1_.dm();
+            ScoreObjective scoreobjective = new ScoreObjective((double)blockpos1.func_177958_n(), (double)blockpos1.func_177956_o(), (double)blockpos1.func_177952_p());
+            ScoreObjective scoreobjective1 = new ScoreObjective((double)blockpos.func_177958_n(), (double)blockpos.func_177956_o(), (double)blockpos.func_177952_p());
+            if (p_a_2_.a(new Vec2f(scoreobjective1.field_96684_b, scoreobjective1.field_96685_c, scoreobjective1.field_178768_d, scoreobjective.field_96684_b, scoreobjective.field_96685_c, scoreobjective.field_178768_d))) {
+               return true;
+            }
+         }
+
+         return false;
+      }
+   }
+
+   protected BehaviorProjectileDispense a(EntitySkeleton p_a_1_) {
+      return field_110862_k[p_a_1_.dr().a()];
+   }
+
+   protected void a(EntitySkeleton p_a_1_, float p_a_2_, float p_a_3_, float p_a_4_) {
+      super.a(p_a_1_, p_a_2_, p_a_3_, p_a_4_);
+      switch(p_a_1_.dl()) {
+      case DOWN:
+      default:
+         break;
+      case EAST:
+         ItemRenderer.c(0.5F, 0.5F, 0.0F);
+         ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+         ItemRenderer.b(90.0F, 0.0F, 0.0F, 1.0F);
+         break;
+      case WEST:
+         ItemRenderer.c(-0.5F, 0.5F, 0.0F);
+         ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+         ItemRenderer.b(-90.0F, 0.0F, 0.0F, 1.0F);
+         break;
+      case NORTH:
+         ItemRenderer.c(0.0F, 0.5F, -0.5F);
+         ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+         break;
+      case SOUTH:
+         ItemRenderer.c(0.0F, 0.5F, 0.5F);
+         ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+         ItemRenderer.b(180.0F, 0.0F, 0.0F, 1.0F);
+         break;
+      case UP:
+         ItemRenderer.c(0.0F, 1.0F, 0.0F);
+         ItemRenderer.b(180.0F, 1.0F, 0.0F, 0.0F);
+      }
+
+   }
+
+   protected void a(EntitySkeleton p_a_1_, float p_a_2_) {
+      float f = 0.999F;
+      ItemRenderer.b(0.999F, 0.999F, 0.999F);
+   }
+
+   class a implements LayerSlimeGel<EntitySkeleton> {
+      private a() {
+      }
+
+      public void a(EntitySkeleton p_a_1_, float p_a_2_, float p_a_3_, float p_a_4_, float p_a_5_, float p_a_6_, float p_a_7_, float p_a_8_) {
+         ItemRenderer.G();
+         switch(p_a_1_.dl()) {
+         case DOWN:
+         default:
+            break;
+         case EAST:
+            ItemRenderer.b(90.0F, 0.0F, 0.0F, 1.0F);
+            ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+            ItemRenderer.c(1.0F, -1.0F, 0.0F);
+            ItemRenderer.b(180.0F, 0.0F, 1.0F, 0.0F);
+            break;
+         case WEST:
+            ItemRenderer.b(-90.0F, 0.0F, 0.0F, 1.0F);
+            ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+            ItemRenderer.c(-1.0F, -1.0F, 0.0F);
+            ItemRenderer.b(180.0F, 0.0F, 1.0F, 0.0F);
+            break;
+         case NORTH:
+            ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+            ItemRenderer.c(0.0F, -1.0F, -1.0F);
+            break;
+         case SOUTH:
+            ItemRenderer.b(180.0F, 0.0F, 0.0F, 1.0F);
+            ItemRenderer.b(90.0F, 1.0F, 0.0F, 0.0F);
+            ItemRenderer.c(0.0F, -1.0F, 1.0F);
+            break;
+         case UP:
+            ItemRenderer.b(180.0F, 1.0F, 0.0F, 0.0F);
+            ItemRenderer.c(0.0F, -2.0F, 0.0F);
+         }
+
+         brs brs = RenderSkeleton.this.h().field_78170_c;
+         brs.g = p_a_6_ * 0.017453292F;
+         brs.f = p_a_7_ * 0.017453292F;
+         RenderSkeleton.this.a(RenderSkeleton.field_110862_k[p_a_1_.dr().a()]);
+         brs.a(p_a_8_);
+         ItemRenderer.H();
+      }
+
+      public boolean func_177142_b() {
+         return false;
+      }
+   }
+}

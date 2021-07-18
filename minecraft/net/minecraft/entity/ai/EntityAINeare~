@@ -1,0 +1,91 @@
+package net.minecraft.entity.ai;
+
+import com.google.common.base.Predicate;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.entity.EntityTrackerEntry;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IJumpingMount;
+import net.minecraft.entity.ai.attributes.BaseAttribute;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.pathfinding.PathNavigateFlying;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class EntityAINearestAttackableTarget extends EntityAIHarvestFarmland {
+   private static final Logger field_75307_b = LogManager.getLogger();
+   private final IEntityLivingData field_75306_g;
+   private final Predicate<EnumCreatureType> field_82643_g;
+   private final EntityAIOwnerHurtByTarget.a field_75309_a;
+   private EnumCreatureType e;
+   private final Class<? extends EnumCreatureType> f;
+
+   public EntityAINearestAttackableTarget(IEntityLivingData p_i1146_1_, Class<? extends EnumCreatureType> p_i1146_2_) {
+      this.field_75306_g = p_i1146_1_;
+      this.f = p_i1146_2_;
+      if (p_i1146_1_ instanceof IJumpingMount) {
+         field_75307_b.warn("Use NearestAttackableTargetGoal.class for PathfinerMob mobs!");
+      }
+
+      this.field_82643_g = new Predicate<EnumCreatureType>() {
+         public boolean a(@Nullable EnumCreatureType p_a_1_) {
+            double d0 = EntityAINearestAttackableTarget.this.f();
+            if (p_a_1_.aU()) {
+               d0 *= 0.800000011920929D;
+            }
+
+            if (p_a_1_.aX()) {
+               return false;
+            } else {
+               return (double)p_a_1_.g(EntityAINearestAttackableTarget.this.field_75306_g) > d0 ? false : PathNavigateFlying.a(EntityAINearestAttackableTarget.this.field_75306_g, p_a_1_, false, true);
+            }
+         }
+      };
+      this.field_75309_a = new EntityAIOwnerHurtByTarget.a(p_i1146_1_);
+   }
+
+   public boolean func_75250_a() {
+      double d0 = this.f();
+      List<EnumCreatureType> list = this.field_75306_g.l.a(this.f, this.field_75306_g.bw().c(d0, 4.0D, d0), this.field_82643_g);
+      Collections.sort(list, this.field_75309_a);
+      if (list.isEmpty()) {
+         return false;
+      } else {
+         this.e = list.get(0);
+         return true;
+      }
+   }
+
+   public boolean func_75253_b() {
+      EnumCreatureType enumcreaturetype = this.field_75306_g.z();
+      if (enumcreaturetype == null) {
+         return false;
+      } else if (!enumcreaturetype.aC()) {
+         return false;
+      } else {
+         double d0 = this.f();
+         if (this.field_75306_g.h(enumcreaturetype) > d0 * d0) {
+            return false;
+         } else {
+            return !(enumcreaturetype instanceof EntityTrackerEntry) || !((EntityTrackerEntry)enumcreaturetype).field_151262_p.d();
+         }
+      }
+   }
+
+   public void func_75249_e() {
+      this.field_75306_g.d(this.e);
+      super.c();
+   }
+
+   public void d() {
+      this.field_75306_g.d((EnumCreatureType)null);
+      super.c();
+   }
+
+   protected double f() {
+      BaseAttribute baseattribute = this.field_75306_g.a(EntitySilverfish.b);
+      return baseattribute == null ? 16.0D : baseattribute.e();
+   }
+}

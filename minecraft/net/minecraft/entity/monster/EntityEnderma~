@@ -1,0 +1,263 @@
+package net.minecraft.entity.monster;
+
+import java.util.Collection;
+import javax.annotation.Nullable;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.ai.EntityAIAttackRanged;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.ai.EntityAIFollowOwnerFlying;
+import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIVillagerMate;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemLead;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataSerializer;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.src.nb;
+import net.minecraft.src.qf;
+import net.minecraft.src.va;
+import net.minecraft.src.yp;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.datafix.IDataWalker;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.storage.loot.LootEntryItem;
+
+public class EntityEnderman extends IRangedAttackMob {
+   private static final DataSerializer<Integer> field_110192_bp = nb.a(EntityEnderman.class, EntityDataManager.field_187232_a);
+   private static final DataSerializer<Boolean> field_110193_bq = nb.a(EntityEnderman.class, EntityDataManager.h);
+   private static final DataSerializer<Boolean> field_70827_d = nb.a(EntityEnderman.class, EntityDataManager.h);
+   private int field_184718_bv;
+   private int field_184719_bw;
+   private int field_184720_bx = 30;
+   private int field_184721_by = 3;
+   private int bB;
+
+   public EntityEnderman(IWorldEventListener p_i1276_1_) {
+      super(p_i1276_1_);
+      this.a(0.6F, 1.7F);
+   }
+
+   protected void func_184651_r() {
+      this.br.a(1, new EntityAIFollowOwnerFlying(this));
+      this.br.a(2, new EntityAITempt(this));
+      this.br.a(3, new EntityAIBreakDoor(this, EntityPig.class, 6.0F, 1.0D, 1.2D));
+      this.br.a(4, new EntityAIMoveThroughVillage(this, 1.0D, false));
+      this.br.a(5, new yp(this, 0.8D));
+      this.br.a(6, new EntityAIVillagerMate(this, RecipeItemHelper.class, 8.0F));
+      this.br.a(6, new EntityAIAttackRanged(this));
+      this.bs.a(1, new EntityAIOwnerHurtByTarget(this, RecipeItemHelper.class, true));
+      this.bs.a(2, new EntityAIFindEntityNearestPlayer(this, false, new Class[0]));
+   }
+
+   protected void func_110147_ax() {
+      super.func_110147_ax();
+      this.a(EntitySilverfish.d).a(0.25D);
+   }
+
+   public int bg() {
+      return this.z() == null ? 3 : 3 + (int)(this.cd() - 1.0F);
+   }
+
+   public void e(float p_e_1_, float p_e_2_) {
+      super.e(p_e_1_, p_e_2_);
+      this.field_184719_bw = (int)((float)this.field_184719_bw + p_e_1_ * 1.5F);
+      if (this.field_184719_bw > this.field_184720_bx - 5) {
+         this.field_184719_bw = this.field_184720_bx - 5;
+      }
+
+   }
+
+   protected void func_70088_a() {
+      super.func_70088_a();
+      this.Y.a(field_110192_bp, Integer.valueOf(-1));
+      this.Y.a(field_110193_bq, Boolean.valueOf(false));
+      this.Y.a(field_70827_d, Boolean.valueOf(false));
+   }
+
+   public static void a(IDataWalker p_a_0_) {
+      IEntityLivingData.a(p_a_0_, EntityEnderman.class);
+   }
+
+   public void func_70014_b(NBTTagCompound p_70014_1_) {
+      super.func_70014_b(p_70014_1_);
+      if (((Boolean)this.Y.a(field_110193_bq)).booleanValue()) {
+         p_70014_1_.func_74757_a("powered", true);
+      }
+
+      p_70014_1_.func_74777_a("Fuse", (short)this.field_184720_bx);
+      p_70014_1_.func_74774_a("ExplosionRadius", (byte)this.field_184721_by);
+      p_70014_1_.func_74757_a("ignited", this.dn());
+   }
+
+   public void func_70037_a(NBTTagCompound p_70037_1_) {
+      super.func_70037_a(p_70037_1_);
+      this.Y.b(field_110193_bq, Boolean.valueOf(p_70037_1_.func_74767_n("powered")));
+      if (p_70037_1_.func_150297_b("Fuse", 99)) {
+         this.field_184720_bx = p_70037_1_.func_74765_d("Fuse");
+      }
+
+      if (p_70037_1_.func_150297_b("ExplosionRadius", 99)) {
+         this.field_184721_by = p_70037_1_.func_74771_c("ExplosionRadius");
+      }
+
+      if (p_70037_1_.func_74767_n("ignited")) {
+         this.do();
+      }
+
+   }
+
+   public void func_70071_h_() {
+      if (this.aC()) {
+         this.field_184718_bv = this.field_184719_bw;
+         if (this.dn()) {
+            this.a(1);
+         }
+
+         int i = this.dm();
+         if (i > 0 && this.field_184719_bw == 0) {
+            this.a(qf.ay, 1.0F, 0.5F);
+         }
+
+         this.field_184719_bw += i;
+         if (this.field_184719_bw < 0) {
+            this.field_184719_bw = 0;
+         }
+
+         if (this.field_184719_bw >= this.field_184720_bx) {
+            this.field_184719_bw = this.field_184720_bx;
+            this.dr();
+         }
+      }
+
+      super.func_70071_h_();
+   }
+
+   protected SoundCategory d(EntityDamageSourceIndirect p_d_1_) {
+      return qf.ax;
+   }
+
+   protected SoundCategory cf() {
+      return qf.aw;
+   }
+
+   public void a(EntityDamageSourceIndirect p_a_1_) {
+      super.a(p_a_1_);
+      if (this.l.W().b("doMobLoot")) {
+         if (p_a_1_.j() instanceof EntitySpellcasterIllager) {
+            int i = ItemStack.a(ItemLead.cB);
+            int j = ItemStack.a(ItemLead.cM);
+            int k = i + this.S.nextInt(j - i + 1);
+            this.a(ItemStack.c(k), 1);
+         } else if (p_a_1_.j() instanceof EntityEnderman && p_a_1_.j() != this && ((EntityEnderman)p_a_1_.j()).func_110182_bF() && ((EntityEnderman)p_a_1_.j()).dp()) {
+            ((EntityEnderman)p_a_1_.j()).dq();
+            this.a(new Items(ItemLead.ci, 1, 4), 0.0F);
+         }
+      }
+
+   }
+
+   public boolean B(EntityList p_B_1_) {
+      return true;
+   }
+
+   public boolean func_110182_bF() {
+      return ((Boolean)this.Y.a(field_110193_bq)).booleanValue();
+   }
+
+   public float a(float p_a_1_) {
+      return ((float)this.field_184718_bv + (float)(this.field_184719_bw - this.field_184718_bv) * p_a_1_) / (float)(this.field_184720_bx - 2);
+   }
+
+   @Nullable
+   protected BehaviorProjectileDispense J() {
+      return LootEntryItem.r;
+   }
+
+   public int dm() {
+      return ((Integer)this.Y.a(field_110192_bp)).intValue();
+   }
+
+   public void a(int p_a_1_) {
+      this.Y.b(field_110192_bp, Integer.valueOf(p_a_1_));
+   }
+
+   public void a(EntityFallingBlock p_a_1_) {
+      super.a(p_a_1_);
+      this.Y.b(field_110193_bq, Boolean.valueOf(true));
+   }
+
+   protected boolean a(RecipeItemHelper p_a_1_, EnumActionResult p_a_2_) {
+      Items items = p_a_1_.b(p_a_2_);
+      if (items.c() == ItemLead.e) {
+         this.l.a(p_a_1_, this.p, this.q, this.r, qf.bO, this.bK(), 1.0F, this.S.nextFloat() * 0.4F + 0.8F);
+         p_a_1_.a(p_a_2_);
+         if (!this.l.G) {
+            this.do();
+            items.a(1, p_a_1_);
+            return true;
+         }
+      }
+
+      return super.a(p_a_1_, p_a_2_);
+   }
+
+   private void dr() {
+      if (!this.l.G) {
+         boolean flag = this.l.W().b("mobGriefing");
+         float f = this.func_110182_bF() ? 2.0F : 1.0F;
+         this.aU = true;
+         this.l.a(this, this.p, this.q, this.r, (float)this.field_184721_by * f, flag);
+         this.X();
+         this.ds();
+      }
+
+   }
+
+   private void ds() {
+      Collection<va> collection = this.ca();
+      if (!collection.isEmpty()) {
+         Entity entity = new Entity(this.l, this.p, this.q, this.r);
+         entity.a(2.5F);
+         entity.b(-0.5F);
+         entity.g(10);
+         entity.e(entity.r() / 2);
+         entity.c(-entity.j() / (float)entity.r());
+
+         for(va va : collection) {
+            entity.a(new va(va));
+         }
+
+         this.l.a(entity);
+      }
+
+   }
+
+   public boolean dn() {
+      return ((Boolean)this.Y.a(field_70827_d)).booleanValue();
+   }
+
+   public void do() {
+      this.Y.b(field_70827_d, Boolean.valueOf(true));
+   }
+
+   public boolean dp() {
+      return this.bB < 1 && this.l.W().b("doMobLoot");
+   }
+
+   public void dq() {
+      ++this.bB;
+   }
+}

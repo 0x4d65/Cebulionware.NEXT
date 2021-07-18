@@ -1,0 +1,16 @@
+***************
+*** 23,28 ****
+        this(p_i46931_1_, p_i46931_2_, true);
+     }
+  
+     public SPacketCombatEvent(CombatTracker p_i46932_1_, SPacketCombatEvent.Event p_i46932_2_, boolean p_i46932_3_) {
+        this.field_179776_a = p_i46932_2_;
+        EntityLivingBase entitylivingbase = p_i46932_1_.func_94550_c();
+--- 23,29 ----
+        this(p_i46931_1_, p_i46931_2_, true);
+     }
+  
++    @SuppressWarnings("incomplete-switch")
+     public SPacketCombatEvent(CombatTracker p_i46932_1_, SPacketCombatEvent.Event p_i46932_2_, boolean p_i46932_3_) {
+        this.field_179776_a = p_i46932_2_;
+        EntityLivingBase entitylivingbase = p_i46932_1_.func_94550_c();

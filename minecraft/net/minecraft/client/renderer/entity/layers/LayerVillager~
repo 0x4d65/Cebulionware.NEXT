@@ -1,0 +1,49 @@
+package net.minecraft.client.renderer.entity.layers;
+
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderStray;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.monster.EntityVex;
+import net.minecraft.src.cii;
+
+public class LayerVillagerArmor<T extends EntityVex> implements LayerSlimeGel<T> {
+   private static final BehaviorProjectileDispense a = new BehaviorProjectileDispense("textures/entity/spider_eyes.png");
+   private final RenderStray<T> b;
+
+   public LayerVillagerArmor(RenderStray<T> p_i405_1_) {
+      this.b = p_i405_1_;
+   }
+
+   public void a(T p_a_1_, float p_a_2_, float p_a_3_, float p_a_4_, float p_a_5_, float p_a_6_, float p_a_7_, float p_a_8_) {
+      this.b.a(a);
+      ItemRenderer.m();
+      ItemRenderer.func_78442_d();
+      ItemRenderer.a(ItemRenderer.r.e, ItemRenderer.l.e);
+      if (p_a_1_.aX()) {
+         ItemRenderer.a(false);
+      } else {
+         ItemRenderer.a(true);
+      }
+
+      int i = 61680;
+      int j = i % 65536;
+      int k = i / 65536;
+      cii.a(cii.r, (float)j, (float)k);
+      ItemRenderer.c(1.0F, 1.0F, 1.0F, 1.0F);
+      GameSettings.z().field_74343_n.d(true);
+      this.b.b().a(p_a_1_, p_a_2_, p_a_3_, p_a_5_, p_a_6_, p_a_7_, p_a_8_);
+      GameSettings.z().field_74343_n.d(false);
+      i = p_a_1_.func_70070_b();
+      j = i % 65536;
+      k = i / 65536;
+      cii.a(cii.r, (float)j, (float)k);
+      this.b.c(p_a_1_);
+      ItemRenderer.l();
+      ItemRenderer.e();
+   }
+
+   public boolean func_177142_b() {
+      return false;
+   }
+}

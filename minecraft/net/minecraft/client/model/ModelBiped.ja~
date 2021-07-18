@@ -1,0 +1,498 @@
+package net.minecraft.client.model;
+
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.passive.EntityDonkey;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.src.brs;
+import net.minecraft.util.IProgressUpdate;
+
+public class ModelBiped extends ModelParrot {
+   private final brs a;
+   private final brs b;
+   private final brs c;
+   private final brs d;
+   private final brs field_78116_c;
+   private final brs field_178720_f;
+   private final brs field_78115_e;
+   private final brs field_178723_h;
+   private final brs field_178724_i;
+   private final brs field_178721_j;
+   private final brs field_178722_k;
+   private final brs field_187075_l;
+   private final brs field_187076_m;
+   private final brs field_78117_n;
+   private final brs u;
+   private final brs v;
+   private final brs w;
+   private final brs x;
+   private final brs y;
+   private final brs z;
+   private final brs A;
+   private final brs B;
+   private final brs C;
+   private final brs D;
+   private final brs E;
+   private final brs F;
+   private final brs G;
+   private final brs H;
+   private final brs I;
+   private final brs J;
+   private final brs K;
+   private final brs L;
+   private final brs M;
+   private final brs N;
+   private final brs O;
+   private final brs P;
+   private final brs Q;
+   private final brs R;
+   private final brs S;
+
+   public ModelBiped() {
+      this.s = 128;
+      this.t = 128;
+      this.field_178722_k = new brs(this, 0, 34);
+      this.field_178722_k.a(-5.0F, -8.0F, -19.0F, 10, 10, 24);
+      this.field_178722_k.a(0.0F, 11.0F, 9.0F);
+      this.field_187075_l = new brs(this, 44, 0);
+      this.field_187075_l.a(-1.0F, -1.0F, 0.0F, 2, 2, 3);
+      this.field_187075_l.a(0.0F, 3.0F, 14.0F);
+      this.field_187075_l.f = -1.134464F;
+      this.field_187076_m = new brs(this, 38, 7);
+      this.field_187076_m.a(-1.5F, -2.0F, 3.0F, 3, 4, 7);
+      this.field_187076_m.a(0.0F, 3.0F, 14.0F);
+      this.field_187076_m.f = -1.134464F;
+      this.field_78117_n = new brs(this, 24, 3);
+      this.field_78117_n.a(-1.5F, -4.5F, 9.0F, 3, 4, 7);
+      this.field_78117_n.a(0.0F, 3.0F, 14.0F);
+      this.field_78117_n.f = -1.3962634F;
+      this.u = new brs(this, 78, 29);
+      this.u.a(-2.5F, -2.0F, -2.5F, 4, 9, 5);
+      this.u.a(4.0F, 9.0F, 11.0F);
+      this.v = new brs(this, 78, 43);
+      this.v.a(-2.0F, 0.0F, -1.5F, 3, 5, 3);
+      this.v.a(4.0F, 16.0F, 11.0F);
+      this.w = new brs(this, 78, 51);
+      this.w.a(-2.5F, 5.1F, -2.0F, 4, 3, 4);
+      this.w.a(4.0F, 16.0F, 11.0F);
+      this.x = new brs(this, 96, 29);
+      this.x.a(-1.5F, -2.0F, -2.5F, 4, 9, 5);
+      this.x.a(-4.0F, 9.0F, 11.0F);
+      this.y = new brs(this, 96, 43);
+      this.y.a(-1.0F, 0.0F, -1.5F, 3, 5, 3);
+      this.y.a(-4.0F, 16.0F, 11.0F);
+      this.z = new brs(this, 96, 51);
+      this.z.a(-1.5F, 5.1F, -2.0F, 4, 3, 4);
+      this.z.a(-4.0F, 16.0F, 11.0F);
+      this.A = new brs(this, 44, 29);
+      this.A.a(-1.9F, -1.0F, -2.1F, 3, 8, 4);
+      this.A.a(4.0F, 9.0F, -8.0F);
+      this.B = new brs(this, 44, 41);
+      this.B.a(-1.9F, 0.0F, -1.6F, 3, 5, 3);
+      this.B.a(4.0F, 16.0F, -8.0F);
+      this.C = new brs(this, 44, 51);
+      this.C.a(-2.4F, 5.1F, -2.1F, 4, 3, 4);
+      this.C.a(4.0F, 16.0F, -8.0F);
+      this.D = new brs(this, 60, 29);
+      this.D.a(-1.1F, -1.0F, -2.1F, 3, 8, 4);
+      this.D.a(-4.0F, 9.0F, -8.0F);
+      this.E = new brs(this, 60, 41);
+      this.E.a(-1.1F, 0.0F, -1.6F, 3, 5, 3);
+      this.E.a(-4.0F, 16.0F, -8.0F);
+      this.F = new brs(this, 60, 51);
+      this.F.a(-1.6F, 5.1F, -2.1F, 4, 3, 4);
+      this.F.a(-4.0F, 16.0F, -8.0F);
+      this.a = new brs(this, 0, 0);
+      this.a.a(-2.5F, -10.0F, -1.5F, 5, 5, 7);
+      this.a.a(0.0F, 4.0F, -10.0F);
+      this.a.f = 0.5235988F;
+      this.b = new brs(this, 24, 18);
+      this.b.a(-2.0F, -10.0F, -7.0F, 4, 3, 6);
+      this.b.a(0.0F, 3.95F, -10.0F);
+      this.b.f = 0.5235988F;
+      this.c = new brs(this, 24, 27);
+      this.c.a(-2.0F, -7.0F, -6.5F, 4, 2, 5);
+      this.c.a(0.0F, 4.0F, -10.0F);
+      this.c.f = 0.5235988F;
+      this.a.a(this.b);
+      this.a.a(this.c);
+      this.d = new brs(this, 0, 0);
+      this.d.a(0.45F, -12.0F, 4.0F, 2, 3, 1);
+      this.d.a(0.0F, 4.0F, -10.0F);
+      this.d.f = 0.5235988F;
+      this.field_78116_c = new brs(this, 0, 0);
+      this.field_78116_c.a(-2.45F, -12.0F, 4.0F, 2, 3, 1);
+      this.field_78116_c.a(0.0F, 4.0F, -10.0F);
+      this.field_78116_c.f = 0.5235988F;
+      this.field_178720_f = new brs(this, 0, 12);
+      this.field_178720_f.a(-2.0F, -16.0F, 4.0F, 2, 7, 1);
+      this.field_178720_f.a(0.0F, 4.0F, -10.0F);
+      this.field_178720_f.f = 0.5235988F;
+      this.field_178720_f.h = 0.2617994F;
+      this.field_78115_e = new brs(this, 0, 12);
+      this.field_78115_e.a(0.0F, -16.0F, 4.0F, 2, 7, 1);
+      this.field_78115_e.a(0.0F, 4.0F, -10.0F);
+      this.field_78115_e.f = 0.5235988F;
+      this.field_78115_e.h = -0.2617994F;
+      this.field_178723_h = new brs(this, 0, 12);
+      this.field_178723_h.a(-2.05F, -9.8F, -2.0F, 4, 14, 8);
+      this.field_178723_h.a(0.0F, 4.0F, -10.0F);
+      this.field_178723_h.f = 0.5235988F;
+      this.G = new brs(this, 0, 34);
+      this.G.a(-3.0F, 0.0F, 0.0F, 8, 8, 3);
+      this.G.a(-7.5F, 3.0F, 10.0F);
+      this.G.g = 1.5707964F;
+      this.H = new brs(this, 0, 47);
+      this.H.a(-3.0F, 0.0F, 0.0F, 8, 8, 3);
+      this.H.a(4.5F, 3.0F, 10.0F);
+      this.H.g = 1.5707964F;
+      this.I = new brs(this, 80, 0);
+      this.I.a(-5.0F, 0.0F, -3.0F, 10, 1, 8);
+      this.I.a(0.0F, 2.0F, 2.0F);
+      this.J = new brs(this, 106, 9);
+      this.J.a(-1.5F, -1.0F, -3.0F, 3, 1, 2);
+      this.J.a(0.0F, 2.0F, 2.0F);
+      this.K = new brs(this, 80, 9);
+      this.K.a(-4.0F, -1.0F, 3.0F, 8, 1, 2);
+      this.K.a(0.0F, 2.0F, 2.0F);
+      this.M = new brs(this, 74, 0);
+      this.M.a(-0.5F, 6.0F, -1.0F, 1, 2, 2);
+      this.M.a(5.0F, 3.0F, 2.0F);
+      this.L = new brs(this, 70, 0);
+      this.L.a(-0.5F, 0.0F, -0.5F, 1, 6, 1);
+      this.L.a(5.0F, 3.0F, 2.0F);
+      this.O = new brs(this, 74, 4);
+      this.O.a(-0.5F, 6.0F, -1.0F, 1, 2, 2);
+      this.O.a(-5.0F, 3.0F, 2.0F);
+      this.N = new brs(this, 80, 0);
+      this.N.a(-0.5F, 0.0F, -0.5F, 1, 6, 1);
+      this.N.a(-5.0F, 3.0F, 2.0F);
+      this.P = new brs(this, 74, 13);
+      this.P.a(1.5F, -8.0F, -4.0F, 1, 2, 2);
+      this.P.a(0.0F, 4.0F, -10.0F);
+      this.P.f = 0.5235988F;
+      this.Q = new brs(this, 74, 13);
+      this.Q.a(-2.5F, -8.0F, -4.0F, 1, 2, 2);
+      this.Q.a(0.0F, 4.0F, -10.0F);
+      this.Q.f = 0.5235988F;
+      this.R = new brs(this, 44, 10);
+      this.R.a(2.6F, -6.0F, -6.0F, 0, 3, 16);
+      this.R.a(0.0F, 4.0F, -10.0F);
+      this.S = new brs(this, 44, 5);
+      this.S.a(-2.6F, -6.0F, -6.0F, 0, 3, 16);
+      this.S.a(0.0F, 4.0F, -10.0F);
+      this.field_178721_j = new brs(this, 58, 0);
+      this.field_178721_j.a(-1.0F, -11.5F, 5.0F, 2, 16, 4);
+      this.field_178721_j.a(0.0F, 4.0F, -10.0F);
+      this.field_178721_j.f = 0.5235988F;
+      this.field_178724_i = new brs(this, 80, 12);
+      this.field_178724_i.a(-2.5F, -10.1F, -7.0F, 5, 5, 12, 0.2F);
+      this.field_178724_i.a(0.0F, 4.0F, -10.0F);
+      this.field_178724_i.f = 0.5235988F;
+   }
+
+   public void a(EntityList p_a_1_, float p_a_2_, float p_a_3_, float p_a_4_, float p_a_5_, float p_a_6_, float p_a_7_) {
+      EntityHorse entityhorse = (EntityHorse)p_a_1_;
+      float f = entityhorse.r(0.0F);
+      boolean flag = entityhorse.l_();
+      boolean flag1 = !flag && entityhorse.dG();
+      boolean flag2 = entityhorse instanceof EntityDonkey;
+      boolean flag3 = !flag && flag2 && ((EntityDonkey)entityhorse).dm();
+      float f1 = entityhorse.dw();
+      boolean flag4 = entityhorse.aT();
+      if (flag1) {
+         this.field_178724_i.a(p_a_7_);
+         this.I.a(p_a_7_);
+         this.J.a(p_a_7_);
+         this.K.a(p_a_7_);
+         this.L.a(p_a_7_);
+         this.M.a(p_a_7_);
+         this.N.a(p_a_7_);
+         this.O.a(p_a_7_);
+         this.P.a(p_a_7_);
+         this.Q.a(p_a_7_);
+         if (flag4) {
+            this.R.a(p_a_7_);
+            this.S.a(p_a_7_);
+         }
+      }
+
+      if (flag) {
+         ItemRenderer.G();
+         ItemRenderer.b(f1, 0.5F + f1 * 0.5F, f1);
+         ItemRenderer.c(0.0F, 0.95F * (1.0F - f1), 0.0F);
+      }
+
+      this.u.a(p_a_7_);
+      this.v.a(p_a_7_);
+      this.w.a(p_a_7_);
+      this.x.a(p_a_7_);
+      this.y.a(p_a_7_);
+      this.z.a(p_a_7_);
+      this.A.a(p_a_7_);
+      this.B.a(p_a_7_);
+      this.C.a(p_a_7_);
+      this.D.a(p_a_7_);
+      this.E.a(p_a_7_);
+      this.F.a(p_a_7_);
+      if (flag) {
+         ItemRenderer.H();
+         ItemRenderer.G();
+         ItemRenderer.b(f1, f1, f1);
+         ItemRenderer.c(0.0F, 1.35F * (1.0F - f1), 0.0F);
+      }
+
+      this.field_178722_k.a(p_a_7_);
+      this.field_187075_l.a(p_a_7_);
+      this.field_187076_m.a(p_a_7_);
+      this.field_78117_n.a(p_a_7_);
+      this.field_178723_h.a(p_a_7_);
+      this.field_178721_j.a(p_a_7_);
+      if (flag) {
+         ItemRenderer.H();
+         ItemRenderer.G();
+         float f2 = 0.5F + f1 * f1 * 0.5F;
+         ItemRenderer.b(f2, f2, f2);
+         if (f <= 0.0F) {
+            ItemRenderer.c(0.0F, 1.35F * (1.0F - f1), 0.0F);
+         } else {
+            ItemRenderer.c(0.0F, 0.9F * (1.0F - f1) * f + 1.35F * (1.0F - f1) * (1.0F - f), 0.15F * (1.0F - f1) * f);
+         }
+      }
+
+      if (flag2) {
+         this.field_178720_f.a(p_a_7_);
+         this.field_78115_e.a(p_a_7_);
+      } else {
+         this.d.a(p_a_7_);
+         this.field_78116_c.a(p_a_7_);
+      }
+
+      this.a.a(p_a_7_);
+      if (flag) {
+         ItemRenderer.H();
+      }
+
+      if (flag3) {
+         this.G.a(p_a_7_);
+         this.H.a(p_a_7_);
+      }
+
+   }
+
+   private float a(float p_a_1_, float p_a_2_, float p_a_3_) {
+      float f;
+      for(f = p_a_2_ - p_a_1_; f < -180.0F; f += 360.0F) {
+         ;
+      }
+
+      while(f >= 180.0F) {
+         f -= 360.0F;
+      }
+
+      return p_a_1_ + p_a_3_ * f;
+   }
+
+   public void a(EnumCreatureType p_a_1_, float p_a_2_, float p_a_3_, float p_a_4_) {
+      super.a(p_a_1_, p_a_2_, p_a_3_, p_a_4_);
+      float f = this.a(p_a_1_.aO, p_a_1_.aN, p_a_4_);
+      float f1 = this.a(p_a_1_.aQ, p_a_1_.aP, p_a_4_);
+      float f2 = p_a_1_.y + (p_a_1_.w - p_a_1_.y) * p_a_4_;
+      float f3 = f1 - f;
+      float f4 = f2 * 0.017453292F;
+      if (f3 > 20.0F) {
+         f3 = 20.0F;
+      }
+
+      if (f3 < -20.0F) {
+         f3 = -20.0F;
+      }
+
+      if (p_a_3_ > 0.2F) {
+         f4 += IProgressUpdate.b(p_a_2_ * 0.4F) * 0.15F * p_a_3_;
+      }
+
+      EntityHorse entityhorse = (EntityHorse)p_a_1_;
+      float f5 = entityhorse.r(p_a_4_);
+      float f6 = entityhorse.s(p_a_4_);
+      float f7 = 1.0F - f6;
+      float f8 = entityhorse.t(p_a_4_);
+      boolean flag = entityhorse.field_184756_bw != 0;
+      boolean flag1 = entityhorse.dG();
+      boolean flag2 = entityhorse.aT();
+      float f9 = (float)p_a_1_.T + p_a_4_;
+      float f10 = IProgressUpdate.b(p_a_2_ * 0.6662F + 3.1415927F);
+      float f11 = f10 * 0.8F * p_a_3_;
+      this.a.d = 4.0F;
+      this.a.e = -10.0F;
+      this.field_187075_l.d = 3.0F;
+      this.field_187076_m.e = 14.0F;
+      this.H.d = 3.0F;
+      this.H.e = 10.0F;
+      this.field_178722_k.f = 0.0F;
+      this.a.f = 0.5235988F + f4;
+      this.a.g = f3 * 0.017453292F;
+      this.a.f = f6 * (0.2617994F + f4) + f5 * 2.1816616F + (1.0F - Math.max(f6, f5)) * this.a.f;
+      this.a.g = f6 * f3 * 0.017453292F + (1.0F - Math.max(f6, f5)) * this.a.g;
+      this.a.d = f6 * -6.0F + f5 * 11.0F + (1.0F - Math.max(f6, f5)) * this.a.d;
+      this.a.e = f6 * -1.0F + f5 * -10.0F + (1.0F - Math.max(f6, f5)) * this.a.e;
+      this.field_187075_l.d = f6 * 9.0F + f7 * this.field_187075_l.d;
+      this.field_187076_m.e = f6 * 18.0F + f7 * this.field_187076_m.e;
+      this.H.d = f6 * 5.5F + f7 * this.H.d;
+      this.H.e = f6 * 15.0F + f7 * this.H.e;
+      this.field_178722_k.f = f6 * -0.7853982F + f7 * this.field_178722_k.f;
+      this.d.d = this.a.d;
+      this.field_78116_c.d = this.a.d;
+      this.field_178720_f.d = this.a.d;
+      this.field_78115_e.d = this.a.d;
+      this.field_178723_h.d = this.a.d;
+      this.b.d = 0.02F;
+      this.c.d = 0.0F;
+      this.field_178721_j.d = this.a.d;
+      this.d.e = this.a.e;
+      this.field_78116_c.e = this.a.e;
+      this.field_178720_f.e = this.a.e;
+      this.field_78115_e.e = this.a.e;
+      this.field_178723_h.e = this.a.e;
+      this.b.e = 0.02F - f8;
+      this.c.e = f8;
+      this.field_178721_j.e = this.a.e;
+      this.d.f = this.a.f;
+      this.field_78116_c.f = this.a.f;
+      this.field_178720_f.f = this.a.f;
+      this.field_78115_e.f = this.a.f;
+      this.field_178723_h.f = this.a.f;
+      this.b.f = -0.09424778F * f8;
+      this.c.f = 0.15707964F * f8;
+      this.field_178721_j.f = this.a.f;
+      this.d.g = this.a.g;
+      this.field_78116_c.g = this.a.g;
+      this.field_178720_f.g = this.a.g;
+      this.field_78115_e.g = this.a.g;
+      this.field_178723_h.g = this.a.g;
+      this.b.g = 0.0F;
+      this.c.g = 0.0F;
+      this.field_178721_j.g = this.a.g;
+      this.G.f = f11 / 5.0F;
+      this.H.f = -f11 / 5.0F;
+      float f12 = 0.2617994F * f6;
+      float f13 = IProgressUpdate.b(f9 * 0.6F + 3.1415927F);
+      this.A.d = -2.0F * f6 + 9.0F * f7;
+      this.A.e = -2.0F * f6 + -8.0F * f7;
+      this.D.d = this.A.d;
+      this.D.e = this.A.e;
+      this.v.d = this.u.d + IProgressUpdate.a(1.5707964F + f12 + f7 * -f10 * 0.5F * p_a_3_) * 7.0F;
+      this.v.e = this.u.e + IProgressUpdate.b(-1.5707964F + f12 + f7 * -f10 * 0.5F * p_a_3_) * 7.0F;
+      this.y.d = this.x.d + IProgressUpdate.a(1.5707964F + f12 + f7 * f10 * 0.5F * p_a_3_) * 7.0F;
+      this.y.e = this.x.e + IProgressUpdate.b(-1.5707964F + f12 + f7 * f10 * 0.5F * p_a_3_) * 7.0F;
+      float f14 = (-1.0471976F + f13) * f6 + f11 * f7;
+      float f15 = (-1.0471976F - f13) * f6 + -f11 * f7;
+      this.B.d = this.A.d + IProgressUpdate.a(1.5707964F + f14) * 7.0F;
+      this.B.e = this.A.e + IProgressUpdate.b(-1.5707964F + f14) * 7.0F;
+      this.E.d = this.D.d + IProgressUpdate.a(1.5707964F + f15) * 7.0F;
+      this.E.e = this.D.e + IProgressUpdate.b(-1.5707964F + f15) * 7.0F;
+      this.u.f = f12 + -f10 * 0.5F * p_a_3_ * f7;
+      this.v.f = -0.08726646F * f6 + (-f10 * 0.5F * p_a_3_ - Math.max(0.0F, f10 * 0.5F * p_a_3_)) * f7;
+      this.w.f = this.v.f;
+      this.x.f = f12 + f10 * 0.5F * p_a_3_ * f7;
+      this.y.f = -0.08726646F * f6 + (f10 * 0.5F * p_a_3_ - Math.max(0.0F, -f10 * 0.5F * p_a_3_)) * f7;
+      this.z.f = this.y.f;
+      this.A.f = f14;
+      this.B.f = (this.A.f + 3.1415927F * Math.max(0.0F, 0.2F + f13 * 0.2F)) * f6 + (f11 + Math.max(0.0F, f10 * 0.5F * p_a_3_)) * f7;
+      this.C.f = this.B.f;
+      this.D.f = f15;
+      this.E.f = (this.D.f + 3.1415927F * Math.max(0.0F, 0.2F - f13 * 0.2F)) * f6 + (-f11 + Math.max(0.0F, -f10 * 0.5F * p_a_3_)) * f7;
+      this.F.f = this.E.f;
+      this.w.d = this.v.d;
+      this.w.e = this.v.e;
+      this.z.d = this.y.d;
+      this.z.e = this.y.e;
+      this.C.d = this.B.d;
+      this.C.e = this.B.e;
+      this.F.d = this.E.d;
+      this.F.e = this.E.e;
+      if (flag1) {
+         this.I.d = f6 * 0.5F + f7 * 2.0F;
+         this.I.e = f6 * 11.0F + f7 * 2.0F;
+         this.J.d = this.I.d;
+         this.K.d = this.I.d;
+         this.L.d = this.I.d;
+         this.N.d = this.I.d;
+         this.M.d = this.I.d;
+         this.O.d = this.I.d;
+         this.G.d = this.H.d;
+         this.J.e = this.I.e;
+         this.K.e = this.I.e;
+         this.L.e = this.I.e;
+         this.N.e = this.I.e;
+         this.M.e = this.I.e;
+         this.O.e = this.I.e;
+         this.G.e = this.H.e;
+         this.I.f = this.field_178722_k.f;
+         this.J.f = this.field_178722_k.f;
+         this.K.f = this.field_178722_k.f;
+         this.R.d = this.a.d;
+         this.S.d = this.a.d;
+         this.field_178724_i.d = this.a.d;
+         this.P.d = this.a.d;
+         this.Q.d = this.a.d;
+         this.R.e = this.a.e;
+         this.S.e = this.a.e;
+         this.field_178724_i.e = this.a.e;
+         this.P.e = this.a.e;
+         this.Q.e = this.a.e;
+         this.R.f = f4;
+         this.S.f = f4;
+         this.field_178724_i.f = this.a.f;
+         this.P.f = this.a.f;
+         this.Q.f = this.a.f;
+         this.field_178724_i.g = this.a.g;
+         this.P.g = this.a.g;
+         this.R.g = this.a.g;
+         this.Q.g = this.a.g;
+         this.S.g = this.a.g;
+         if (flag2) {
+            this.L.f = -1.0471976F;
+            this.M.f = -1.0471976F;
+            this.N.f = -1.0471976F;
+            this.O.f = -1.0471976F;
+            this.L.h = 0.0F;
+            this.M.h = 0.0F;
+            this.N.h = 0.0F;
+            this.O.h = 0.0F;
+         } else {
+            this.L.f = f11 / 3.0F;
+            this.M.f = f11 / 3.0F;
+            this.N.f = f11 / 3.0F;
+            this.O.f = f11 / 3.0F;
+            this.L.h = f11 / 5.0F;
+            this.M.h = f11 / 5.0F;
+            this.N.h = -f11 / 5.0F;
+            this.O.h = -f11 / 5.0F;
+         }
+      }
+
+      f12 = -1.3089969F + p_a_3_ * 1.5F;
+      if (f12 > 0.0F) {
+         f12 = 0.0F;
+      }
+
+      if (flag) {
+         this.field_187075_l.g = IProgressUpdate.b(f9 * 0.7F);
+         f12 = 0.0F;
+      } else {
+         this.field_187075_l.g = 0.0F;
+      }
+
+      this.field_187076_m.g = this.field_187075_l.g;
+      this.field_78117_n.g = this.field_187075_l.g;
+      this.field_187076_m.d = this.field_187075_l.d;
+      this.field_78117_n.d = this.field_187075_l.d;
+      this.field_187076_m.e = this.field_187075_l.e;
+      this.field_78117_n.e = this.field_187075_l.e;
+      this.field_187075_l.f = f12;
+      this.field_187076_m.f = f12;
+      this.field_78117_n.f = -0.2617994F + f12;
+   }
+}

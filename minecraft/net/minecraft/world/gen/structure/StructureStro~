@@ -1,0 +1,691 @@
+package net.minecraft.world.gen.structure;
+
+import java.util.Map;
+import java.util.Random;
+import java.util.Map.Entry;
+import net.minecraft.block.BlockDoubleStoneSlabNew;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockPistonMoving;
+import net.minecraft.block.BlockPotato;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockSeaLantern;
+import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.BlockStoneSlab;
+import net.minecraft.block.BlockStructureVoid;
+import net.minecraft.block.BlockVine;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.IGrowable;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.item.ItemCloth;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.awt;
+import net.minecraft.src.bcj;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.gen.structure.template.ITemplateProcessor;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.storage.loot.LootEntryItem;
+
+public class StructureStrongholdPieces {
+   public static void func_143046_a() {
+      StructureComponent.a(StructureStrongholdPieces.ChestCorridor.class, "TeDP");
+      StructureComponent.a(StructureStrongholdPieces.Crossing.class, "TeJP");
+      StructureComponent.a(StructureStrongholdPieces.Library.class, "TeSH");
+      StructureComponent.a(StructureStrongholdPieces.Corridor.class, "Iglu");
+   }
+
+   public static class ChestCorridor extends StructureStrongholdPieces.LeftTurn {
+      private final boolean[] e = new boolean[4];
+
+      public ChestCorridor() {
+      }
+
+      public ChestCorridor(Random p_i1966_1_, int p_i1966_2_, int p_i1966_3_) {
+         super(p_i1966_1_, p_i1966_2_, 64, p_i1966_3_, 21, 15, 21);
+      }
+
+      protected void func_143012_a(NBTTagCompound p_143012_1_) {
+         super.func_143012_a(p_143012_1_);
+         p_143012_1_.func_74757_a("hasPlacedChest0", this.e[0]);
+         p_143012_1_.func_74757_a("hasPlacedChest1", this.e[1]);
+         p_143012_1_.func_74757_a("hasPlacedChest2", this.e[2]);
+         p_143012_1_.func_74757_a("hasPlacedChest3", this.e[3]);
+      }
+
+      protected void a(NBTTagCompound p_a_1_, ITemplateProcessor p_a_2_) {
+         super.a(p_a_1_, p_a_2_);
+         this.e[0] = p_a_1_.func_74767_n("hasPlacedChest0");
+         this.e[1] = p_a_1_.func_74767_n("hasPlacedChest1");
+         this.e[2] = p_a_1_.func_74767_n("hasPlacedChest2");
+         this.e[3] = p_a_1_.func_74767_n("hasPlacedChest3");
+      }
+
+      public boolean a(IWorldEventListener p_a_1_, Random p_a_2_, StructureEndCityPieces p_a_3_) {
+         this.a(p_a_1_, p_a_3_, 0, -4, 0, this.field_75002_c - 1, 0, this.field_186178_c - 1, IGrowable.A.t(), IGrowable.A.t(), false);
+
+         for(int i = 1; i <= 9; ++i) {
+            this.a(p_a_1_, p_a_3_, i, i, i, this.field_75002_c - 1 - i, i, this.field_186178_c - 1 - i, IGrowable.A.t(), IGrowable.A.t(), false);
+            this.a(p_a_1_, p_a_3_, i + 1, i, i + 1, this.field_75002_c - 2 - i, i, this.field_186178_c - 2 - i, IGrowable.a.t(), IGrowable.a.t(), false);
+         }
+
+         for(int i2 = 0; i2 < this.field_75002_c; ++i2) {
+            for(int j = 0; j < this.field_186178_c; ++j) {
+               int k = -5;
+               this.b(p_a_1_, IGrowable.A.t(), i2, -5, j, p_a_3_);
+            }
+         }
+
+         awt awt = IGrowable.bO.t().a(BlockStaticLiquid.a, EnumFacing.NORTH);
+         awt awt = IGrowable.bO.t().a(BlockStaticLiquid.a, EnumFacing.SOUTH);
+         awt awt = IGrowable.bO.t().a(BlockStaticLiquid.a, EnumFacing.EAST);
+         awt awt = IGrowable.bO.t().a(BlockStaticLiquid.a, EnumFacing.WEST);
+         int l = ~ItemCloth.b.b() & 15;
+         int i1 = ~ItemCloth.l.b() & 15;
+         this.a(p_a_1_, p_a_3_, 0, 0, 0, 4, 9, 4, IGrowable.A.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 1, 10, 1, 3, 10, 3, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, awt, 2, 10, 0, p_a_3_);
+         this.a(p_a_1_, awt, 2, 10, 4, p_a_3_);
+         this.a(p_a_1_, awt, 0, 10, 2, p_a_3_);
+         this.a(p_a_1_, awt, 4, 10, 2, p_a_3_);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 5, 0, 0, this.field_75002_c - 1, 9, 4, IGrowable.A.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 4, 10, 1, this.field_75002_c - 2, 10, 3, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, awt, this.field_75002_c - 3, 10, 0, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 3, 10, 4, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 5, 10, 2, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 1, 10, 2, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 8, 0, 0, 12, 4, 4, IGrowable.A.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 9, 1, 0, 11, 3, 4, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 9, 1, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 9, 2, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 9, 3, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 10, 3, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 11, 3, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 11, 2, 1, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 11, 1, 1, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 4, 1, 1, 8, 3, 3, IGrowable.A.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 4, 1, 2, 8, 2, 2, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 12, 1, 1, 16, 3, 3, IGrowable.A.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 12, 1, 2, 16, 2, 2, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 5, 4, 5, this.field_75002_c - 6, 4, this.field_186178_c - 6, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, 9, 4, 9, 11, 4, 11, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, 8, 1, 8, 8, 3, 8, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 12, 1, 8, 12, 3, 8, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 8, 1, 12, 8, 3, 12, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 12, 1, 12, 12, 3, 12, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 1, 1, 5, 4, 4, 11, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 5, 1, 5, this.field_75002_c - 2, 4, 11, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, 6, 7, 9, 6, 7, 11, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 7, 7, 9, this.field_75002_c - 7, 7, 11, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, 5, 5, 9, 5, 7, 11, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 6, 5, 9, this.field_75002_c - 6, 7, 11, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, IGrowable.a.t(), 5, 5, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 5, 6, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 6, 6, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), this.field_75002_c - 6, 5, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), this.field_75002_c - 6, 6, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), this.field_75002_c - 7, 6, 10, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 2, 4, 4, 2, 6, 4, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 3, 4, 4, this.field_75002_c - 3, 6, 4, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, awt, 2, 4, 5, p_a_3_);
+         this.a(p_a_1_, awt, 2, 3, 4, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 3, 4, 5, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 3, 3, 4, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 1, 1, 3, 2, 2, 3, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 3, 1, 3, this.field_75002_c - 2, 2, 3, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, IGrowable.A.t(), 1, 1, 2, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.t(), this.field_75002_c - 2, 1, 2, p_a_3_);
+         this.a(p_a_1_, IGrowable.U.a(BlockStructureVoid.a.b.a()), 1, 2, 2, p_a_3_);
+         this.a(p_a_1_, IGrowable.U.a(BlockStructureVoid.a.b.a()), this.field_75002_c - 2, 2, 2, p_a_3_);
+         this.a(p_a_1_, awt, 2, 1, 2, p_a_3_);
+         this.a(p_a_1_, awt, this.field_75002_c - 3, 1, 2, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 4, 3, 5, 4, 3, 18, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 5, 3, 5, this.field_75002_c - 5, 3, 17, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, 3, 1, 5, 4, 2, 16, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, p_a_3_, this.field_75002_c - 6, 1, 5, this.field_75002_c - 5, 2, 16, IGrowable.a.t(), IGrowable.a.t(), false);
+
+         for(int j1 = 5; j1 <= 17; j1 += 2) {
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 4, 1, j1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 4, 2, j1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), this.field_75002_c - 5, 1, j1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), this.field_75002_c - 5, 2, j1, p_a_3_);
+         }
+
+         this.a(p_a_1_, IGrowable.cu.a(l), 10, 0, 7, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 10, 0, 8, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 9, 0, 9, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 11, 0, 9, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 8, 0, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 12, 0, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 7, 0, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 13, 0, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 9, 0, 11, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 11, 0, 11, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 10, 0, 12, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 10, 0, 13, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(i1), 10, 0, 10, p_a_3_);
+
+         for(int j2 = 0; j2 <= this.field_75002_c - 1; j2 += this.field_75002_c - 1) {
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 2, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 2, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 2, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 3, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 3, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 3, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 4, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), j2, 4, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 4, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 5, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 5, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 5, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 6, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), j2, 6, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 6, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 7, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 7, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), j2, 7, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 8, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 8, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), j2, 8, 3, p_a_3_);
+         }
+
+         for(int k2 = 2; k2 <= this.field_75002_c - 3; k2 += this.field_75002_c - 3 - 2) {
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 - 1, 2, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2, 2, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 + 1, 2, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 - 1, 3, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2, 3, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 + 1, 3, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 - 1, 4, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), k2, 4, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 + 1, 4, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 - 1, 5, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2, 5, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 + 1, 5, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 - 1, 6, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), k2, 6, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 + 1, 6, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 - 1, 7, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2, 7, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.cu.a(l), k2 + 1, 7, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 - 1, 8, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2, 8, 0, p_a_3_);
+            this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), k2 + 1, 8, 0, p_a_3_);
+         }
+
+         this.a(p_a_1_, p_a_3_, 8, 4, 0, 12, 6, 0, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, IGrowable.a.t(), 8, 6, 0, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 12, 6, 0, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 9, 5, 0, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 10, 5, 0, p_a_3_);
+         this.a(p_a_1_, IGrowable.cu.a(l), 11, 5, 0, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 8, -14, 8, 12, -11, 12, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 8, -10, 8, 12, -10, 12, IGrowable.A.a(BlockSeaLantern.a.b.a()), IGrowable.A.a(BlockSeaLantern.a.b.a()), false);
+         this.a(p_a_1_, p_a_3_, 8, -9, 8, 12, -9, 12, IGrowable.A.a(BlockSeaLantern.a.c.a()), IGrowable.A.a(BlockSeaLantern.a.c.a()), false);
+         this.a(p_a_1_, p_a_3_, 8, -8, 8, 12, -1, 12, IGrowable.A.t(), IGrowable.A.t(), false);
+         this.a(p_a_1_, p_a_3_, 9, -11, 9, 11, -1, 11, IGrowable.a.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, IGrowable.az.t(), 10, -11, 10, p_a_3_);
+         this.a(p_a_1_, p_a_3_, 9, -13, 9, 11, -13, 11, IGrowable.W.t(), IGrowable.a.t(), false);
+         this.a(p_a_1_, IGrowable.a.t(), 8, -11, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 8, -10, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 7, -10, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 7, -11, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 12, -11, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 12, -10, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 13, -10, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 13, -11, 10, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 10, -11, 8, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 10, -10, 8, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 10, -10, 7, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 10, -11, 7, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 10, -11, 12, p_a_3_);
+         this.a(p_a_1_, IGrowable.a.t(), 10, -10, 12, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.b.a()), 10, -10, 13, p_a_3_);
+         this.a(p_a_1_, IGrowable.A.a(BlockSeaLantern.a.c.a()), 10, -11, 13, p_a_3_);
+
+         for(EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
+            if (!this.e[enumfacing.func_176736_b()]) {
+               int k1 = enumfacing.func_82601_c() * 2;
+               int l1 = enumfacing.func_82599_e() * 2;
+               this.e[enumfacing.func_176736_b()] = this.a(p_a_1_, p_a_3_, p_a_2_, 10 + k1, -11, 10 + l1, LootEntryItem.k);
+            }
+         }
+
+         return true;
+      }
+   }
+
+   public static class Corridor extends StructureStrongholdPieces.LeftTurn {
+      private static final BehaviorProjectileDispense e = new BehaviorProjectileDispense("igloo/igloo_top");
+      private static final BehaviorProjectileDispense f = new BehaviorProjectileDispense("igloo/igloo_middle");
+      private static final BehaviorProjectileDispense g = new BehaviorProjectileDispense("igloo/igloo_bottom");
+
+      public Corridor() {
+      }
+
+      public Corridor(Random p_i1967_1_, int p_i1967_2_, int p_i1967_3_) {
+         super(p_i1967_1_, p_i1967_2_, 64, p_i1967_3_, 7, 5, 8);
+      }
+
+      public boolean a(IWorldEventListener p_a_1_, Random p_a_2_, StructureEndCityPieces p_a_3_) {
+         if (!this.a(p_a_1_, p_a_3_, -1)) {
+            return false;
+         } else {
+            StructureEndCityPieces structureendcitypieces = this.d();
+            BlockPos blockpos = new BlockPos(structureendcitypieces.field_186202_b, structureendcitypieces.field_186203_c, structureendcitypieces.field_186204_d);
+            BlockSandStone[] ablocksandstone = BlockSandStone.values();
+            MinecraftServer minecraftserver = p_a_1_.u();
+            ITemplateProcessor itemplateprocessor = p_a_1_.U().h();
+            Template template = (new Template()).a(ablocksandstone[p_a_2_.nextInt(ablocksandstone.length)]).a(IGrowable.dj).a(structureendcitypieces);
+            bcj bcj = itemplateprocessor.a(minecraftserver, e);
+            bcj.a(p_a_1_, blockpos, template);
+            if (p_a_2_.nextDouble() < 0.5D) {
+               bcj bcj = itemplateprocessor.a(minecraftserver, f);
+               bcj bcj = itemplateprocessor.a(minecraftserver, g);
+               int i = p_a_2_.nextInt(8) + 4;
+
+               for(int j = 0; j < i; ++j) {
+                  BlockPos blockpos1 = bcj.a(template, new BlockPos(3, -1 - j * 3, 5), template, new BlockPos(1, 2, 1));
+                  bcj.a(p_a_1_, blockpos.func_177971_a(blockpos1), template);
+               }
+
+               BlockPos blockpos4 = blockpos.func_177971_a(bcj.a(template, new BlockPos(3, -1 - i * 3, 5), template, new BlockPos(3, 5, 7)));
+               bcj.a(p_a_1_, blockpos4, template);
+               Map<BlockPos, String> map = bcj.a(blockpos4, template);
+
+               for(Entry<BlockPos, String> entry : map.entrySet()) {
+                  if ("chest".equals(entry.getValue())) {
+                     BlockPos blockpos2 = entry.getKey();
+                     p_a_1_.a(blockpos2, IGrowable.a.t(), 3);
+                     TileEntityChest tileentitychest = p_a_1_.r(blockpos2.func_177977_b());
+                     if (tileentitychest instanceof TileEntityComparator) {
+                        ((TileEntityComparator)tileentitychest).a(LootEntryItem.n, p_a_2_.nextLong());
+                     }
+                  }
+               }
+            } else {
+               BlockPos blockpos3 = bcj.a(template, new BlockPos(3, 0, 5));
+               p_a_1_.a(blockpos.func_177971_a(blockpos3), IGrowable.aJ.t(), 3);
+            }
+
+            return true;
+         }
+      }
+   }
+
+   public static class Crossing extends StructureStrongholdPieces.LeftTurn {
+      private boolean field_74999_h;
+      private boolean f;
+      private boolean g;
+      private boolean h;
+      private static final StructureStrongholdPieces.Crossing.a i = new StructureStrongholdPieces.Crossing.a();
+
+      public Crossing() {
+      }
+
+      public Crossing(Random p_i1969_1_, int p_i1969_2_, int p_i1969_3_) {
+         super(p_i1969_1_, p_i1969_2_, 64, p_i1969_3_, 12, 10, 15);
+      }
+
+      protected void func_143012_a(NBTTagCompound p_143012_1_) {
+         super.func_143012_a(p_143012_1_);
+         p_143012_1_.func_74757_a("placedMainChest", this.field_74999_h);
+         p_143012_1_.func_74757_a("placedHiddenChest", this.f);
+         p_143012_1_.func_74757_a("placedTrap1", this.g);
+         p_143012_1_.func_74757_a("placedTrap2", this.h);
+      }
+
+      protected void a(NBTTagCompound p_a_1_, ITemplateProcessor p_a_2_) {
+         super.a(p_a_1_, p_a_2_);
+         this.field_74999_h = p_a_1_.func_74767_n("placedMainChest");
+         this.f = p_a_1_.func_74767_n("placedHiddenChest");
+         this.g = p_a_1_.func_74767_n("placedTrap1");
+         this.h = p_a_1_.func_74767_n("placedTrap2");
+      }
+
+      public boolean a(IWorldEventListener p_a_1_, Random p_a_2_, StructureEndCityPieces p_a_3_) {
+         if (!this.a(p_a_1_, p_a_3_, 0)) {
+            return false;
+         } else {
+            this.a(p_a_1_, p_a_3_, 0, -4, 0, this.field_74996_b - 1, 0, this.field_74995_d - 1, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 1, 2, 9, 2, 2, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 1, 12, 9, 2, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 1, 3, 2, 2, 11, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 9, 1, 3, 9, 2, 11, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 1, 3, 1, 10, 6, 1, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 1, 3, 13, 10, 6, 13, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 1, 3, 2, 1, 6, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 10, 3, 2, 10, 6, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 3, 2, 9, 3, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 6, 2, 9, 6, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 3, 7, 3, 8, 7, 11, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 4, 8, 4, 7, 8, 10, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 3, 1, 3, 8, 2, 11);
+            this.a(p_a_1_, p_a_3_, 4, 3, 6, 7, 3, 9);
+            this.a(p_a_1_, p_a_3_, 2, 4, 2, 9, 5, 12);
+            this.a(p_a_1_, p_a_3_, 4, 6, 5, 7, 6, 9);
+            this.a(p_a_1_, p_a_3_, 5, 7, 6, 6, 7, 8);
+            this.a(p_a_1_, p_a_3_, 5, 1, 2, 6, 2, 2);
+            this.a(p_a_1_, p_a_3_, 5, 2, 12, 6, 2, 12);
+            this.a(p_a_1_, p_a_3_, 5, 5, 1, 6, 5, 1);
+            this.a(p_a_1_, p_a_3_, 5, 5, 13, 6, 5, 13);
+            this.a(p_a_1_, IGrowable.a.t(), 1, 5, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 10, 5, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 1, 5, 9, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 10, 5, 9, p_a_3_);
+
+            for(int i = 0; i <= 14; i += 14) {
+               this.a(p_a_1_, p_a_3_, 2, 4, i, 2, 5, i, false, p_a_2_, i);
+               this.a(p_a_1_, p_a_3_, 4, 4, i, 4, 5, i, false, p_a_2_, i);
+               this.a(p_a_1_, p_a_3_, 7, 4, i, 7, 5, i, false, p_a_2_, i);
+               this.a(p_a_1_, p_a_3_, 9, 4, i, 9, 5, i, false, p_a_2_, i);
+            }
+
+            this.a(p_a_1_, p_a_3_, 5, 6, 0, 6, 6, 0, false, p_a_2_, i);
+
+            for(int l = 0; l <= 11; l += 11) {
+               for(int j = 2; j <= 12; j += 2) {
+                  this.a(p_a_1_, p_a_3_, l, 4, j, l, 5, j, false, p_a_2_, i);
+               }
+
+               this.a(p_a_1_, p_a_3_, l, 6, 5, l, 6, 5, false, p_a_2_, i);
+               this.a(p_a_1_, p_a_3_, l, 6, 9, l, 6, 9, false, p_a_2_, i);
+            }
+
+            this.a(p_a_1_, p_a_3_, 2, 7, 2, 2, 9, 2, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 9, 7, 2, 9, 9, 2, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 2, 7, 12, 2, 9, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 9, 7, 12, 9, 9, 12, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 4, 9, 4, 4, 9, 4, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 7, 9, 4, 7, 9, 4, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 4, 9, 10, 4, 9, 10, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 7, 9, 10, 7, 9, 10, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 5, 9, 7, 6, 9, 7, false, p_a_2_, i);
+            awt awt = IGrowable.aw.t().a(BlockStaticLiquid.a, EnumFacing.EAST);
+            awt awt = IGrowable.aw.t().a(BlockStaticLiquid.a, EnumFacing.WEST);
+            awt awt = IGrowable.aw.t().a(BlockStaticLiquid.a, EnumFacing.SOUTH);
+            awt awt = IGrowable.aw.t().a(BlockStaticLiquid.a, EnumFacing.NORTH);
+            this.a(p_a_1_, awt, 5, 9, 6, p_a_3_);
+            this.a(p_a_1_, awt, 6, 9, 6, p_a_3_);
+            this.a(p_a_1_, awt, 5, 9, 8, p_a_3_);
+            this.a(p_a_1_, awt, 6, 9, 8, p_a_3_);
+            this.a(p_a_1_, awt, 4, 0, 0, p_a_3_);
+            this.a(p_a_1_, awt, 5, 0, 0, p_a_3_);
+            this.a(p_a_1_, awt, 6, 0, 0, p_a_3_);
+            this.a(p_a_1_, awt, 7, 0, 0, p_a_3_);
+            this.a(p_a_1_, awt, 4, 1, 8, p_a_3_);
+            this.a(p_a_1_, awt, 4, 2, 9, p_a_3_);
+            this.a(p_a_1_, awt, 4, 3, 10, p_a_3_);
+            this.a(p_a_1_, awt, 7, 1, 8, p_a_3_);
+            this.a(p_a_1_, awt, 7, 2, 9, p_a_3_);
+            this.a(p_a_1_, awt, 7, 3, 10, p_a_3_);
+            this.a(p_a_1_, p_a_3_, 4, 1, 9, 4, 1, 9, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 7, 1, 9, 7, 1, 9, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 4, 1, 10, 7, 2, 10, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 5, 4, 5, 6, 4, 5, false, p_a_2_, i);
+            this.a(p_a_1_, awt, 4, 4, 5, p_a_3_);
+            this.a(p_a_1_, awt, 7, 4, 5, p_a_3_);
+
+            for(int k = 0; k < 4; ++k) {
+               this.a(p_a_1_, awt, 5, 0 - k, 6 + k, p_a_3_);
+               this.a(p_a_1_, awt, 6, 0 - k, 6 + k, p_a_3_);
+               this.a(p_a_1_, p_a_3_, 5, 0 - k, 7 + k, 6, 0 - k, 9 + k);
+            }
+
+            this.a(p_a_1_, p_a_3_, 1, -3, 12, 10, -1, 13);
+            this.a(p_a_1_, p_a_3_, 1, -3, 1, 3, -1, 13);
+            this.a(p_a_1_, p_a_3_, 1, -3, 1, 9, -1, 5);
+
+            for(int i1 = 1; i1 <= 13; i1 += 2) {
+               this.a(p_a_1_, p_a_3_, 1, -3, i1, 1, -2, i1, false, p_a_2_, i);
+            }
+
+            for(int j1 = 2; j1 <= 12; j1 += 2) {
+               this.a(p_a_1_, p_a_3_, 1, -1, j1, 3, -1, j1, false, p_a_2_, i);
+            }
+
+            this.a(p_a_1_, p_a_3_, 2, -2, 1, 5, -2, 1, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 7, -2, 1, 9, -2, 1, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 6, -3, 1, 6, -3, 1, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 6, -1, 1, 6, -1, 1, false, p_a_2_, i);
+            this.a(p_a_1_, IGrowable.bR.t().a(BlockWall.field_176256_a, EnumFacing.EAST).a(BlockWall.field_176257_M, Boolean.valueOf(true)), 1, -3, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.bR.t().a(BlockWall.field_176256_a, EnumFacing.WEST).a(BlockWall.field_176257_M, Boolean.valueOf(true)), 4, -3, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.bS.t().a(BlockVine.field_176273_b, Boolean.valueOf(true)), 2, -3, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.bS.t().a(BlockVine.field_176273_b, Boolean.valueOf(true)), 3, -3, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 7, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 6, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 4, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 5, -3, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 4, -3, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 3, -3, 1, p_a_3_);
+            if (!this.g) {
+               this.g = this.a(p_a_1_, p_a_3_, p_a_2_, 3, -2, 1, EnumFacing.NORTH, LootEntryItem.m);
+            }
+
+            this.a(p_a_1_, IGrowable.bn.t().a(BlockWallSign.field_185579_d, Boolean.valueOf(true)), 3, -2, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.bR.t().a(BlockWall.field_176256_a, EnumFacing.NORTH).a(BlockWall.field_176257_M, Boolean.valueOf(true)), 7, -3, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.bR.t().a(BlockWall.field_176256_a, EnumFacing.SOUTH).a(BlockWall.field_176257_M, Boolean.valueOf(true)), 7, -3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.bS.t().a(BlockVine.field_176273_b, Boolean.valueOf(true)), 7, -3, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.bS.t().a(BlockVine.field_176273_b, Boolean.valueOf(true)), 7, -3, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.bS.t().a(BlockVine.field_176273_b, Boolean.valueOf(true)), 7, -3, 4, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 8, -3, 6, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 9, -3, 6, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 9, -3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 9, -3, 4, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 9, -2, 4, p_a_3_);
+            if (!this.h) {
+               this.h = this.a(p_a_1_, p_a_3_, p_a_2_, 9, -2, 3, EnumFacing.WEST, LootEntryItem.m);
+            }
+
+            this.a(p_a_1_, IGrowable.bn.t().a(BlockWallSign.field_185578_c, Boolean.valueOf(true)), 8, -1, 3, p_a_3_);
+            this.a(p_a_1_, IGrowable.bn.t().a(BlockWallSign.field_185578_c, Boolean.valueOf(true)), 8, -2, 3, p_a_3_);
+            if (!this.field_74999_h) {
+               this.field_74999_h = this.a(p_a_1_, p_a_3_, p_a_2_, 8, -3, 3, LootEntryItem.l);
+            }
+
+            this.a(p_a_1_, IGrowable.Y.t(), 9, -3, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 8, -3, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 4, -3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 5, -2, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 5, -1, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 6, -3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 7, -2, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 7, -1, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.Y.t(), 8, -3, 5, p_a_3_);
+            this.a(p_a_1_, p_a_3_, 9, -1, 1, 9, -1, 5, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 8, -3, 8, 10, -1, 10);
+            this.a(p_a_1_, IGrowable.bf.a(BlockStoneSlab.field_176556_M), 8, -2, 11, p_a_3_);
+            this.a(p_a_1_, IGrowable.bf.a(BlockStoneSlab.field_176556_M), 9, -2, 11, p_a_3_);
+            this.a(p_a_1_, IGrowable.bf.a(BlockStoneSlab.field_176556_M), 10, -2, 11, p_a_3_);
+            awt awt = IGrowable.ay.t().a(BlockLog.field_176299_a, BlockLog.EnumAxis.field_176874_e);
+            this.a(p_a_1_, awt, 8, -2, 12, p_a_3_);
+            this.a(p_a_1_, awt, 9, -2, 12, p_a_3_);
+            this.a(p_a_1_, awt, 10, -2, 12, p_a_3_);
+            this.a(p_a_1_, p_a_3_, 8, -3, 8, 8, -3, 10, false, p_a_2_, i);
+            this.a(p_a_1_, p_a_3_, 10, -3, 8, 10, -3, 10, false, p_a_2_, i);
+            this.a(p_a_1_, IGrowable.Y.t(), 10, -2, 9, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 8, -2, 9, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 8, -2, 10, p_a_3_);
+            this.a(p_a_1_, IGrowable.af.t(), 10, -1, 9, p_a_3_);
+            this.a(p_a_1_, IGrowable.F.t().a(BlockPistonMoving.H, EnumFacing.UP), 9, -2, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.F.t().a(BlockPistonMoving.H, EnumFacing.WEST), 10, -2, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.F.t().a(BlockPistonMoving.H, EnumFacing.WEST), 10, -1, 8, p_a_3_);
+            this.a(p_a_1_, IGrowable.bb.t().a(Rotation.D, EnumFacing.NORTH), 10, -2, 10, p_a_3_);
+            if (!this.f) {
+               this.f = this.a(p_a_1_, p_a_3_, p_a_2_, 9, -3, 10, LootEntryItem.l);
+            }
+
+            return true;
+         }
+      }
+
+      static class a extends StructureComponentTemplate.a {
+         private a() {
+         }
+
+         public void a(Random p_a_1_, int p_a_2_, int p_a_3_, int p_a_4_, boolean p_a_5_) {
+            if (p_a_1_.nextFloat() < 0.4F) {
+               this.a = IGrowable.e.t();
+            } else {
+               this.a = IGrowable.Y.t();
+            }
+
+         }
+      }
+   }
+
+   abstract static class LeftTurn extends StructureComponentTemplate {
+      protected int field_186176_a;
+      protected int field_186177_b;
+      protected int field_186178_c;
+      protected int field_186179_d = -1;
+
+      public LeftTurn() {
+      }
+
+      protected LeftTurn(Random p_i1970_1_, int p_i1970_2_, int p_i1970_3_, int p_i1970_4_, int p_i1970_5_, int p_i1970_6_, int p_i1970_7_) {
+         super(0);
+         this.field_186176_a = p_i1970_5_;
+         this.field_186177_b = p_i1970_6_;
+         this.field_186178_c = p_i1970_7_;
+         this.a(EnumFacing.Plane.HORIZONTAL.func_179518_a(p_i1970_1_));
+         if (this.f().func_176740_k() == EnumFacing.Axis.Z) {
+            this.l = new StructureEndCityPieces(p_i1970_2_, p_i1970_3_, p_i1970_4_, p_i1970_2_ + p_i1970_5_ - 1, p_i1970_3_ + p_i1970_6_ - 1, p_i1970_4_ + p_i1970_7_ - 1);
+         } else {
+            this.l = new StructureEndCityPieces(p_i1970_2_, p_i1970_3_, p_i1970_4_, p_i1970_2_ + p_i1970_7_ - 1, p_i1970_3_ + p_i1970_6_ - 1, p_i1970_4_ + p_i1970_5_ - 1);
+         }
+
+      }
+
+      protected void func_143012_a(NBTTagCompound p_143012_1_) {
+         p_143012_1_.func_74768_a("Width", this.field_186176_a);
+         p_143012_1_.func_74768_a("Height", this.field_186177_b);
+         p_143012_1_.func_74768_a("Depth", this.field_186178_c);
+         p_143012_1_.func_74768_a("HPos", this.field_186179_d);
+      }
+
+      protected void a(NBTTagCompound p_a_1_, ITemplateProcessor p_a_2_) {
+         this.field_186176_a = p_a_1_.func_74762_e("Width");
+         this.field_186177_b = p_a_1_.func_74762_e("Height");
+         this.field_186178_c = p_a_1_.func_74762_e("Depth");
+         this.field_186179_d = p_a_1_.func_74762_e("HPos");
+      }
+
+      protected boolean a(IWorldEventListener p_a_1_, StructureEndCityPieces p_a_2_, int p_a_3_) {
+         if (this.field_186179_d >= 0) {
+            return true;
+         } else {
+            int i = 0;
+            int j = 0;
+            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+            for(int k = this.l.field_186204_d; k <= this.l.field_186207_g; ++k) {
+               for(int l = this.l.field_186202_b; l <= this.l.field_186205_e; ++l) {
+                  blockpos$mutableblockpos.func_181079_c(l, 64, k);
+                  if (p_a_2_.b(blockpos$mutableblockpos)) {
+                     i += Math.max(p_a_1_.q(blockpos$mutableblockpos).func_177956_o(), p_a_1_.s.i());
+                     ++j;
+                  }
+               }
+            }
+
+            if (j == 0) {
+               return false;
+            } else {
+               this.field_186179_d = i / j;
+               this.l.a(0, this.field_186179_d - this.l.field_186203_c + p_a_3_, 0);
+               return true;
+            }
+         }
+      }
+   }
+
+   public static class Library extends StructureStrongholdPieces.LeftTurn {
+      private boolean e;
+
+      public Library() {
+      }
+
+      public Library(Random p_i1971_1_, int p_i1971_2_, int p_i1971_3_) {
+         super(p_i1971_1_, p_i1971_2_, 64, p_i1971_3_, 7, 7, 9);
+      }
+
+      protected void func_143012_a(NBTTagCompound p_143012_1_) {
+         super.func_143012_a(p_143012_1_);
+         p_143012_1_.func_74757_a("Witch", this.e);
+      }
+
+      protected void a(NBTTagCompound p_a_1_, ITemplateProcessor p_a_2_) {
+         super.a(p_a_1_, p_a_2_);
+         this.e = p_a_1_.func_74767_n("Witch");
+      }
+
+      public boolean a(IWorldEventListener p_a_1_, Random p_a_2_, StructureEndCityPieces p_a_3_) {
+         if (!this.a(p_a_1_, p_a_3_, 0)) {
+            return false;
+         } else {
+            this.a(p_a_1_, p_a_3_, 1, 1, 1, 5, 1, 7, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 1, 4, 2, 5, 4, 7, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 2, 1, 0, 4, 1, 0, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 2, 2, 2, 3, 3, 2, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 1, 2, 3, 1, 3, 6, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 5, 2, 3, 5, 3, 6, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 2, 2, 7, 4, 3, 7, IGrowable.f.a(BlockPotato.a.b.a()), IGrowable.f.a(BlockPotato.a.b.a()), false);
+            this.a(p_a_1_, p_a_3_, 1, 0, 2, 1, 3, 2, IGrowable.r.t(), IGrowable.r.t(), false);
+            this.a(p_a_1_, p_a_3_, 5, 0, 2, 5, 3, 2, IGrowable.r.t(), IGrowable.r.t(), false);
+            this.a(p_a_1_, p_a_3_, 1, 0, 7, 1, 3, 7, IGrowable.r.t(), IGrowable.r.t(), false);
+            this.a(p_a_1_, p_a_3_, 5, 0, 7, 5, 3, 7, IGrowable.r.t(), IGrowable.r.t(), false);
+            this.a(p_a_1_, IGrowable.aO.t(), 2, 3, 2, p_a_3_);
+            this.a(p_a_1_, IGrowable.aO.t(), 3, 3, 7, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 1, 3, 4, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 5, 3, 4, p_a_3_);
+            this.a(p_a_1_, IGrowable.a.t(), 5, 3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.ca.t().a(BlockDoubleStoneSlabNew.b, BlockDoubleStoneSlabNew.a.r), 1, 3, 5, p_a_3_);
+            this.a(p_a_1_, IGrowable.ai.t(), 3, 2, 6, p_a_3_);
+            this.a(p_a_1_, IGrowable.bE.t(), 4, 2, 6, p_a_3_);
+            this.a(p_a_1_, IGrowable.aO.t(), 1, 2, 1, p_a_3_);
+            this.a(p_a_1_, IGrowable.aO.t(), 5, 2, 1, p_a_3_);
+            awt awt = IGrowable.bU.t().a(BlockStaticLiquid.a, EnumFacing.NORTH);
+            awt awt = IGrowable.bU.t().a(BlockStaticLiquid.a, EnumFacing.EAST);
+            awt awt = IGrowable.bU.t().a(BlockStaticLiquid.a, EnumFacing.WEST);
+            awt awt = IGrowable.bU.t().a(BlockStaticLiquid.a, EnumFacing.SOUTH);
+            this.a(p_a_1_, p_a_3_, 0, 4, 1, 6, 4, 1, awt, awt, false);
+            this.a(p_a_1_, p_a_3_, 0, 4, 2, 0, 4, 7, awt, awt, false);
+            this.a(p_a_1_, p_a_3_, 6, 4, 2, 6, 4, 7, awt, awt, false);
+            this.a(p_a_1_, p_a_3_, 0, 4, 8, 6, 4, 8, awt, awt, false);
+
+            for(int i = 2; i <= 7; i += 5) {
+               for(int j = 1; j <= 5; j += 4) {
+                  this.b(p_a_1_, IGrowable.r.t(), j, -1, i, p_a_3_);
+               }
+            }
+
+            if (!this.e) {
+               int l = this.a(2, 5);
+               int i1 = this.d(2);
+               int k = this.b(2, 5);
+               if (p_a_3_.b(new BlockPos(l, i1, k))) {
+                  this.e = true;
+                  EntityZombie entityzombie = new EntityZombie(p_a_1_);
+                  entityzombie.cW();
+                  entityzombie.b((double)l + 0.5D, (double)i1, (double)k + 0.5D, 0.0F, 0.0F);
+                  entityzombie.a(p_a_1_.D(new BlockPos(l, i1, k)), (EnumCreatureAttribute)null);
+                  p_a_1_.a(entityzombie);
+               }
+            }
+
+            return true;
+         }
+      }
+   }
+}

@@ -1,0 +1,44 @@
+package net.minecraft.world.storage.loot.functions;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import java.util.Random;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
+import net.minecraft.util.LowerStringMap;
+import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.conditions.EntityHasProperty;
+
+public class LootFunctionManager extends LootingEnchantBonus {
+   private final EnchantWithLevels field_186584_a;
+   private final boolean field_186585_b;
+
+   public LootFunctionManager(EntityHasProperty[] p_i2114_1_, EnchantWithLevels p_i2114_2_, boolean p_i2114_3_) {
+      super(p_i2114_1_);
+      this.field_186584_a = p_i2114_2_;
+      this.field_186585_b = p_i2114_3_;
+   }
+
+   public Items a(Items p_a_1_, Random p_a_2_, LootTableManager p_a_3_) {
+      return Enchantments.a(p_a_2_, p_a_1_, this.field_186584_a.a(p_a_2_), this.field_186585_b);
+   }
+
+   public static class Serializer extends LootingEnchantBonus.Serializer<LootFunctionManager> {
+      public Serializer() {
+         super(new BehaviorProjectileDispense("enchant_with_levels"), LootFunctionManager.class);
+      }
+
+      public void a(JsonObject p_a_1_, LootFunctionManager p_a_2_, JsonSerializationContext p_a_3_) {
+         p_a_1_.add("levels", p_a_3_.serialize(p_a_2_.field_186584_a));
+         p_a_1_.addProperty("treasure", Boolean.valueOf(p_a_2_.field_186585_b));
+      }
+
+      public LootFunctionManager a(JsonObject p_a_1_, JsonDeserializationContext p_a_2_, EntityHasProperty[] p_a_3_) {
+         EnchantWithLevels enchantwithlevels = (EnchantWithLevels)LowerStringMap.a(p_a_1_, "levels", p_a_2_, EnchantWithLevels.class);
+         boolean flag = LowerStringMap.a(p_a_1_, "treasure", false);
+         return new LootFunctionManager(p_a_3_, enchantwithlevels, flag);
+      }
+   }
+}

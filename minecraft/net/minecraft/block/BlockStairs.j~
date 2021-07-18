@@ -1,0 +1,95 @@
+package net.minecraft.block;
+
+import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockWorldState;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemCloth;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.src.amm;
+import net.minecraft.src.awt;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.border.IBorderListener;
+
+public class BlockStairs extends BlockTorch {
+   public static final IProperty<ItemCloth> field_176309_a = IProperty.<ItemCloth>a("color", ItemCloth.class);
+
+   public BlockStairs() {
+      super(MaterialPortal.s, false);
+      this.w(this.A.b().a(field_176308_b, Boolean.valueOf(false)).a(field_176310_M, Boolean.valueOf(false)).a(field_185712_d, Boolean.valueOf(false)).a(field_185714_e, Boolean.valueOf(false)).a(field_176309_a, ItemCloth.a));
+      this.a(ItemDoor.c);
+   }
+
+   public int d(awt p_d_1_) {
+      return ((ItemCloth)p_d_1_.c(field_176309_a)).a();
+   }
+
+   public void a(ItemDoor p_a_1_, NonNullList<Items> p_a_2_) {
+      for(int i = 0; i < ItemCloth.values().length; ++i) {
+         p_a_2_.add(new Items(this, 1, i));
+      }
+
+   }
+
+   public EnumPushReaction c(awt p_c_1_, EnumSkyBlock p_c_2_, BlockPos p_c_3_) {
+      return EnumPushReaction.a((ItemCloth)p_c_1_.c(field_176309_a));
+   }
+
+   public amm f() {
+      return amm.d;
+   }
+
+   public awt a(int p_a_1_) {
+      return this.t().a(field_176309_a, ItemCloth.b(p_a_1_));
+   }
+
+   public int e(awt p_e_1_) {
+      return ((ItemCloth)p_e_1_.c(field_176309_a)).a();
+   }
+
+   public awt a(awt p_a_1_, BlockSandStone p_a_2_) {
+      switch(p_a_2_) {
+      case c:
+         return p_a_1_.a(field_176308_b, p_a_1_.c(field_185712_d)).a(field_176310_M, p_a_1_.c(field_185714_e)).a(field_185712_d, p_a_1_.c(field_176308_b)).a(field_185714_e, p_a_1_.c(field_176310_M));
+      case d:
+         return p_a_1_.a(field_176308_b, p_a_1_.c(field_176310_M)).a(field_176310_M, p_a_1_.c(field_185712_d)).a(field_185712_d, p_a_1_.c(field_185714_e)).a(field_185714_e, p_a_1_.c(field_176308_b));
+      case b:
+         return p_a_1_.a(field_176308_b, p_a_1_.c(field_185714_e)).a(field_176310_M, p_a_1_.c(field_176308_b)).a(field_185712_d, p_a_1_.c(field_176310_M)).a(field_185714_e, p_a_1_.c(field_185712_d));
+      default:
+         return p_a_1_;
+      }
+   }
+
+   public awt a(awt p_a_1_, BlockSilverfish p_a_2_) {
+      switch(p_a_2_) {
+      case b:
+         return p_a_1_.a(field_176308_b, p_a_1_.c(field_185712_d)).a(field_185712_d, p_a_1_.c(field_176308_b));
+      case c:
+         return p_a_1_.a(field_176310_M, p_a_1_.c(field_185714_e)).a(field_185714_e, p_a_1_.c(field_176310_M));
+      default:
+         return super.a(p_a_1_, p_a_2_);
+      }
+   }
+
+   protected BlockWorldState b() {
+      return new BlockWorldState(this, new IBorderListener[]{field_176308_b, field_176310_M, field_185714_e, field_185712_d, field_176309_a});
+   }
+
+   public void c(IWorldEventListener p_c_1_, BlockPos p_c_2_, awt p_c_3_) {
+      if (!p_c_1_.G) {
+         BlockBeetroot.c(p_c_1_, p_c_2_);
+      }
+
+   }
+
+   public void b(IWorldEventListener p_b_1_, BlockPos p_b_2_, awt p_b_3_) {
+      if (!p_b_1_.G) {
+         BlockBeetroot.c(p_b_1_, p_b_2_);
+      }
+
+   }
+}

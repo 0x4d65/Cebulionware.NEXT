@@ -1,0 +1,84 @@
+package net.minecraft.world.storage.loot.conditions;
+
+import com.google.common.collect.Maps;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.Map.Entry;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityTrackerEntry;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.util.LowerStringMap;
+import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
+
+public class LootConditionManager implements EntityHasProperty {
+   private final Map<String, EnchantWithLevels> field_186642_a;
+   private final LootTableManager.b field_186643_b;
+
+   public LootConditionManager(Map<String, EnchantWithLevels> p_i2125_1_, LootTableManager.b p_i2125_2_) {
+      this.field_186642_a = p_i2125_1_;
+      this.field_186643_b = p_i2125_2_;
+   }
+
+   public boolean a(Random p_a_1_, LootTableManager p_a_2_) {
+      EntityList entitylist = p_a_2_.a(this.field_186643_b);
+      if (entitylist == null) {
+         return false;
+      } else {
+         Team team = entitylist.l.af();
+
+         for(Entry<String, EnchantWithLevels> entry : this.field_186642_a.entrySet()) {
+            if (!this.a(entitylist, team, entry.getKey(), entry.getValue())) {
+               return false;
+            }
+         }
+
+         return true;
+      }
+   }
+
+   protected boolean a(EntityList p_a_1_, Team p_a_2_, String p_a_3_, EnchantWithLevels p_a_4_) {
+      Score score = p_a_2_.b(p_a_3_);
+      if (score == null) {
+         return false;
+      } else {
+         String s = p_a_1_ instanceof EntityTrackerEntry ? p_a_1_.func_70005_c_() : p_a_1_.bn();
+         return !p_a_2_.b(s, score) ? false : p_a_4_.a(p_a_2_.c(s, score).c());
+      }
+   }
+
+   public static class Serializer extends EntityHasProperty.Serializer<LootConditionManager> {
+      protected Serializer() {
+         super(new BehaviorProjectileDispense("entity_scores"), LootConditionManager.class);
+      }
+
+      public void a(JsonObject p_a_1_, LootConditionManager p_a_2_, JsonSerializationContext p_a_3_) {
+         JsonObject jsonobject = new JsonObject();
+
+         for(Entry<String, EnchantWithLevels> entry : p_a_2_.field_186642_a.entrySet()) {
+            jsonobject.add(entry.getKey(), p_a_3_.serialize(entry.getValue()));
+         }
+
+         p_a_1_.add("scores", jsonobject);
+         p_a_1_.add("entity", p_a_3_.serialize(p_a_2_.field_186643_b));
+      }
+
+      public LootConditionManager a(JsonObject p_a_1_, JsonDeserializationContext p_a_2_) {
+         Set<Entry<String, JsonElement>> set = LowerStringMap.t(p_a_1_, "scores").entrySet();
+         Map<String, EnchantWithLevels> map = Maps.<String, EnchantWithLevels>newLinkedHashMap();
+
+         for(Entry<String, JsonElement> entry : set) {
+            map.put(entry.getKey(), LowerStringMap.a(entry.getValue(), "score", p_a_2_, EnchantWithLevels.class));
+         }
+
+         return new LootConditionManager(map, (LootTableManager.b)LowerStringMap.a(p_a_1_, "entity", p_a_2_, LootTableManager.b.class));
+      }
+   }
+}

@@ -1,0 +1,303 @@
+package net.minecraft.network.datasync;
+
+import com.google.common.base.Optional;
+import java.util.UUID;
+import javax.annotation.Nullable;
+import net.minecraft.block.BlockBone;
+import net.minecraft.init.Items;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.src.awt;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.FrameTimer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Rotations;
+import net.minecraft.util.text.ITextComponent;
+
+public class EntityDataManager {
+   private static final FrameTimer<DataSerializers<?>> o = new FrameTimer<DataSerializers<?>>(16);
+   public static final DataSerializers<Byte> field_190303_a = new DataSerializers<Byte>() {
+      public void a(PacketBuffer p_a_1_, Byte p_a_2_) {
+         p_a_1_.writeByte(p_a_2_.byteValue());
+      }
+
+      public Byte b(PacketBuffer p_b_1_) {
+         return p_b_1_.readByte();
+      }
+
+      public DataSerializer<Byte> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Byte>(p_187190_1_, this);
+      }
+
+      public Byte a(Byte p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Integer> field_187232_a = new DataSerializers<Integer>() {
+      public void a(PacketBuffer p_a_1_, Integer p_a_2_) {
+         p_a_1_.func_150787_b(p_a_2_.intValue());
+      }
+
+      public Integer b(PacketBuffer p_b_1_) {
+         return p_b_1_.func_150792_a();
+      }
+
+      public DataSerializer<Integer> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Integer>(p_187190_1_, this);
+      }
+
+      public Integer a(Integer p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Float> field_187233_b = new DataSerializers<Float>() {
+      public void a(PacketBuffer p_a_1_, Float p_a_2_) {
+         p_a_1_.writeFloat(p_a_2_.floatValue());
+      }
+
+      public Float b(PacketBuffer p_b_1_) {
+         return p_b_1_.readFloat();
+      }
+
+      public DataSerializer<Float> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Float>(p_187190_1_, this);
+      }
+
+      public Float a(Float p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<String> field_187234_c = new DataSerializers<String>() {
+      public void a(PacketBuffer p_a_1_, String p_a_2_) {
+         p_a_1_.func_180714_a(p_a_2_);
+      }
+
+      public String b(PacketBuffer p_b_1_) {
+         return p_b_1_.func_150789_c(32767);
+      }
+
+      public DataSerializer<String> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<String>(p_187190_1_, this);
+      }
+
+      public String a(String p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<ITextComponent> field_187235_d = new DataSerializers<ITextComponent>() {
+      public void a(PacketBuffer p_a_1_, ITextComponent p_a_2_) {
+         p_a_1_.func_179256_a(p_a_2_);
+      }
+
+      public ITextComponent b(PacketBuffer p_b_1_) {
+         return p_b_1_.func_179258_d();
+      }
+
+      public DataSerializer<ITextComponent> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<ITextComponent>(p_187190_1_, this);
+      }
+
+      public ITextComponent a(ITextComponent p_a_1_) {
+         return p_a_1_.func_150259_f();
+      }
+   };
+   public static final DataSerializers<Items> field_187236_e = new DataSerializers<Items>() {
+      public void a(PacketBuffer p_a_1_, Items p_a_2_) {
+         p_a_1_.a(p_a_2_);
+      }
+
+      public Items b(PacketBuffer p_b_1_) {
+         return p_b_1_.k();
+      }
+
+      public DataSerializer<Items> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Items>(p_187190_1_, this);
+      }
+
+      public Items a(Items p_a_1_) {
+         return p_a_1_.l();
+      }
+   };
+   public static final DataSerializers<Optional<awt>> field_187237_f = new DataSerializers<Optional<awt>>() {
+      public void a(PacketBuffer p_a_1_, Optional<awt> p_a_2_) {
+         if (p_a_2_.isPresent()) {
+            p_a_1_.func_150787_b(BlockBone.j(p_a_2_.get()));
+         } else {
+            p_a_1_.func_150787_b(0);
+         }
+
+      }
+
+      public Optional<awt> b(PacketBuffer p_b_1_) {
+         int i = p_b_1_.func_150792_a();
+         return i == 0 ? Optional.absent() : Optional.of(BlockBone.d(i));
+      }
+
+      public DataSerializer<Optional<awt>> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Optional<awt>>(p_187190_1_, this);
+      }
+
+      public Optional<awt> a(Optional<awt> p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Boolean> h = new DataSerializers<Boolean>() {
+      public void a(PacketBuffer p_a_1_, Boolean p_a_2_) {
+         p_a_1_.writeBoolean(p_a_2_.booleanValue());
+      }
+
+      public Boolean b(PacketBuffer p_b_1_) {
+         return p_b_1_.readBoolean();
+      }
+
+      public DataSerializer<Boolean> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Boolean>(p_187190_1_, this);
+      }
+
+      public Boolean a(Boolean p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Rotations> i = new DataSerializers<Rotations>() {
+      public void a(PacketBuffer p_a_1_, Rotations p_a_2_) {
+         p_a_1_.writeFloat(p_a_2_.func_179415_b());
+         p_a_1_.writeFloat(p_a_2_.func_179416_c());
+         p_a_1_.writeFloat(p_a_2_.func_179413_d());
+      }
+
+      public Rotations b(PacketBuffer p_b_1_) {
+         return new Rotations(p_b_1_.readFloat(), p_b_1_.readFloat(), p_b_1_.readFloat());
+      }
+
+      public DataSerializer<Rotations> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Rotations>(p_187190_1_, this);
+      }
+
+      public Rotations a(Rotations p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<BlockPos> j = new DataSerializers<BlockPos>() {
+      public void a(PacketBuffer p_a_1_, BlockPos p_a_2_) {
+         p_a_1_.func_179255_a(p_a_2_);
+      }
+
+      public BlockPos b(PacketBuffer p_b_1_) {
+         return p_b_1_.func_179259_c();
+      }
+
+      public DataSerializer<BlockPos> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<BlockPos>(p_187190_1_, this);
+      }
+
+      public BlockPos a(BlockPos p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Optional<BlockPos>> k = new DataSerializers<Optional<BlockPos>>() {
+      public void a(PacketBuffer p_a_1_, Optional<BlockPos> p_a_2_) {
+         p_a_1_.writeBoolean(p_a_2_.isPresent());
+         if (p_a_2_.isPresent()) {
+            p_a_1_.func_179255_a(p_a_2_.get());
+         }
+
+      }
+
+      public Optional<BlockPos> b(PacketBuffer p_b_1_) {
+         return !p_b_1_.readBoolean() ? Optional.absent() : Optional.of(p_b_1_.func_179259_c());
+      }
+
+      public DataSerializer<Optional<BlockPos>> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Optional<BlockPos>>(p_187190_1_, this);
+      }
+
+      public Optional<BlockPos> a(Optional<BlockPos> p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<EnumFacing> l = new DataSerializers<EnumFacing>() {
+      public void a(PacketBuffer p_a_1_, EnumFacing p_a_2_) {
+         p_a_1_.func_179249_a(p_a_2_);
+      }
+
+      public EnumFacing b(PacketBuffer p_b_1_) {
+         return (EnumFacing)p_b_1_.func_179257_a(EnumFacing.class);
+      }
+
+      public DataSerializer<EnumFacing> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<EnumFacing>(p_187190_1_, this);
+      }
+
+      public EnumFacing a(EnumFacing p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<Optional<UUID>> m = new DataSerializers<Optional<UUID>>() {
+      public void a(PacketBuffer p_a_1_, Optional<UUID> p_a_2_) {
+         p_a_1_.writeBoolean(p_a_2_.isPresent());
+         if (p_a_2_.isPresent()) {
+            p_a_1_.func_179252_a(p_a_2_.get());
+         }
+
+      }
+
+      public Optional<UUID> b(PacketBuffer p_b_1_) {
+         return !p_b_1_.readBoolean() ? Optional.absent() : Optional.of(p_b_1_.func_179253_g());
+      }
+
+      public DataSerializer<Optional<UUID>> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<Optional<UUID>>(p_187190_1_, this);
+      }
+
+      public Optional<UUID> a(Optional<UUID> p_a_1_) {
+         return p_a_1_;
+      }
+   };
+   public static final DataSerializers<NBTTagCompound> n = new DataSerializers<NBTTagCompound>() {
+      public void a(PacketBuffer p_a_1_, NBTTagCompound p_a_2_) {
+         p_a_1_.func_150786_a(p_a_2_);
+      }
+
+      public NBTTagCompound b(PacketBuffer p_b_1_) {
+         return p_b_1_.func_150793_b();
+      }
+
+      public DataSerializer<NBTTagCompound> func_187190_a(int p_187190_1_) {
+         return new DataSerializer<NBTTagCompound>(p_187190_1_, this);
+      }
+
+      public NBTTagCompound a(NBTTagCompound p_a_1_) {
+         return p_a_1_.func_74737_b();
+      }
+   };
+
+   public static void a(DataSerializers<?> p_a_0_) {
+      o.c(p_a_0_);
+   }
+
+   @Nullable
+   public static DataSerializers<?> a(int p_a_0_) {
+      return (DataSerializers)o.a(p_a_0_);
+   }
+
+   public static int b(DataSerializers<?> p_b_0_) {
+      return o.a(p_b_0_);
+   }
+
+   static {
+      a(field_190303_a);
+      a(field_187232_a);
+      a(field_187233_b);
+      a(field_187234_c);
+      a(field_187235_d);
+      a(field_187236_e);
+      a(h);
+      a(i);
+      a(j);
+      a(k);
+      a(l);
+      a(m);
+      a(field_187237_f);
+      a(n);
+   }
+}

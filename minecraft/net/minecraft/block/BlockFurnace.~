@@ -1,0 +1,17 @@
+package net.minecraft.block;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.src.awt;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
+
+public class BlockFurnace extends BlockStructureVoid {
+   public boolean e() {
+      return true;
+   }
+
+   public IBlockState a(EnumSkyBlock p_a_1_, awt p_a_2_, BlockPos p_a_3_, EnumFacing p_a_4_) {
+      return IBlockState.a;
+   }
+}

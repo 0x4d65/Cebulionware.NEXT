@@ -1,0 +1,285 @@
+package net.minecraft.world.gen.structure;
+
+import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Random;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.IGrowable;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemLead;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.bcj;
+import net.minecraft.src.rr;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.gen.structure.template.ITemplateProcessor;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.storage.loot.LootEntryItem;
+
+public class StructureMineshaftPieces {
+   private static final Template a = (new Template()).a(true);
+   private static final Template b = (new Template()).a(true).a(IGrowable.a);
+   private static final StructureMineshaftPieces.Cross c = new StructureMineshaftPieces.Cross() {
+      public void a() {
+      }
+
+      public boolean a(ITemplateProcessor p_a_1_, int p_a_2_, StructureMineshaftPieces.Corridor p_a_3_, BlockPos p_a_4_, List<StructureComponentTemplate> p_a_5_, Random p_a_6_) {
+         if (p_a_2_ > 8) {
+            return false;
+         } else {
+            BlockSandStone blocksandstone = p_a_3_.field_74958_a.c();
+            StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, p_a_3_, p_a_4_, "base_floor", blocksandstone, true));
+            int i = p_a_6_.nextInt(3);
+            if (i == 0) {
+               StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 4, -1), "base_roof", blocksandstone, true));
+            } else if (i == 1) {
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 0, -1), "second_floor_2", blocksandstone, false));
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 8, -1), "second_roof", blocksandstone, false));
+               StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.e, p_a_2_ + 1, structuremineshaftpieces$corridor, (BlockPos)null, p_a_5_, p_a_6_);
+            } else if (i == 2) {
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 0, -1), "second_floor_2", blocksandstone, false));
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 4, -1), "third_floor_c", blocksandstone, false));
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-1, 8, -1), "third_roof", blocksandstone, true));
+               StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.e, p_a_2_ + 1, structuremineshaftpieces$corridor, (BlockPos)null, p_a_5_, p_a_6_);
+            }
+
+            return true;
+         }
+      }
+   };
+   private static final List<rr<BlockSandStone, BlockPos>> d = Lists.newArrayList(new rr(BlockSandStone.field_176297_a, new BlockPos(1, -1, 0)), new rr(BlockSandStone.b, new BlockPos(6, -1, 1)), new rr(BlockSandStone.d, new BlockPos(0, -1, 5)), new rr(BlockSandStone.c, new BlockPos(5, -1, 6)));
+   private static final StructureMineshaftPieces.Cross e = new StructureMineshaftPieces.Cross() {
+      public void a() {
+      }
+
+      public boolean a(ITemplateProcessor p_a_1_, int p_a_2_, StructureMineshaftPieces.Corridor p_a_3_, BlockPos p_a_4_, List<StructureComponentTemplate> p_a_5_, Random p_a_6_) {
+         BlockSandStone blocksandstone = p_a_3_.field_74958_a.c();
+         StructureMineshaftPieces.Corridor lvt_8_1_ = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, p_a_3_, new BlockPos(3 + p_a_6_.nextInt(2), -3, 3 + p_a_6_.nextInt(2)), "tower_base", blocksandstone, true));
+         lvt_8_1_ = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, lvt_8_1_, new BlockPos(0, 7, 0), "tower_piece", blocksandstone, true));
+         StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor1 = p_a_6_.nextInt(3) == 0 ? lvt_8_1_ : null;
+         int i = 1 + p_a_6_.nextInt(3);
+
+         for(int j = 0; j < i; ++j) {
+            lvt_8_1_ = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, lvt_8_1_, new BlockPos(0, 4, 0), "tower_piece", blocksandstone, true));
+            if (j < i - 1 && p_a_6_.nextBoolean()) {
+               structuremineshaftpieces$corridor1 = lvt_8_1_;
+            }
+         }
+
+         if (structuremineshaftpieces$corridor1 != null) {
+            for(rr<BlockSandStone, BlockPos> rr : StructureMineshaftPieces.d) {
+               if (p_a_6_.nextBoolean()) {
+                  StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor2 = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor1, rr.b(), "bridge_end", blocksandstone.a(rr.a()), true));
+                  StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.f, p_a_2_ + 1, structuremineshaftpieces$corridor2, (BlockPos)null, p_a_5_, p_a_6_);
+               }
+            }
+
+            StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, lvt_8_1_, new BlockPos(-1, 4, -1), "tower_top", blocksandstone, true));
+         } else {
+            if (p_a_2_ != 7) {
+               return StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.h, p_a_2_ + 1, lvt_8_1_, (BlockPos)null, p_a_5_, p_a_6_);
+            }
+
+            StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, lvt_8_1_, new BlockPos(-1, 4, -1), "tower_top", blocksandstone, true));
+         }
+
+         return true;
+      }
+   };
+   private static final StructureMineshaftPieces.Cross f = new StructureMineshaftPieces.Cross() {
+      public boolean a;
+
+      public void a() {
+         this.a = false;
+      }
+
+      public boolean a(ITemplateProcessor p_a_1_, int p_a_2_, StructureMineshaftPieces.Corridor p_a_3_, BlockPos p_a_4_, List<StructureComponentTemplate> p_a_5_, Random p_a_6_) {
+         BlockSandStone blocksandstone = p_a_3_.field_74958_a.c();
+         int i = p_a_6_.nextInt(4) + 1;
+         StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, p_a_3_, new BlockPos(0, 0, -4), "bridge_piece", blocksandstone, true));
+         structuremineshaftpieces$corridor.m = -1;
+         int j = 0;
+
+         for(int k = 0; k < i; ++k) {
+            if (p_a_6_.nextBoolean()) {
+               structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(0, j, -4), "bridge_piece", blocksandstone, true));
+               j = 0;
+            } else {
+               if (p_a_6_.nextBoolean()) {
+                  structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(0, j, -4), "bridge_steep_stairs", blocksandstone, true));
+               } else {
+                  structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(0, j, -8), "bridge_gentle_stairs", blocksandstone, true));
+               }
+
+               j = 4;
+            }
+         }
+
+         if (!this.a && p_a_6_.nextInt(10 - p_a_2_) == 0) {
+            StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-8 + p_a_6_.nextInt(8), j, -70 + p_a_6_.nextInt(10)), "ship", blocksandstone, true));
+            this.a = true;
+         } else if (!StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.c, p_a_2_ + 1, structuremineshaftpieces$corridor, new BlockPos(-3, j + 1, -11), p_a_5_, p_a_6_)) {
+            return false;
+         }
+
+         structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(4, j, 0), "bridge_end", blocksandstone.a(BlockSandStone.c), true));
+         structuremineshaftpieces$corridor.m = -1;
+         return true;
+      }
+   };
+   private static final List<rr<BlockSandStone, BlockPos>> g = Lists.newArrayList(new rr(BlockSandStone.field_176297_a, new BlockPos(4, -1, 0)), new rr(BlockSandStone.b, new BlockPos(12, -1, 4)), new rr(BlockSandStone.d, new BlockPos(0, -1, 8)), new rr(BlockSandStone.c, new BlockPos(8, -1, 12)));
+   private static final StructureMineshaftPieces.Cross h = new StructureMineshaftPieces.Cross() {
+      public void a() {
+      }
+
+      public boolean a(ITemplateProcessor p_a_1_, int p_a_2_, StructureMineshaftPieces.Corridor p_a_3_, BlockPos p_a_4_, List<StructureComponentTemplate> p_a_5_, Random p_a_6_) {
+         BlockSandStone blocksandstone = p_a_3_.field_74958_a.c();
+         StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, p_a_3_, new BlockPos(-3, 4, -3), "fat_tower_base", blocksandstone, true));
+         structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(0, 4, 0), "fat_tower_middle", blocksandstone, true));
+
+         for(int i = 0; i < 2 && p_a_6_.nextInt(3) != 0; ++i) {
+            structuremineshaftpieces$corridor = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(0, 8, 0), "fat_tower_middle", blocksandstone, true));
+
+            for(rr<BlockSandStone, BlockPos> rr : StructureMineshaftPieces.g) {
+               if (p_a_6_.nextBoolean()) {
+                  StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor1 = StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, rr.b(), "bridge_end", blocksandstone.a(rr.a()), true));
+                  StructureMineshaftPieces.b(p_a_1_, StructureMineshaftPieces.f, p_a_2_ + 1, structuremineshaftpieces$corridor1, (BlockPos)null, p_a_5_, p_a_6_);
+               }
+            }
+         }
+
+         StructureMineshaftPieces.b(p_a_5_, StructureMineshaftPieces.b(p_a_1_, structuremineshaftpieces$corridor, new BlockPos(-2, 8, -2), "fat_tower_top", blocksandstone, true));
+         return true;
+      }
+   };
+
+   public static void func_143048_a() {
+      StructureComponent.a(StructureMineshaftPieces.Corridor.class, "ECP");
+   }
+
+   private static StructureMineshaftPieces.Corridor b(ITemplateProcessor p_b_0_, StructureMineshaftPieces.Corridor p_b_1_, BlockPos p_b_2_, String p_b_3_, BlockSandStone p_b_4_, boolean p_b_5_) {
+      StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor = new StructureMineshaftPieces.Corridor(p_b_0_, p_b_3_, p_b_1_.field_74956_b, p_b_4_, p_b_5_);
+      BlockPos blockpos = p_b_1_.field_186176_a.a(p_b_1_.field_74958_a, p_b_2_, structuremineshaftpieces$corridor.field_74958_a, BlockPos.field_177992_a);
+      structuremineshaftpieces$corridor.func_181138_a(blockpos.func_177958_n(), blockpos.func_177956_o(), blockpos.func_177952_p());
+      return structuremineshaftpieces$corridor;
+   }
+
+   public static void a(ITemplateProcessor p_a_0_, BlockPos p_a_1_, BlockSandStone p_a_2_, List<StructureComponentTemplate> p_a_3_, Random p_a_4_) {
+      h.a();
+      c.a();
+      f.a();
+      e.a();
+      StructureMineshaftPieces.Corridor structuremineshaftpieces$corridor = b(p_a_3_, new StructureMineshaftPieces.Corridor(p_a_0_, "base_floor", p_a_1_, p_a_2_, true));
+      structuremineshaftpieces$corridor = b(p_a_3_, b(p_a_0_, structuremineshaftpieces$corridor, new BlockPos(-1, 0, -1), "second_floor", p_a_2_, false));
+      structuremineshaftpieces$corridor = b(p_a_3_, b(p_a_0_, structuremineshaftpieces$corridor, new BlockPos(-1, 4, -1), "third_floor", p_a_2_, false));
+      structuremineshaftpieces$corridor = b(p_a_3_, b(p_a_0_, structuremineshaftpieces$corridor, new BlockPos(-1, 8, -1), "third_roof", p_a_2_, true));
+      b(p_a_0_, e, 1, structuremineshaftpieces$corridor, (BlockPos)null, p_a_3_, p_a_4_);
+   }
+
+   private static StructureMineshaftPieces.Corridor b(List<StructureComponentTemplate> p_b_0_, StructureMineshaftPieces.Corridor p_b_1_) {
+      p_b_0_.add(p_b_1_);
+      return p_b_1_;
+   }
+
+   private static boolean b(ITemplateProcessor p_b_0_, StructureMineshaftPieces.Cross p_b_1_, int p_b_2_, StructureMineshaftPieces.Corridor p_b_3_, BlockPos p_b_4_, List<StructureComponentTemplate> p_b_5_, Random p_b_6_) {
+      if (p_b_2_ > 8) {
+         return false;
+      } else {
+         List<StructureComponentTemplate> list = Lists.<StructureComponentTemplate>newArrayList();
+         if (p_b_1_.a(p_b_0_, p_b_2_, p_b_3_, p_b_4_, list, p_b_6_)) {
+            boolean flag = false;
+            int i = p_b_6_.nextInt();
+
+            for(StructureComponentTemplate structurecomponenttemplate : list) {
+               structurecomponenttemplate.m = i;
+               StructureComponentTemplate structurecomponenttemplate1 = StructureComponentTemplate.a(p_b_5_, structurecomponenttemplate.d());
+               if (structurecomponenttemplate1 != null && structurecomponenttemplate1.m != p_b_3_.m) {
+                  flag = true;
+                  break;
+               }
+            }
+
+            if (!flag) {
+               p_b_5_.addAll(list);
+               return true;
+            }
+         }
+
+         return false;
+      }
+   }
+
+   public static class Corridor extends StructureVillagePieces {
+      private String field_74957_c;
+      private BlockSandStone field_74955_d;
+      private boolean f;
+
+      public Corridor() {
+      }
+
+      public Corridor(ITemplateProcessor p_i1911_1_, String p_i1911_2_, BlockPos p_i1911_3_, BlockSandStone p_i1911_4_, boolean p_i1911_5_) {
+         super(0);
+         this.field_74957_c = p_i1911_2_;
+         this.field_74956_b = p_i1911_3_;
+         this.field_74955_d = p_i1911_4_;
+         this.f = p_i1911_5_;
+         this.a(p_i1911_1_);
+      }
+
+      private void a(ITemplateProcessor p_a_1_) {
+         bcj bcj = p_a_1_.a((MinecraftServer)null, new BehaviorProjectileDispense("endcity/" + this.field_74957_c));
+         Template template = (this.f ? StructureMineshaftPieces.a : StructureMineshaftPieces.b).a().a(this.field_74955_d);
+         this.a(bcj, this.field_74956_b, template);
+      }
+
+      protected void func_143012_a(NBTTagCompound p_143012_1_) {
+         super.func_143012_a(p_143012_1_);
+         p_143012_1_.func_74778_a("Template", this.field_74957_c);
+         p_143012_1_.func_74778_a("Rot", this.field_74955_d.name());
+         p_143012_1_.func_74757_a("OW", this.f);
+      }
+
+      protected void a(NBTTagCompound p_a_1_, ITemplateProcessor p_a_2_) {
+         super.a(p_a_1_, p_a_2_);
+         this.field_74957_c = p_a_1_.func_74779_i("Template");
+         this.field_74955_d = BlockSandStone.valueOf(p_a_1_.func_74779_i("Rot"));
+         this.f = p_a_1_.func_74767_n("OW");
+         this.a(p_a_2_);
+      }
+
+      protected void a(String p_a_1_, BlockPos p_a_2_, IWorldEventListener p_a_3_, Random p_a_4_, StructureEndCityPieces p_a_5_) {
+         if (p_a_1_.startsWith("Chest")) {
+            BlockPos blockpos = p_a_2_.func_177977_b();
+            if (p_a_5_.b(blockpos)) {
+               TileEntityChest tileentitychest = p_a_3_.r(blockpos);
+               if (tileentitychest instanceof TileEntityComparator) {
+                  ((TileEntityComparator)tileentitychest).a(LootEntryItem.c, p_a_4_.nextLong());
+               }
+            }
+         } else if (p_a_1_.startsWith("Sentry")) {
+            EntitySkeleton entityskeleton = new EntitySkeleton(p_a_3_);
+            entityskeleton.b((double)p_a_2_.func_177958_n() + 0.5D, (double)p_a_2_.func_177956_o() + 0.5D, (double)p_a_2_.func_177952_p() + 0.5D);
+            entityskeleton.g(p_a_2_);
+            p_a_3_.a(entityskeleton);
+         } else if (p_a_1_.startsWith("Elytra")) {
+            EntityPainting entitypainting = new EntityPainting(p_a_3_, p_a_2_, this.field_74955_d.a(EnumFacing.SOUTH));
+            entitypainting.a(new Items(ItemLead.cS));
+            p_a_3_.a(entitypainting);
+         }
+
+      }
+   }
+
+   interface Cross {
+      void a();
+
+      boolean a(ITemplateProcessor var1, int var2, StructureMineshaftPieces.Corridor var3, BlockPos var4, List<StructureComponentTemplate> var5, Random var6);
+   }
+}

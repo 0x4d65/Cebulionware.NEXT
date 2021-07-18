@@ -1,0 +1,230 @@
+***************
+*** 150,156 ****
+                             }
+                          }
+  
+-                         return Lists.newArrayList(entity);
+                       }
+  
+                       return Collections.<T>emptyList();
+--- 150,156 ----
+                             }
+                          }
+  
++                         return Lists.newArrayList((T)entity);
+                       }
+  
+                       return Collections.<T>emptyList();
+***************
+*** 245,251 ****
+              s = s.substring(1);
+           }
+  
+-          final GameType gametype;
+           try {
+              int i = Integer.parseInt(s);
+              gametype = GameType.func_185329_a(i, GameType.NOT_SET);
+--- 245,251 ----
+              s = s.substring(1);
+           }
+  
++          GameType gametype;
+           try {
+              int i = Integer.parseInt(s);
+              gametype = GameType.func_185329_a(i, GameType.NOT_SET);
+***************
+*** 253,258 ****
+              gametype = GameType.func_185328_a(s, GameType.NOT_SET);
+           }
+  
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (!(p_apply_1_ instanceof EntityPlayerMP)) {
+--- 253,259 ----
+              gametype = GameType.func_185328_a(s, GameType.NOT_SET);
+           }
+  
++          final GameType type = gametype;
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (!(p_apply_1_ instanceof EntityPlayerMP)) {
+***************
+*** 260,266 ****
+                 } else {
+                    EntityPlayerMP entityplayermp = (EntityPlayerMP)p_apply_1_;
+                    GameType gametype1 = entityplayermp.field_71134_c.func_73081_b();
+-                   return flag ? gametype1 != gametype : gametype1 == gametype;
+                 }
+              }
+           });
+--- 261,267 ----
+                 } else {
+                    EntityPlayerMP entityplayermp = (EntityPlayerMP)p_apply_1_;
+                    GameType gametype1 = entityplayermp.field_71134_c.func_73081_b();
++                   return flag ? gametype1 != type : gametype1 == type;
+                 }
+              }
+           });
+***************
+*** 270,282 ****
+  
+     private static List<Predicate<Entity>> func_179659_d(Map<String, String> p_179659_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
+-       final String s = func_179651_b(p_179659_0_, field_190847_u);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (!(p_apply_1_ instanceof EntityLivingBase)) {
+--- 271,284 ----
+  
+     private static List<Predicate<Entity>> func_179659_d(Map<String, String> p_179659_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
++       String s = func_179651_b(p_179659_0_, field_190847_u);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
++          final String s_f_ = s;
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (!(p_apply_1_ instanceof EntityLivingBase)) {
+***************
+*** 285,291 ****
+                    EntityLivingBase entitylivingbase = (EntityLivingBase)p_apply_1_;
+                    Team team = entitylivingbase.func_96124_cp();
+                    String s1 = team == null ? "" : team.func_96661_b();
+-                   return s1.equals(s) != flag;
+                 }
+              }
+           });
+--- 287,293 ----
+                    EntityLivingBase entitylivingbase = (EntityLivingBase)p_apply_1_;
+                    Team team = entitylivingbase.func_96124_cp();
+                    String s1 = team == null ? "" : team.func_96661_b();
++                   return s1.equals(s_f_) != flag;
+                 }
+              }
+           });
+***************
+*** 296,302 ****
+  
+     private static List<Predicate<Entity>> func_184952_c(final ICommandSender p_184952_0_, Map<String, String> p_184952_1_) {
+        final Map<String, Integer> map = func_96560_a(p_184952_1_);
+-       return (List<Predicate<Entity>>)(map.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate<Entity>() {
+           public boolean apply(@Nullable Entity p_apply_1_) {
+              if (p_apply_1_ == null) {
+                 return false;
+--- 298,304 ----
+  
+     private static List<Predicate<Entity>> func_184952_c(final ICommandSender p_184952_0_, Map<String, String> p_184952_1_) {
+        final Map<String, Integer> map = func_96560_a(p_184952_1_);
++       return (map.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate<Entity>() {
+           public boolean apply(@Nullable Entity p_apply_1_) {
+              if (p_apply_1_ == null) {
+                 return false;
+***************
+*** 340,355 ****
+  
+     private static List<Predicate<Entity>> func_179647_f(Map<String, String> p_179647_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
+-       final String s = func_179651_b(p_179647_0_, field_190848_v);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+-                return p_apply_1_ != null && p_apply_1_.func_70005_c_().equals(s) != flag;
+              }
+           });
+        }
+--- 342,358 ----
+  
+     private static List<Predicate<Entity>> func_179647_f(Map<String, String> p_179647_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
++       String s = func_179651_b(p_179647_0_, field_190848_v);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
++          final String s_f_ = s;
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
++                return p_apply_1_ != null && p_apply_1_.func_70005_c_().equals(s_f_) != flag;
+              }
+           });
+        }
+***************
+*** 359,379 ****
+  
+     private static List<Predicate<Entity>> func_184951_f(Map<String, String> p_184951_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
+-       final String s = func_179651_b(p_184951_0_, field_190850_x);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (p_apply_1_ == null) {
+                    return false;
+-                } else if ("".equals(s)) {
+                    return p_apply_1_.func_184216_O().isEmpty() != flag;
+                 } else {
+-                   return p_apply_1_.func_184216_O().contains(s) != flag;
+                 }
+              }
+           });
+--- 362,383 ----
+  
+     private static List<Predicate<Entity>> func_184951_f(Map<String, String> p_184951_0_) {
+        List<Predicate<Entity>> list = Lists.<Predicate<Entity>>newArrayList();
++       String s = func_179651_b(p_184951_0_, field_190850_x);
+        final boolean flag = s != null && s.startsWith("!");
+        if (flag) {
+           s = s.substring(1);
+        }
+  
+        if (s != null) {
++          final String s_f_ = s;
+           list.add(new Predicate<Entity>() {
+              public boolean apply(@Nullable Entity p_apply_1_) {
+                 if (p_apply_1_ == null) {
+                    return false;
++                } else if ("".equals(s_f_)) {
+                    return p_apply_1_.func_184216_O().isEmpty() != flag;
+                 } else {
++                   return p_apply_1_.func_184216_O().contains(s_f_) != flag;
+                 }
+              }
+           });
+***************
+*** 510,516 ****
+  
+        Entity entity = p_179658_2_.func_174793_f();
+        if (entity != null && p_179658_3_.isAssignableFrom(entity.getClass()) && i == 1 && p_179658_0_.contains(entity) && !"r".equals(p_179658_4_)) {
+-          p_179658_0_ = Lists.newArrayList(entity);
+        }
+  
+        if (i != 0) {
+--- 514,520 ----
+  
+        Entity entity = p_179658_2_.func_174793_f();
+        if (entity != null && p_179658_3_.isAssignableFrom(entity.getClass()) && i == 1 && p_179658_0_.contains(entity) && !"r".equals(p_179658_4_)) {
++          p_179658_0_ = Lists.newArrayList((T)entity);
+        }
+  
+        if (i != 0) {

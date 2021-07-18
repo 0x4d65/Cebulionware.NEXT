@@ -1,0 +1,69 @@
+package net.minecraft.client.renderer.vertex;
+
+import net.minecraft.client.resources.AbstractResourcePack;
+import net.minecraft.src.cea;
+
+public class VertexFormat {
+   public static final cea field_177357_a = new cea();
+   public static final cea field_177355_b = new cea();
+   public static final cea field_177356_c = new cea();
+   public static final cea field_177353_d = new cea();
+   public static final cea field_177354_e = new cea();
+   public static final cea field_177351_f = new cea();
+   public static final cea field_177352_g = new cea();
+   public static final cea h = new cea();
+   public static final cea i = new cea();
+   public static final cea j = new cea();
+   public static final cea k = new cea();
+   public static final cea l = new cea();
+   public static final AbstractResourcePack m = new AbstractResourcePack(0, AbstractResourcePack.a.a, AbstractResourcePack.b.a, 3);
+   public static final AbstractResourcePack n = new AbstractResourcePack(0, AbstractResourcePack.a.b, AbstractResourcePack.b.c, 4);
+   public static final AbstractResourcePack o = new AbstractResourcePack(0, AbstractResourcePack.a.a, AbstractResourcePack.b.d, 2);
+   public static final AbstractResourcePack p = new AbstractResourcePack(1, AbstractResourcePack.a.e, AbstractResourcePack.b.d, 2);
+   public static final AbstractResourcePack q = new AbstractResourcePack(0, AbstractResourcePack.a.c, AbstractResourcePack.b.b, 3);
+   public static final AbstractResourcePack r = new AbstractResourcePack(0, AbstractResourcePack.a.c, AbstractResourcePack.b.g, 1);
+
+   static {
+      field_177357_a.a(m);
+      field_177357_a.a(n);
+      field_177357_a.a(o);
+      field_177357_a.a(p);
+      field_177355_b.a(m);
+      field_177355_b.a(n);
+      field_177355_b.a(o);
+      field_177355_b.a(q);
+      field_177355_b.a(r);
+      field_177356_c.a(m);
+      field_177356_c.a(o);
+      field_177356_c.a(q);
+      field_177356_c.a(r);
+      field_177353_d.a(m);
+      field_177353_d.a(o);
+      field_177353_d.a(n);
+      field_177353_d.a(p);
+      field_177354_e.a(m);
+      field_177351_f.a(m);
+      field_177351_f.a(n);
+      field_177352_g.a(m);
+      field_177352_g.a(o);
+      h.a(m);
+      h.a(q);
+      h.a(r);
+      i.a(m);
+      i.a(o);
+      i.a(n);
+      j.a(m);
+      j.a(o);
+      j.a(q);
+      j.a(r);
+      k.a(m);
+      k.a(o);
+      k.a(p);
+      k.a(n);
+      l.a(m);
+      l.a(o);
+      l.a(n);
+      l.a(q);
+      l.a(r);
+   }
+}

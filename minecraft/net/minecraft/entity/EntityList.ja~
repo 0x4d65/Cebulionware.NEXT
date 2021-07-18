@@ -1,0 +1,2425 @@
+package net.minecraft.entity;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+import javax.annotation.Nullable;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.BlockBone;
+import net.minecraft.block.BlockFire;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockLilyPad;
+import net.minecraft.block.BlockMagma;
+import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockSilverfish;
+import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.command.CommandResultStats;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ICrashReportDetail;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.enchantment.EnchantmentThorns;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityMinecartChest;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.network.datasync.DataSerializer;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.scoreboard.ScoreCriteria;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.acl;
+import net.minecraft.src.awt;
+import net.minecraft.src.awx;
+import net.minecraft.src.bhd;
+import net.minecraft.src.bhh;
+import net.minecraft.src.nb;
+import net.minecraft.src.qf;
+import net.minecraft.src.qg;
+import net.minecraft.src.ud;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.ReportedException;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.WeightedSpawnerEntity;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.DataFixesManager;
+import net.minecraft.util.datafix.IDataWalker;
+import net.minecraft.util.datafix.fixes.BedItemColor;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.gen.layer.GenLayerDeepOcean;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public abstract class EntityList implements ICommandSender {
+   private static final Logger field_191307_a = LogManager.getLogger();
+   private static final List<Items> field_191308_b = Collections.<Items>emptyList();
+   private static final Vec2f field_75627_a = new Vec2f(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+   private static double field_151516_b = 1.0D;
+   private static int field_191311_g;
+   private int h;
+   public boolean i;
+   private final List<EntityList> at;
+   protected int j;
+   private EntityList au;
+   public boolean k;
+   public IWorldEventListener l;
+   public double m;
+   public double n;
+   public double o;
+   public double p;
+   public double q;
+   public double r;
+   public double s;
+   public double t;
+   public double u;
+   public float v;
+   public float w;
+   public float x;
+   public float y;
+   private Vec2f av;
+   public boolean z;
+   public boolean A;
+   public boolean B;
+   public boolean C;
+   public boolean D;
+   protected boolean E;
+   private boolean aw;
+   public boolean F;
+   public float G;
+   public float H;
+   public float I;
+   public float J;
+   public float K;
+   public float L;
+   private int ax;
+   private float ay;
+   public double M;
+   public double N;
+   public double O;
+   public float P;
+   public boolean Q;
+   public float R;
+   protected Random S;
+   public int T;
+   private int az;
+   protected boolean U;
+   public int V;
+   protected boolean W;
+   protected boolean X;
+   protected nb Y;
+   protected static final DataSerializer<Byte> Z = nb.a(EntityList.class, EntityDataManager.field_190303_a);
+   private static final DataSerializer<Integer> aA = nb.a(EntityList.class, EntityDataManager.field_187232_a);
+   private static final DataSerializer<String> aB = nb.a(EntityList.class, EntityDataManager.field_187234_c);
+   private static final DataSerializer<Boolean> aC = nb.a(EntityList.class, EntityDataManager.h);
+   private static final DataSerializer<Boolean> aD = nb.a(EntityList.class, EntityDataManager.h);
+   private static final DataSerializer<Boolean> aE = nb.a(EntityList.class, EntityDataManager.h);
+   public boolean aa;
+   public int ab;
+   public int ac;
+   public int ad;
+   public long ae;
+   public long af;
+   public long ag;
+   public boolean ah;
+   public boolean ai;
+   public int aj;
+   protected boolean ak;
+   protected int al;
+   public int am;
+   protected BlockPos an;
+   protected ScoreObjective ao;
+   protected EnumFacing ap;
+   private boolean aF;
+   protected UUID aq;
+   protected String ar;
+   private final CommandResultStats aG;
+   protected boolean as;
+   private final Set<String> aH;
+   private boolean aI;
+   private final double[] aJ;
+   private long aK;
+
+   public EntityList(IWorldEventListener p_i1053_1_) {
+      this.h = field_191311_g++;
+      this.at = Lists.<EntityList>newArrayList();
+      this.av = field_75627_a;
+      this.G = 0.6F;
+      this.H = 1.8F;
+      this.ax = 1;
+      this.ay = 1.0F;
+      this.S = new Random();
+      this.az = -this.bL();
+      this.W = true;
+      this.aq = IProgressUpdate.a(this.S);
+      this.ar = this.aq.toString();
+      this.aG = new CommandResultStats();
+      this.aH = Sets.<String>newHashSet();
+      this.aJ = new double[]{0.0D, 0.0D, 0.0D};
+      this.l = p_i1053_1_;
+      this.b(0.0D, 0.0D, 0.0D);
+      if (p_i1053_1_ != null) {
+         this.am = p_i1053_1_.s.q().a();
+      }
+
+      this.Y = new nb(this);
+      this.Y.a(Z, Byte.valueOf((byte)0));
+      this.Y.a(aA, Integer.valueOf(300));
+      this.Y.a(aC, Boolean.valueOf(false));
+      this.Y.a(aB, "");
+      this.Y.a(aD, Boolean.valueOf(false));
+      this.Y.a(aE, Boolean.valueOf(false));
+      this.i();
+   }
+
+   public int S() {
+      return this.h;
+   }
+
+   public void h(int p_h_1_) {
+      this.h = p_h_1_;
+   }
+
+   public Set<String> T() {
+      return this.aH;
+   }
+
+   public boolean a(String p_a_1_) {
+      if (this.aH.size() >= 1024) {
+         return false;
+      } else {
+         this.aH.add(p_a_1_);
+         return true;
+      }
+   }
+
+   public boolean b(String p_b_1_) {
+      return this.aH.remove(p_b_1_);
+   }
+
+   public void U() {
+      this.X();
+   }
+
+   protected abstract void i();
+
+   public nb V() {
+      return this.Y;
+   }
+
+   public boolean equals(Object p_equals_1_) {
+      if (p_equals_1_ instanceof EntityList) {
+         return ((EntityList)p_equals_1_).h == this.h;
+      } else {
+         return false;
+      }
+   }
+
+   public int hashCode() {
+      return this.h;
+   }
+
+   protected void W() {
+      if (this.l != null) {
+         while(this.q > 0.0D && this.q < 256.0D) {
+            this.b(this.p, this.q, this.r);
+            if (this.l.a(this, this.bw()).isEmpty()) {
+               break;
+            }
+
+            ++this.q;
+         }
+
+         this.s = 0.0D;
+         this.t = 0.0D;
+         this.u = 0.0D;
+         this.w = 0.0F;
+      }
+   }
+
+   public void X() {
+      this.F = true;
+   }
+
+   public void b(boolean p_b_1_) {
+   }
+
+   protected void a(float p_a_1_, float p_a_2_) {
+      if (p_a_1_ != this.G || p_a_2_ != this.H) {
+         float f = this.G;
+         this.G = p_a_1_;
+         this.H = p_a_2_;
+         if (this.G < f) {
+            double d0 = (double)p_a_1_ / 2.0D;
+            this.a(new Vec2f(this.p - d0, this.q, this.r - d0, this.p + d0, this.q + (double)this.H, this.r + d0));
+            return;
+         }
+
+         Vec2f vec2f = this.bw();
+         this.a(new Vec2f(vec2f.field_189974_a, vec2f.field_189975_b, vec2f.field_189976_c, vec2f.field_189974_a + (double)this.G, vec2f.field_189975_b + (double)this.H, vec2f.field_189976_c + (double)this.G));
+         if (this.G > f && !this.W && !this.l.G) {
+            this.a(EntityCreature.field_70775_bC, (double)(f - this.G), 0.0D, (double)(f - this.G));
+         }
+      }
+
+   }
+
+   protected void b(float p_b_1_, float p_b_2_) {
+      this.v = p_b_1_ % 360.0F;
+      this.w = p_b_2_ % 360.0F;
+   }
+
+   public void b(double p_b_1_, double p_b_3_, double p_b_5_) {
+      this.p = p_b_1_;
+      this.q = p_b_3_;
+      this.r = p_b_5_;
+      float f = this.G / 2.0F;
+      float f1 = this.H;
+      this.a(new Vec2f(p_b_1_ - (double)f, p_b_3_, p_b_5_ - (double)f, p_b_1_ + (double)f, p_b_3_ + (double)f1, p_b_5_ + (double)f));
+   }
+
+   public void c(float p_c_1_, float p_c_2_) {
+      float f = this.w;
+      float f1 = this.v;
+      this.v = (float)((double)this.v + (double)p_c_1_ * 0.15D);
+      this.w = (float)((double)this.w - (double)p_c_2_ * 0.15D);
+      this.w = IProgressUpdate.a(this.w, -90.0F, 90.0F);
+      this.y += this.w - f;
+      this.x += this.v - f1;
+      if (this.au != null) {
+         this.au.l(this);
+      }
+
+   }
+
+   public void B_() {
+      if (!this.l.G) {
+         this.b(6, this.aW());
+      }
+
+      this.Y();
+   }
+
+   public void Y() {
+      this.l.E.a("entityBaseTick");
+      if (this.aS() && this.bJ().F) {
+         this.o();
+      }
+
+      if (this.j > 0) {
+         --this.j;
+      }
+
+      this.I = this.J;
+      this.m = this.p;
+      this.n = this.q;
+      this.o = this.r;
+      this.y = this.w;
+      this.x = this.v;
+      if (!this.l.G && this.l instanceof EntityPlayerMP) {
+         this.l.E.a("portal");
+         if (this.ak) {
+            MinecraftServer minecraftserver = this.l.u();
+            if (minecraftserver.func_71255_r()) {
+               if (!this.aS()) {
+                  int i = this.Z();
+                  if (this.al++ >= i) {
+                     this.al = i;
+                     this.aj = this.aM();
+                     int j;
+                     if (this.l.s.q().a() == -1) {
+                        j = 0;
+                     } else {
+                        j = -1;
+                     }
+
+                     this.b(j);
+                  }
+               }
+
+               this.ak = false;
+            }
+         } else {
+            if (this.al > 0) {
+               this.al -= 4;
+            }
+
+            if (this.al < 0) {
+               this.al = 0;
+            }
+         }
+
+         this.I();
+         this.l.E.b();
+      }
+
+      this.as();
+      this.aq();
+      if (this.l.G) {
+         this.ab();
+      } else if (this.az > 0) {
+         if (this.X) {
+            this.az -= 4;
+            if (this.az < 0) {
+               this.ab();
+            }
+         } else {
+            if (this.az % 20 == 0) {
+               this.a(EntityDamageSourceIndirect.c, 1.0F);
+            }
+
+            --this.az;
+         }
+      }
+
+      if (this.au()) {
+         this.aa();
+         this.L *= 0.5F;
+      }
+
+      if (this.q < -64.0D) {
+         this.ac();
+      }
+
+      if (!this.l.G) {
+         this.b(0, this.az > 0);
+      }
+
+      this.W = false;
+      this.l.E.b();
+   }
+
+   protected void I() {
+      if (this.aj > 0) {
+         --this.aj;
+      }
+
+   }
+
+   public int Z() {
+      return 1;
+   }
+
+   protected void aa() {
+      if (!this.X) {
+         this.a(EntityDamageSourceIndirect.d, 4.0F);
+         this.i(15);
+      }
+   }
+
+   public void i(int p_i_1_) {
+      int i = p_i_1_ * 20;
+      if (this instanceof EnumCreatureType) {
+         i = EnchantmentThorns.a((EnumCreatureType)this, i);
+      }
+
+      if (this.az < i) {
+         this.az = i;
+      }
+
+   }
+
+   public void ab() {
+      this.az = 0;
+   }
+
+   protected void ac() {
+      this.X();
+   }
+
+   public boolean c(double p_c_1_, double p_c_3_, double p_c_5_) {
+      Vec2f vec2f = this.bw().d(p_c_1_, p_c_3_, p_c_5_);
+      return this.b(vec2f);
+   }
+
+   private boolean b(Vec2f p_b_1_) {
+      return this.l.a(this, p_b_1_).isEmpty() && !this.l.d(p_b_1_);
+   }
+
+   public void a(EntityCreature p_a_1_, double p_a_2_, double p_a_4_, double p_a_6_) {
+      if (this.Q) {
+         this.a(this.bw().d(p_a_2_, p_a_4_, p_a_6_));
+         this.ad();
+      } else {
+         if (p_a_1_ == EntityCreature.field_184661_bw) {
+            long i = this.l.R();
+            if (i != this.aK) {
+               Arrays.fill(this.aJ, 0.0D);
+               this.aK = i;
+            }
+
+            if (p_a_2_ != 0.0D) {
+               int j = EnumFacing.Axis.X.ordinal();
+               double d0 = IProgressUpdate.a(p_a_2_ + this.aJ[j], -0.51D, 0.51D);
+               p_a_2_ = d0 - this.aJ[j];
+               this.aJ[j] = d0;
+               if (Math.abs(p_a_2_) <= 9.999999747378752E-6D) {
+                  return;
+               }
+            } else if (p_a_4_ != 0.0D) {
+               int l4 = EnumFacing.Axis.Y.ordinal();
+               double d12 = IProgressUpdate.a(p_a_4_ + this.aJ[l4], -0.51D, 0.51D);
+               p_a_4_ = d12 - this.aJ[l4];
+               this.aJ[l4] = d12;
+               if (Math.abs(p_a_4_) <= 9.999999747378752E-6D) {
+                  return;
+               }
+            } else {
+               if (p_a_6_ == 0.0D) {
+                  return;
+               }
+
+               int i5 = EnumFacing.Axis.Z.ordinal();
+               double d13 = IProgressUpdate.a(p_a_6_ + this.aJ[i5], -0.51D, 0.51D);
+               p_a_6_ = d13 - this.aJ[i5];
+               this.aJ[i5] = d13;
+               if (Math.abs(p_a_6_) <= 9.999999747378752E-6D) {
+                  return;
+               }
+            }
+         }
+
+         this.l.E.a("move");
+         double d10 = this.p;
+         double d11 = this.q;
+         double d1 = this.r;
+         if (this.E) {
+            this.E = false;
+            p_a_2_ *= 0.25D;
+            p_a_4_ *= 0.05000000074505806D;
+            p_a_6_ *= 0.25D;
+            this.s = 0.0D;
+            this.t = 0.0D;
+            this.u = 0.0D;
+         }
+
+         double d2 = p_a_2_;
+         double d3 = p_a_4_;
+         double d4 = p_a_6_;
+         if ((p_a_1_ == EntityCreature.field_70775_bC || p_a_1_ == EntityCreature.field_70772_bD) && this.z && this.aU() && this instanceof RecipeItemHelper) {
+            for(double d5 = 0.05D; p_a_2_ != 0.0D && this.l.a(this, this.bw().d(p_a_2_, (double)(-this.P), 0.0D)).isEmpty(); d2 = p_a_2_) {
+               if (p_a_2_ < 0.05D && p_a_2_ >= -0.05D) {
+                  p_a_2_ = 0.0D;
+               } else if (p_a_2_ > 0.0D) {
+                  p_a_2_ -= 0.05D;
+               } else {
+                  p_a_2_ += 0.05D;
+               }
+            }
+
+            for(; p_a_6_ != 0.0D && this.l.a(this, this.bw().d(0.0D, (double)(-this.P), p_a_6_)).isEmpty(); d4 = p_a_6_) {
+               if (p_a_6_ < 0.05D && p_a_6_ >= -0.05D) {
+                  p_a_6_ = 0.0D;
+               } else if (p_a_6_ > 0.0D) {
+                  p_a_6_ -= 0.05D;
+               } else {
+                  p_a_6_ += 0.05D;
+               }
+            }
+
+            for(; p_a_2_ != 0.0D && p_a_6_ != 0.0D && this.l.a(this, this.bw().d(p_a_2_, (double)(-this.P), p_a_6_)).isEmpty(); d4 = p_a_6_) {
+               if (p_a_2_ < 0.05D && p_a_2_ >= -0.05D) {
+                  p_a_2_ = 0.0D;
+               } else if (p_a_2_ > 0.0D) {
+                  p_a_2_ -= 0.05D;
+               } else {
+                  p_a_2_ += 0.05D;
+               }
+
+               d2 = p_a_2_;
+               if (p_a_6_ < 0.05D && p_a_6_ >= -0.05D) {
+                  p_a_6_ = 0.0D;
+               } else if (p_a_6_ > 0.0D) {
+                  p_a_6_ -= 0.05D;
+               } else {
+                  p_a_6_ += 0.05D;
+               }
+            }
+         }
+
+         List<Vec2f> list1 = this.l.a(this, this.bw().b(p_a_2_, p_a_4_, p_a_6_));
+         Vec2f vec2f = this.bw();
+         if (p_a_4_ != 0.0D) {
+            int k = 0;
+
+            for(int l = list1.size(); k < l; ++k) {
+               p_a_4_ = ((Vec2f)list1.get(k)).b(this.bw(), p_a_4_);
+            }
+
+            this.a(this.bw().d(0.0D, p_a_4_, 0.0D));
+         }
+
+         if (p_a_2_ != 0.0D) {
+            int j5 = 0;
+
+            for(int l5 = list1.size(); j5 < l5; ++j5) {
+               p_a_2_ = ((Vec2f)list1.get(j5)).a(this.bw(), p_a_2_);
+            }
+
+            if (p_a_2_ != 0.0D) {
+               this.a(this.bw().d(p_a_2_, 0.0D, 0.0D));
+            }
+         }
+
+         if (p_a_6_ != 0.0D) {
+            int k5 = 0;
+
+            for(int i6 = list1.size(); k5 < i6; ++k5) {
+               p_a_6_ = ((Vec2f)list1.get(k5)).c(this.bw(), p_a_6_);
+            }
+
+            if (p_a_6_ != 0.0D) {
+               this.a(this.bw().d(0.0D, 0.0D, p_a_6_));
+            }
+         }
+
+         boolean flag = this.z || p_a_4_ != p_a_4_ && p_a_4_ < 0.0D;
+         if (this.P > 0.0F && flag && (d2 != p_a_2_ || d4 != p_a_6_)) {
+            double d14 = p_a_2_;
+            double d6 = p_a_4_;
+            double d7 = p_a_6_;
+            Vec2f vec2f1 = this.bw();
+            this.a(vec2f);
+            p_a_4_ = (double)this.P;
+            List<Vec2f> list = this.l.a(this, this.bw().b(d2, p_a_4_, d4));
+            Vec2f vec2f2 = this.bw();
+            Vec2f vec2f3 = vec2f2.b(d2, 0.0D, d4);
+            double d8 = p_a_4_;
+            int j1 = 0;
+
+            for(int k1 = list.size(); j1 < k1; ++j1) {
+               d8 = ((Vec2f)list.get(j1)).b(vec2f3, d8);
+            }
+
+            vec2f2 = vec2f2.d(0.0D, d8, 0.0D);
+            double d18 = d2;
+            int l1 = 0;
+
+            for(int i2 = list.size(); l1 < i2; ++l1) {
+               d18 = ((Vec2f)list.get(l1)).a(vec2f2, d18);
+            }
+
+            vec2f2 = vec2f2.d(d18, 0.0D, 0.0D);
+            double d19 = d4;
+            int j2 = 0;
+
+            for(int k2 = list.size(); j2 < k2; ++j2) {
+               d19 = ((Vec2f)list.get(j2)).c(vec2f2, d19);
+            }
+
+            vec2f2 = vec2f2.d(0.0D, 0.0D, d19);
+            Vec2f vec2f4 = this.bw();
+            double d20 = p_a_4_;
+            int l2 = 0;
+
+            for(int i3 = list.size(); l2 < i3; ++l2) {
+               d20 = ((Vec2f)list.get(l2)).b(vec2f4, d20);
+            }
+
+            vec2f4 = vec2f4.d(0.0D, d20, 0.0D);
+            double d21 = d2;
+            int j3 = 0;
+
+            for(int k3 = list.size(); j3 < k3; ++j3) {
+               d21 = ((Vec2f)list.get(j3)).a(vec2f4, d21);
+            }
+
+            vec2f4 = vec2f4.d(d21, 0.0D, 0.0D);
+            double d22 = d4;
+            int l3 = 0;
+
+            for(int i4 = list.size(); l3 < i4; ++l3) {
+               d22 = ((Vec2f)list.get(l3)).c(vec2f4, d22);
+            }
+
+            vec2f4 = vec2f4.d(0.0D, 0.0D, d22);
+            double d23 = d18 * d18 + d19 * d19;
+            double d9 = d21 * d21 + d22 * d22;
+            if (d23 > d9) {
+               p_a_2_ = d18;
+               p_a_6_ = d19;
+               p_a_4_ = -d8;
+               this.a(vec2f2);
+            } else {
+               p_a_2_ = d21;
+               p_a_6_ = d22;
+               p_a_4_ = -d20;
+               this.a(vec2f4);
+            }
+
+            int j4 = 0;
+
+            for(int k4 = list.size(); j4 < k4; ++j4) {
+               p_a_4_ = ((Vec2f)list.get(j4)).b(this.bw(), p_a_4_);
+            }
+
+            this.a(this.bw().d(0.0D, p_a_4_, 0.0D));
+            if (d14 * d14 + d7 * d7 >= p_a_2_ * p_a_2_ + p_a_6_ * p_a_6_) {
+               p_a_2_ = d14;
+               p_a_4_ = d6;
+               p_a_6_ = d7;
+               this.a(vec2f1);
+            }
+         }
+
+         this.l.E.b();
+         this.l.E.a("rest");
+         this.ad();
+         this.A = d2 != p_a_2_ || d4 != p_a_6_;
+         this.B = p_a_4_ != p_a_4_;
+         this.z = this.B && d3 < 0.0D;
+         this.C = this.A || this.B;
+         int j6 = IProgressUpdate.c(this.p);
+         int i1 = IProgressUpdate.c(this.q - 0.20000000298023224D);
+         int k6 = IProgressUpdate.c(this.r);
+         BlockPos blockpos = new BlockPos(j6, i1, k6);
+         awt awt = this.l.o(blockpos);
+         if (awt.a() == MaterialPortal.a) {
+            BlockPos blockpos1 = blockpos.func_177977_b();
+            awt awt = this.l.o(blockpos1);
+            BlockBone blockbone1 = awt.u();
+            if (blockbone1 instanceof BlockFire || blockbone1 instanceof BlockLilyPad || blockbone1 instanceof BlockFlower) {
+               awt = awt;
+               blockpos = blockpos1;
+            }
+         }
+
+         this.a(p_a_4_, this.z, awt, blockpos);
+         if (d2 != p_a_2_) {
+            this.s = 0.0D;
+         }
+
+         if (d4 != p_a_6_) {
+            this.u = 0.0D;
+         }
+
+         BlockBone blockbone = awt.u();
+         if (d3 != p_a_4_) {
+            blockbone.a(this.l, this);
+         }
+
+         if (this.ak() && (!this.z || !this.aU() || !(this instanceof RecipeItemHelper)) && !this.aS()) {
+            double d15 = this.p - d10;
+            double d16 = this.q - d11;
+            double d17 = this.r - d1;
+            if (blockbone != IGrowable.au) {
+               d16 = 0.0D;
+            }
+
+            if (blockbone != null && this.z) {
+               blockbone.a(this.l, blockpos, this);
+            }
+
+            this.J = (float)((double)this.J + (double)IProgressUpdate.a(d15 * d15 + d17 * d17) * 0.6D);
+            this.K = (float)((double)this.K + (double)IProgressUpdate.a(d15 * d15 + d16 * d16 + d17 * d17) * 0.6D);
+            if (this.K > (float)this.ax && awt.a() != MaterialPortal.a) {
+               this.ax = (int)this.K + 1;
+               if (this.ao()) {
+                  EntityList entitylist = this.aT() && this.bE() != null ? this.bE() : this;
+                  float f = entitylist == this ? 0.35F : 0.4F;
+                  float f1 = IProgressUpdate.a(entitylist.s * entitylist.s * 0.20000000298023224D + entitylist.t * entitylist.t + entitylist.u * entitylist.u * 0.20000000298023224D) * f;
+                  if (f1 > 1.0F) {
+                     f1 = 1.0F;
+                  }
+
+                  this.a(this.ae(), f1, 1.0F + (this.S.nextFloat() - this.S.nextFloat()) * 0.4F);
+               } else {
+                  this.a(blockpos, blockbone);
+               }
+            } else if (this.K > this.ay && this.ah() && awt.a() == MaterialPortal.a) {
+               this.ay = this.d(this.K);
+            }
+         }
+
+         try {
+            this.ag();
+         } catch (Throwable throwable) {
+            CrashReport crashreport = CrashReport.func_85055_a(throwable, "Checking entity block collision");
+            CrashReportCategory crashreportcategory = crashreport.func_85058_a("Entity being checked for collision");
+            this.a(crashreportcategory);
+            throw new ReportedException(crashreport);
+         }
+
+         boolean flag1 = this.an();
+         if (this.l.e(this.bw().h(0.001D))) {
+            this.j(1);
+            if (!flag1) {
+               ++this.az;
+               if (this.az == 0) {
+                  this.i(8);
+               }
+            }
+         } else if (this.az <= 0) {
+            this.az = -this.bL();
+         }
+
+         if (flag1 && this.aR()) {
+            this.a(qf.bW, 0.7F, 1.6F + (this.S.nextFloat() - this.S.nextFloat()) * 0.4F);
+            this.az = -this.bL();
+         }
+
+         this.l.E.b();
+      }
+   }
+
+   public void ad() {
+      Vec2f vec2f = this.bw();
+      this.p = (vec2f.field_189974_a + vec2f.field_189977_d) / 2.0D;
+      this.q = vec2f.field_189975_b;
+      this.r = (vec2f.field_189976_c + vec2f.field_189979_f) / 2.0D;
+   }
+
+   protected SoundCategory ae() {
+      return qf.ca;
+   }
+
+   protected SoundCategory af() {
+      return qf.bZ;
+   }
+
+   protected void ag() {
+      Vec2f vec2f = this.bw();
+      BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.func_185345_c(vec2f.field_189974_a + 0.001D, vec2f.field_189975_b + 0.001D, vec2f.field_189976_c + 0.001D);
+      BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos1 = BlockPos.PooledMutableBlockPos.func_185345_c(vec2f.field_189977_d - 0.001D, vec2f.field_189978_e - 0.001D, vec2f.field_189979_f - 0.001D);
+      BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos2 = BlockPos.PooledMutableBlockPos.func_185346_s();
+      if (this.l.a(blockpos$pooledmutableblockpos, blockpos$pooledmutableblockpos1)) {
+         for(int i = blockpos$pooledmutableblockpos.func_177958_n(); i <= blockpos$pooledmutableblockpos1.func_177958_n(); ++i) {
+            for(int j = blockpos$pooledmutableblockpos.func_177956_o(); j <= blockpos$pooledmutableblockpos1.func_177956_o(); ++j) {
+               for(int k = blockpos$pooledmutableblockpos.func_177952_p(); k <= blockpos$pooledmutableblockpos1.func_177952_p(); ++k) {
+                  blockpos$pooledmutableblockpos2.func_181079_c(i, j, k);
+                  awt awt = this.l.o(blockpos$pooledmutableblockpos2);
+
+                  try {
+                     awt.u().a(this.l, blockpos$pooledmutableblockpos2, awt, this);
+                     this.a(awt);
+                  } catch (Throwable throwable) {
+                     CrashReport crashreport = CrashReport.func_85055_a(throwable, "Colliding entity with block");
+                     CrashReportCategory crashreportcategory = crashreport.func_85058_a("Block being collided with");
+                     CrashReportCategory.a(crashreportcategory, blockpos$pooledmutableblockpos2, awt);
+                     throw new ReportedException(crashreport);
+                  }
+               }
+            }
+         }
+      }
+
+      blockpos$pooledmutableblockpos.func_185344_t();
+      blockpos$pooledmutableblockpos1.func_185344_t();
+      blockpos$pooledmutableblockpos2.func_185344_t();
+   }
+
+   protected void a(awt p_a_1_) {
+   }
+
+   protected void a(BlockPos p_a_1_, BlockBone p_a_2_) {
+      BlockStainedGlass blockstainedglass = p_a_2_.v();
+      if (this.l.o(p_a_1_.func_177984_a()).u() == IGrowable.aH) {
+         blockstainedglass = IGrowable.aH.v();
+         this.a(blockstainedglass.d(), blockstainedglass.a() * 0.15F, blockstainedglass.b());
+      } else if (!p_a_2_.t().a().d()) {
+         this.a(blockstainedglass.d(), blockstainedglass.a() * 0.15F, blockstainedglass.b());
+      }
+
+   }
+
+   protected float d(float p_d_1_) {
+      return 0.0F;
+   }
+
+   protected boolean ah() {
+      return false;
+   }
+
+   public void a(SoundCategory p_a_1_, float p_a_2_, float p_a_3_) {
+      if (!this.ai()) {
+         this.l.a((RecipeItemHelper)null, this.p, this.q, this.r, p_a_1_, this.bK(), p_a_2_, p_a_3_);
+      }
+
+   }
+
+   public boolean ai() {
+      return ((Boolean)this.Y.a(aD)).booleanValue();
+   }
+
+   public void c(boolean p_c_1_) {
+      this.Y.b(aD, Boolean.valueOf(p_c_1_));
+   }
+
+   public boolean aj() {
+      return ((Boolean)this.Y.a(aE)).booleanValue();
+   }
+
+   public void d(boolean p_d_1_) {
+      this.Y.b(aE, Boolean.valueOf(p_d_1_));
+   }
+
+   protected boolean ak() {
+      return true;
+   }
+
+   protected void a(double p_a_1_, boolean p_a_3_, awt p_a_4_, BlockPos p_a_5_) {
+      if (p_a_3_) {
+         if (this.L > 0.0F) {
+            p_a_4_.u().a(this.l, p_a_5_, this, this.L);
+         }
+
+         this.L = 0.0F;
+      } else if (p_a_1_ < 0.0D) {
+         this.L = (float)((double)this.L - p_a_1_);
+      }
+
+   }
+
+   @Nullable
+   public Vec2f al() {
+      return null;
+   }
+
+   protected void j(int p_j_1_) {
+      if (!this.X) {
+         this.a(EntityDamageSourceIndirect.a, (float)p_j_1_);
+      }
+
+   }
+
+   public final boolean am() {
+      return this.X;
+   }
+
+   public void e(float p_e_1_, float p_e_2_) {
+      if (this.aT()) {
+         for(EntityList entitylist : this.bF()) {
+            entitylist.e(p_e_1_, p_e_2_);
+         }
+      }
+
+   }
+
+   public boolean an() {
+      if (this.U) {
+         return true;
+      } else {
+         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.func_185345_c(this.p, this.q, this.r);
+         if (!this.l.B(blockpos$pooledmutableblockpos) && !this.l.B(blockpos$pooledmutableblockpos.func_189532_c(this.p, this.q + (double)this.H, this.r))) {
+            blockpos$pooledmutableblockpos.func_185344_t();
+            return false;
+         } else {
+            blockpos$pooledmutableblockpos.func_185344_t();
+            return true;
+         }
+      }
+   }
+
+   public boolean ao() {
+      return this.U;
+   }
+
+   public boolean ap() {
+      return this.l.a(this.bw().c(0.0D, -20.0D, 0.0D).h(0.001D), MaterialPortal.h, this);
+   }
+
+   public boolean aq() {
+      if (this.bJ() instanceof EntityMinecartChest) {
+         this.U = false;
+      } else if (this.l.a(this.bw().c(0.0D, -0.4000000059604645D, 0.0D).h(0.001D), MaterialPortal.h, this)) {
+         if (!this.U && !this.W) {
+            this.ar();
+         }
+
+         this.L = 0.0F;
+         this.U = true;
+         this.ab();
+      } else {
+         this.U = false;
+      }
+
+      return this.U;
+   }
+
+   protected void ar() {
+      EntityList entitylist = this.aT() && this.bE() != null ? this.bE() : this;
+      float f = entitylist == this ? 0.2F : 0.9F;
+      float f1 = IProgressUpdate.a(entitylist.s * entitylist.s * 0.20000000298023224D + entitylist.t * entitylist.t + entitylist.u * entitylist.u * 0.20000000298023224D) * f;
+      if (f1 > 1.0F) {
+         f1 = 1.0F;
+      }
+
+      this.a(this.af(), f1, 1.0F + (this.S.nextFloat() - this.S.nextFloat()) * 0.4F);
+      float f2 = (float)IProgressUpdate.c(this.bw().field_189975_b);
+
+      for(int i = 0; (float)i < 1.0F + this.G * 20.0F; ++i) {
+         float f3 = (this.S.nextFloat() * 2.0F - 1.0F) * this.G;
+         float f4 = (this.S.nextFloat() * 2.0F - 1.0F) * this.G;
+         this.l.a(EnumParticleTypes.WATER_BUBBLE, this.p + (double)f3, (double)(f2 + 1.0F), this.r + (double)f4, this.s, this.t - (double)(this.S.nextFloat() * 0.2F), this.u);
+      }
+
+      for(int j = 0; (float)j < 1.0F + this.G * 20.0F; ++j) {
+         float f5 = (this.S.nextFloat() * 2.0F - 1.0F) * this.G;
+         float f6 = (this.S.nextFloat() * 2.0F - 1.0F) * this.G;
+         this.l.a(EnumParticleTypes.WATER_SPLASH, this.p + (double)f5, (double)(f2 + 1.0F), this.r + (double)f6, this.s, this.t, this.u);
+      }
+
+   }
+
+   public void as() {
+      if (this.aV() && !this.ao()) {
+         this.at();
+      }
+
+   }
+
+   protected void at() {
+      int i = IProgressUpdate.c(this.p);
+      int j = IProgressUpdate.c(this.q - 0.20000000298023224D);
+      int k = IProgressUpdate.c(this.r);
+      BlockPos blockpos = new BlockPos(i, j, k);
+      awt awt = this.l.o(blockpos);
+      if (awt.i() != BlockRotatedPillar.a) {
+         this.l.a(EnumParticleTypes.BLOCK_CRACK, this.p + ((double)this.S.nextFloat() - 0.5D) * (double)this.G, this.bw().field_189975_b + 0.1D, this.r + ((double)this.S.nextFloat() - 0.5D) * (double)this.G, -this.s * 4.0D, 1.5D, -this.u * 4.0D, BlockBone.j(awt));
+      }
+
+   }
+
+   public boolean a(MaterialPortal p_a_1_) {
+      if (this.bJ() instanceof EntityMinecartChest) {
+         return false;
+      } else {
+         double d0 = this.q + (double)this.by();
+         BlockPos blockpos = new BlockPos(this.p, d0, this.r);
+         awt awt = this.l.o(blockpos);
+         if (awt.a() == p_a_1_) {
+            float f = BlockMagma.b(awt.u().e(awt)) - 0.11111111F;
+            float f1 = (float)(blockpos.func_177956_o() + 1) - f;
+            boolean flag = d0 < (double)f1;
+            return !flag && this instanceof RecipeItemHelper ? false : flag;
+         } else {
+            return false;
+         }
+      }
+   }
+
+   public boolean au() {
+      return this.l.a(this.bw().c(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), MaterialPortal.i);
+   }
+
+   public void b(float p_b_1_, float p_b_2_, float p_b_3_, float p_b_4_) {
+      float f = p_b_1_ * p_b_1_ + p_b_2_ * p_b_2_ + p_b_3_ * p_b_3_;
+      if (f >= 1.0E-4F) {
+         f = IProgressUpdate.c(f);
+         if (f < 1.0F) {
+            f = 1.0F;
+         }
+
+         f = p_b_4_ / f;
+         p_b_1_ = p_b_1_ * f;
+         p_b_2_ = p_b_2_ * f;
+         p_b_3_ = p_b_3_ * f;
+         float f1 = IProgressUpdate.a(this.v * 0.017453292F);
+         float f2 = IProgressUpdate.b(this.v * 0.017453292F);
+         this.s += (double)(p_b_1_ * f2 - p_b_3_ * f1);
+         this.t += (double)p_b_2_;
+         this.u += (double)(p_b_3_ * f2 + p_b_1_ * f1);
+      }
+   }
+
+   public int av() {
+      BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(IProgressUpdate.c(this.p), 0, IProgressUpdate.c(this.r));
+      if (this.l.e(blockpos$mutableblockpos)) {
+         blockpos$mutableblockpos.func_185336_p(IProgressUpdate.c(this.q + (double)this.by()));
+         return this.l.b(blockpos$mutableblockpos, 0);
+      } else {
+         return 0;
+      }
+   }
+
+   public float aw() {
+      BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(IProgressUpdate.c(this.p), 0, IProgressUpdate.c(this.r));
+      if (this.l.e(blockpos$mutableblockpos)) {
+         blockpos$mutableblockpos.func_185336_p(IProgressUpdate.c(this.q + (double)this.by()));
+         return this.l.n(blockpos$mutableblockpos);
+      } else {
+         return 0.0F;
+      }
+   }
+
+   public void a(IWorldEventListener p_a_1_) {
+      this.l = p_a_1_;
+   }
+
+   public void a(double p_a_1_, double p_a_3_, double p_a_5_, float p_a_7_, float p_a_8_) {
+      this.p = IProgressUpdate.a(p_a_1_, -3.0E7D, 3.0E7D);
+      this.q = p_a_3_;
+      this.r = IProgressUpdate.a(p_a_5_, -3.0E7D, 3.0E7D);
+      this.m = this.p;
+      this.n = this.q;
+      this.o = this.r;
+      p_a_8_ = IProgressUpdate.a(p_a_8_, -90.0F, 90.0F);
+      this.v = p_a_7_;
+      this.w = p_a_8_;
+      this.x = this.v;
+      this.y = this.w;
+      double d0 = (double)(this.x - p_a_7_);
+      if (d0 < -180.0D) {
+         this.x += 360.0F;
+      }
+
+      if (d0 >= 180.0D) {
+         this.x -= 360.0F;
+      }
+
+      this.b(this.p, this.q, this.r);
+      this.b(p_a_7_, p_a_8_);
+   }
+
+   public void a(BlockPos p_a_1_, float p_a_2_, float p_a_3_) {
+      this.b((double)p_a_1_.func_177958_n() + 0.5D, (double)p_a_1_.func_177956_o(), (double)p_a_1_.func_177952_p() + 0.5D, p_a_2_, p_a_3_);
+   }
+
+   public void b(double p_b_1_, double p_b_3_, double p_b_5_, float p_b_7_, float p_b_8_) {
+      this.p = p_b_1_;
+      this.q = p_b_3_;
+      this.r = p_b_5_;
+      this.m = this.p;
+      this.n = this.q;
+      this.o = this.r;
+      this.M = this.p;
+      this.N = this.q;
+      this.O = this.r;
+      this.v = p_b_7_;
+      this.w = p_b_8_;
+      this.b(this.p, this.q, this.r);
+   }
+
+   public float g(EntityList p_g_1_) {
+      float f = (float)(this.p - p_g_1_.p);
+      float f1 = (float)(this.q - p_g_1_.q);
+      float f2 = (float)(this.r - p_g_1_.r);
+      return IProgressUpdate.c(f * f + f1 * f1 + f2 * f2);
+   }
+
+   public double d(double p_d_1_, double p_d_3_, double p_d_5_) {
+      double d0 = this.p - p_d_1_;
+      double d1 = this.q - p_d_3_;
+      double d2 = this.r - p_d_5_;
+      return d0 * d0 + d1 * d1 + d2 * d2;
+   }
+
+   public double c(BlockPos p_c_1_) {
+      return p_c_1_.func_177954_c(this.p, this.q, this.r);
+   }
+
+   public double d(BlockPos p_d_1_) {
+      return p_d_1_.func_177957_d(this.p, this.q, this.r);
+   }
+
+   public double e(double p_e_1_, double p_e_3_, double p_e_5_) {
+      double d0 = this.p - p_e_1_;
+      double d1 = this.q - p_e_3_;
+      double d2 = this.r - p_e_5_;
+      return (double)IProgressUpdate.a(d0 * d0 + d1 * d1 + d2 * d2);
+   }
+
+   public double h(EntityList p_h_1_) {
+      double d0 = this.p - p_h_1_.p;
+      double d1 = this.q - p_h_1_.q;
+      double d2 = this.r - p_h_1_.r;
+      return d0 * d0 + d1 * d1 + d2 * d2;
+   }
+
+   public void d(RecipeItemHelper p_d_1_) {
+   }
+
+   public void i(EntityList p_i_1_) {
+      if (!this.x(p_i_1_)) {
+         if (!p_i_1_.Q && !this.Q) {
+            double d0 = p_i_1_.p - this.p;
+            double d1 = p_i_1_.r - this.r;
+            double d2 = IProgressUpdate.a(d0, d1);
+            if (d2 >= 0.009999999776482582D) {
+               d2 = (double)IProgressUpdate.a(d2);
+               d0 = d0 / d2;
+               d1 = d1 / d2;
+               double d3 = 1.0D / d2;
+               if (d3 > 1.0D) {
+                  d3 = 1.0D;
+               }
+
+               d0 = d0 * d3;
+               d1 = d1 * d3;
+               d0 = d0 * 0.05000000074505806D;
+               d1 = d1 * 0.05000000074505806D;
+               d0 = d0 * (double)(1.0F - this.R);
+               d1 = d1 * (double)(1.0F - this.R);
+               if (!this.aT()) {
+                  this.f(-d0, 0.0D, -d1);
+               }
+
+               if (!p_i_1_.aT()) {
+                  p_i_1_.f(d0, 0.0D, d1);
+               }
+            }
+
+         }
+      }
+   }
+
+   public void f(double p_f_1_, double p_f_3_, double p_f_5_) {
+      this.s += p_f_1_;
+      this.t += p_f_3_;
+      this.u += p_f_5_;
+      this.ai = true;
+   }
+
+   protected void ax() {
+      this.D = true;
+   }
+
+   public boolean a(EntityDamageSourceIndirect p_a_1_, float p_a_2_) {
+      if (this.b(p_a_1_)) {
+         return false;
+      } else {
+         this.ax();
+         return false;
+      }
+   }
+
+   public ScoreObjective e(float p_e_1_) {
+      if (p_e_1_ == 1.0F) {
+         return this.f(this.w, this.v);
+      } else {
+         float f = this.y + (this.w - this.y) * p_e_1_;
+         float f1 = this.x + (this.v - this.x) * p_e_1_;
+         return this.f(f, f1);
+      }
+   }
+
+   protected final ScoreObjective f(float p_f_1_, float p_f_2_) {
+      float f = IProgressUpdate.b(-p_f_2_ * 0.017453292F - 3.1415927F);
+      float f1 = IProgressUpdate.a(-p_f_2_ * 0.017453292F - 3.1415927F);
+      float f2 = -IProgressUpdate.b(-p_f_1_ * 0.017453292F);
+      float f3 = IProgressUpdate.a(-p_f_1_ * 0.017453292F);
+      return new ScoreObjective((double)(f1 * f2), (double)f3, (double)(f * f2));
+   }
+
+   public ScoreObjective f(float p_f_1_) {
+      if (p_f_1_ == 1.0F) {
+         return new ScoreObjective(this.p, this.q + (double)this.by(), this.r);
+      } else {
+         double d0 = this.m + (this.p - this.m) * (double)p_f_1_;
+         double d1 = this.n + (this.q - this.n) * (double)p_f_1_ + (double)this.by();
+         double d2 = this.o + (this.r - this.o) * (double)p_f_1_;
+         return new ScoreObjective(d0, d1, d2);
+      }
+   }
+
+   @Nullable
+   public Vec3d a(double p_a_1_, float p_a_3_) {
+      ScoreObjective scoreobjective = this.f(p_a_3_);
+      ScoreObjective scoreobjective1 = this.e(p_a_3_);
+      ScoreObjective scoreobjective2 = scoreobjective.b(scoreobjective1.field_96684_b * p_a_1_, scoreobjective1.field_96685_c * p_a_1_, scoreobjective1.field_178768_d * p_a_1_);
+      return this.l.a(scoreobjective, scoreobjective2, false, false, true);
+   }
+
+   public boolean ay() {
+      return false;
+   }
+
+   public boolean az() {
+      return false;
+   }
+
+   public void a(EntityList p_a_1_, int p_a_2_, EntityDamageSourceIndirect p_a_3_) {
+      if (p_a_1_ instanceof EntityTrackerEntry) {
+         CriteriaTriggers.field_192123_c.a((EntityTrackerEntry)p_a_1_, this, p_a_3_);
+      }
+
+   }
+
+   public boolean g(double p_g_1_, double p_g_3_, double p_g_5_) {
+      double d0 = this.p - p_g_1_;
+      double d1 = this.q - p_g_3_;
+      double d2 = this.r - p_g_5_;
+      double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+      return this.a(d3);
+   }
+
+   public boolean a(double p_a_1_) {
+      double d0 = this.bw().a();
+      if (Double.isNaN(d0)) {
+         d0 = 1.0D;
+      }
+
+      d0 = d0 * 64.0D * field_151516_b;
+      return p_a_1_ < d0 * d0;
+   }
+
+   public boolean c(NBTTagCompound p_c_1_) {
+      String s = this.aB();
+      if (!this.F && s != null) {
+         p_c_1_.func_74778_a("id", s);
+         this.e(p_c_1_);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   public boolean d(NBTTagCompound p_d_1_) {
+      String s = this.aB();
+      if (!this.F && s != null && !this.aS()) {
+         p_d_1_.func_74778_a("id", s);
+         this.e(p_d_1_);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   public static void b(IDataWalker p_b_0_) {
+      p_b_0_.a(DataFixer.e, new BedItemColor() {
+         public NBTTagCompound a(DataFixesManager p_a_1_, NBTTagCompound p_a_2_, int p_a_3_) {
+            if (p_a_2_.func_150297_b("Passengers", 9)) {
+               NBTTagList nbttaglist = p_a_2_.func_150295_c("Passengers", 10);
+
+               for(int i = 0; i < nbttaglist.func_74745_c(); ++i) {
+                  nbttaglist.func_150304_a(i, p_a_1_.a(DataFixer.e, nbttaglist.func_150305_b(i), p_a_3_));
+               }
+            }
+
+            return p_a_2_;
+         }
+      });
+   }
+
+   public NBTTagCompound e(NBTTagCompound p_e_1_) {
+      try {
+         p_e_1_.func_74782_a("Pos", this.a(this.p, this.q, this.r));
+         p_e_1_.func_74782_a("Motion", this.a(this.s, this.t, this.u));
+         p_e_1_.func_74782_a("Rotation", this.a(this.v, this.w));
+         p_e_1_.func_74776_a("FallDistance", this.L);
+         p_e_1_.func_74777_a("Fire", (short)this.az);
+         p_e_1_.func_74777_a("Air", (short)this.aZ());
+         p_e_1_.func_74757_a("OnGround", this.z);
+         p_e_1_.func_74768_a("Dimension", this.am);
+         p_e_1_.func_74757_a("Invulnerable", this.aF);
+         p_e_1_.func_74768_a("PortalCooldown", this.aj);
+         p_e_1_.func_186854_a("UUID", this.bm());
+         if (this.n_()) {
+            p_e_1_.func_74778_a("CustomName", this.bq());
+         }
+
+         if (this.br()) {
+            p_e_1_.func_74757_a("CustomNameVisible", this.br());
+         }
+
+         this.aG.func_179670_b(p_e_1_);
+         if (this.ai()) {
+            p_e_1_.func_74757_a("Silent", this.ai());
+         }
+
+         if (this.aj()) {
+            p_e_1_.func_74757_a("NoGravity", this.aj());
+         }
+
+         if (this.as) {
+            p_e_1_.func_74757_a("Glowing", this.as);
+         }
+
+         if (!this.aH.isEmpty()) {
+            NBTTagList nbttaglist = new NBTTagList();
+
+            for(String s : this.aH) {
+               nbttaglist.func_74742_a(new NBTTagString(s));
+            }
+
+            p_e_1_.func_74782_a("Tags", nbttaglist);
+         }
+
+         this.b(p_e_1_);
+         if (this.aT()) {
+            NBTTagList nbttaglist1 = new NBTTagList();
+
+            for(EntityList entitylist : this.bF()) {
+               NBTTagCompound nbttagcompound = new NBTTagCompound();
+               if (entitylist.c(nbttagcompound)) {
+                  nbttaglist1.func_74742_a(nbttagcompound);
+               }
+            }
+
+            if (!nbttaglist1.func_82582_d()) {
+               p_e_1_.func_74782_a("Passengers", nbttaglist1);
+            }
+         }
+
+         return p_e_1_;
+      } catch (Throwable throwable) {
+         CrashReport crashreport = CrashReport.func_85055_a(throwable, "Saving entity NBT");
+         CrashReportCategory crashreportcategory = crashreport.func_85058_a("Entity being saved");
+         this.a(crashreportcategory);
+         throw new ReportedException(crashreport);
+      }
+   }
+
+   public void f(NBTTagCompound p_f_1_) {
+      try {
+         NBTTagList nbttaglist = p_f_1_.func_150295_c("Pos", 6);
+         NBTTagList nbttaglist2 = p_f_1_.func_150295_c("Motion", 6);
+         NBTTagList nbttaglist3 = p_f_1_.func_150295_c("Rotation", 5);
+         this.s = nbttaglist2.func_150309_d(0);
+         this.t = nbttaglist2.func_150309_d(1);
+         this.u = nbttaglist2.func_150309_d(2);
+         if (Math.abs(this.s) > 10.0D) {
+            this.s = 0.0D;
+         }
+
+         if (Math.abs(this.t) > 10.0D) {
+            this.t = 0.0D;
+         }
+
+         if (Math.abs(this.u) > 10.0D) {
+            this.u = 0.0D;
+         }
+
+         this.p = nbttaglist.func_150309_d(0);
+         this.q = nbttaglist.func_150309_d(1);
+         this.r = nbttaglist.func_150309_d(2);
+         this.M = this.p;
+         this.N = this.q;
+         this.O = this.r;
+         this.m = this.p;
+         this.n = this.q;
+         this.o = this.r;
+         this.v = nbttaglist3.func_150308_e(0);
+         this.w = nbttaglist3.func_150308_e(1);
+         this.x = this.v;
+         this.y = this.w;
+         this.g(this.v);
+         this.h(this.v);
+         this.L = p_f_1_.func_74760_g("FallDistance");
+         this.az = p_f_1_.func_74765_d("Fire");
+         this.l(p_f_1_.func_74765_d("Air"));
+         this.z = p_f_1_.func_74767_n("OnGround");
+         if (p_f_1_.func_74764_b("Dimension")) {
+            this.am = p_f_1_.func_74762_e("Dimension");
+         }
+
+         this.aF = p_f_1_.func_74767_n("Invulnerable");
+         this.aj = p_f_1_.func_74762_e("PortalCooldown");
+         if (p_f_1_.func_186855_b("UUID")) {
+            this.aq = p_f_1_.func_186857_a("UUID");
+            this.ar = this.aq.toString();
+         }
+
+         this.b(this.p, this.q, this.r);
+         this.b(this.v, this.w);
+         if (p_f_1_.func_150297_b("CustomName", 8)) {
+            this.c(p_f_1_.func_74779_i("CustomName"));
+         }
+
+         this.j(p_f_1_.func_74767_n("CustomNameVisible"));
+         this.aG.func_179668_a(p_f_1_);
+         this.c(p_f_1_.func_74767_n("Silent"));
+         this.d(p_f_1_.func_74767_n("NoGravity"));
+         this.g(p_f_1_.func_74767_n("Glowing"));
+         if (p_f_1_.func_150297_b("Tags", 9)) {
+            this.aH.clear();
+            NBTTagList nbttaglist1 = p_f_1_.func_150295_c("Tags", 8);
+            int i = Math.min(nbttaglist1.func_74745_c(), 1024);
+
+            for(int j = 0; j < i; ++j) {
+               this.aH.add(nbttaglist1.func_150307_f(j));
+            }
+         }
+
+         this.a(p_f_1_);
+         if (this.aA()) {
+            this.b(this.p, this.q, this.r);
+         }
+
+      } catch (Throwable throwable) {
+         CrashReport crashreport = CrashReport.func_85055_a(throwable, "Loading entity NBT");
+         CrashReportCategory crashreportcategory = crashreport.func_85058_a("Entity being loaded");
+         this.a(crashreportcategory);
+         throw new ReportedException(crashreport);
+      }
+   }
+
+   protected boolean aA() {
+      return true;
+   }
+
+   @Nullable
+   protected final String aB() {
+      BehaviorProjectileDispense behaviorprojectiledispense = EntitySelectors.a(this);
+      return behaviorprojectiledispense == null ? null : behaviorprojectiledispense.toString();
+   }
+
+   protected abstract void a(NBTTagCompound var1);
+
+   protected abstract void b(NBTTagCompound var1);
+
+   protected NBTTagList a(double... p_a_1_) {
+      NBTTagList nbttaglist = new NBTTagList();
+
+      for(double d0 : p_a_1_) {
+         nbttaglist.func_74742_a(new NBTTagDouble(d0));
+      }
+
+      return nbttaglist;
+   }
+
+   protected NBTTagList a(float... p_a_1_) {
+      NBTTagList nbttaglist = new NBTTagList();
+
+      for(float f : p_a_1_) {
+         nbttaglist.func_74742_a(new NBTTagFloat(f));
+      }
+
+      return nbttaglist;
+   }
+
+   @Nullable
+   public acl a(ItemStack p_a_1_, int p_a_2_) {
+      return this.a(p_a_1_, p_a_2_, 0.0F);
+   }
+
+   @Nullable
+   public acl a(ItemStack p_a_1_, int p_a_2_, float p_a_3_) {
+      return this.a(new Items(p_a_1_, p_a_2_, 0), p_a_3_);
+   }
+
+   @Nullable
+   public acl a(Items p_a_1_, float p_a_2_) {
+      if (p_a_1_.b()) {
+         return null;
+      } else {
+         acl acl = new acl(this.l, this.p, this.q + (double)p_a_2_, this.r, p_a_1_);
+         acl.q();
+         this.l.a(acl);
+         return acl;
+      }
+   }
+
+   public boolean aC() {
+      return !this.F;
+   }
+
+   public boolean aD() {
+      if (this.Q) {
+         return false;
+      } else {
+         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.func_185346_s();
+
+         for(int i = 0; i < 8; ++i) {
+            int j = IProgressUpdate.c(this.q + (double)(((float)((i >> 0) % 2) - 0.5F) * 0.1F) + (double)this.by());
+            int k = IProgressUpdate.c(this.p + (double)(((float)((i >> 1) % 2) - 0.5F) * this.G * 0.8F));
+            int l = IProgressUpdate.c(this.r + (double)(((float)((i >> 2) % 2) - 0.5F) * this.G * 0.8F));
+            if (blockpos$pooledmutableblockpos.func_177958_n() != k || blockpos$pooledmutableblockpos.func_177956_o() != j || blockpos$pooledmutableblockpos.func_177952_p() != l) {
+               blockpos$pooledmutableblockpos.func_181079_c(k, j, l);
+               if (this.l.o(blockpos$pooledmutableblockpos).func_191058_s()) {
+                  blockpos$pooledmutableblockpos.func_185344_t();
+                  return true;
+               }
+            }
+         }
+
+         blockpos$pooledmutableblockpos.func_185344_t();
+         return false;
+      }
+   }
+
+   public boolean b(RecipeItemHelper p_b_1_, EnumActionResult p_b_2_) {
+      return false;
+   }
+
+   @Nullable
+   public Vec2f j(EntityList p_j_1_) {
+      return null;
+   }
+
+   public void aE() {
+      EntityList entitylist = this.bJ();
+      if (this.aS() && entitylist.F) {
+         this.o();
+      } else {
+         this.s = 0.0D;
+         this.t = 0.0D;
+         this.u = 0.0D;
+         this.B_();
+         if (this.aS()) {
+            entitylist.k(this);
+         }
+      }
+   }
+
+   public void k(EntityList p_k_1_) {
+      if (this.w(p_k_1_)) {
+         p_k_1_.b(this.p, this.q + this.aG() + p_k_1_.aF(), this.r);
+      }
+   }
+
+   public void l(EntityList p_l_1_) {
+   }
+
+   public double aF() {
+      return 0.0D;
+   }
+
+   public double aG() {
+      return (double)this.H * 0.75D;
+   }
+
+   public boolean m(EntityList p_m_1_) {
+      return this.a(p_m_1_, false);
+   }
+
+   public boolean a(EntityList p_a_1_, boolean p_a_2_) {
+      for(EntityList entitylist = p_a_1_; entitylist.au != null; entitylist = entitylist.au) {
+         if (entitylist.au == this) {
+            return false;
+         }
+      }
+
+      if (p_a_2_ || this.n(p_a_1_) && p_a_1_.q(this)) {
+         if (this.aS()) {
+            this.o();
+         }
+
+         this.au = p_a_1_;
+         this.au.o(this);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   protected boolean n(EntityList p_n_1_) {
+      return this.j <= 0;
+   }
+
+   public void aH() {
+      for(int i = this.at.size() - 1; i >= 0; --i) {
+         ((EntityList)this.at.get(i)).o();
+      }
+
+   }
+
+   public void o() {
+      if (this.au != null) {
+         EntityList entitylist = this.au;
+         this.au = null;
+         entitylist.p(this);
+      }
+
+   }
+
+   protected void o(EntityList p_o_1_) {
+      if (p_o_1_.bJ() != this) {
+         throw new IllegalStateException("Use x.startRiding(y), not y.addPassenger(x)");
+      } else {
+         if (!this.l.G && p_o_1_ instanceof RecipeItemHelper && !(this.bE() instanceof RecipeItemHelper)) {
+            this.at.add(0, p_o_1_);
+         } else {
+            this.at.add(p_o_1_);
+         }
+
+      }
+   }
+
+   protected void p(EntityList p_p_1_) {
+      if (p_p_1_.bJ() == this) {
+         throw new IllegalStateException("Use x.stopRiding(y), not y.removePassenger(x)");
+      } else {
+         this.at.remove(p_p_1_);
+         p_p_1_.j = 60;
+      }
+   }
+
+   protected boolean q(EntityList p_q_1_) {
+      return this.bF().size() < 1;
+   }
+
+   public void a(double p_a_1_, double p_a_3_, double p_a_5_, float p_a_7_, float p_a_8_, int p_a_9_, boolean p_a_10_) {
+      this.b(p_a_1_, p_a_3_, p_a_5_);
+      this.b(p_a_7_, p_a_8_);
+   }
+
+   public float aI() {
+      return 0.0F;
+   }
+
+   public ScoreObjective aJ() {
+      return this.f(this.w, this.v);
+   }
+
+   public bhd aK() {
+      return new bhd(this.w, this.v);
+   }
+
+   public ScoreObjective aL() {
+      return ScoreObjective.a(this.aK());
+   }
+
+   public void e(BlockPos p_e_1_) {
+      if (this.aj > 0) {
+         this.aj = this.aM();
+      } else {
+         if (!this.l.G && !p_e_1_.equals(this.an)) {
+            this.an = new BlockPos(p_e_1_);
+            awx.b awx$b = IGrowable.aY.c(this.l, this.an);
+            double d0 = awx$b.b().func_176740_k() == EnumFacing.Axis.X ? (double)awx$b.a().func_177952_p() : (double)awx$b.a().func_177958_n();
+            double d1 = awx$b.b().func_176740_k() == EnumFacing.Axis.X ? this.r : this.p;
+            d1 = Math.abs(IProgressUpdate.c(d1 - (double)(awx$b.b().func_176746_e().func_176743_c() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double)awx$b.d()));
+            double d2 = IProgressUpdate.c(this.q - 1.0D, (double)awx$b.a().func_177956_o(), (double)(awx$b.a().func_177956_o() - awx$b.e()));
+            this.ao = new ScoreObjective(d1, d2, 0.0D);
+            this.ap = awx$b.b();
+         }
+
+         this.ak = true;
+      }
+   }
+
+   public int aM() {
+      return 300;
+   }
+
+   public void h(double p_h_1_, double p_h_3_, double p_h_5_) {
+      this.s = p_h_1_;
+      this.t = p_h_3_;
+      this.u = p_h_5_;
+   }
+
+   public void a(byte p_a_1_) {
+   }
+
+   public void aN() {
+   }
+
+   public Iterable<Items> aO() {
+      return field_191308_b;
+   }
+
+   public Iterable<Items> aP() {
+      return field_191308_b;
+   }
+
+   public Iterable<Items> aQ() {
+      return Iterables.<Items>concat(this.aO(), this.aP());
+   }
+
+   public void a(EntityFlying p_a_1_, Items p_a_2_) {
+   }
+
+   public boolean aR() {
+      boolean flag = this.l != null && this.l.G;
+      return !this.X && (this.az > 0 || flag && this.k(0));
+   }
+
+   public boolean aS() {
+      return this.bJ() != null;
+   }
+
+   public boolean aT() {
+      return !this.bF().isEmpty();
+   }
+
+   public boolean aU() {
+      return this.k(1);
+   }
+
+   public void e(boolean p_e_1_) {
+      this.b(1, p_e_1_);
+   }
+
+   public boolean aV() {
+      return this.k(3);
+   }
+
+   public void f(boolean p_f_1_) {
+      this.b(3, p_f_1_);
+   }
+
+   public boolean aW() {
+      return this.as || this.l.G && this.k(6);
+   }
+
+   public void g(boolean p_g_1_) {
+      this.as = p_g_1_;
+      if (!this.l.G) {
+         this.b(6, this.as);
+      }
+
+   }
+
+   public boolean aX() {
+      return this.k(5);
+   }
+
+   public boolean e(RecipeItemHelper p_e_1_) {
+      if (p_e_1_.y()) {
+         return false;
+      } else {
+         ScoreCriteria scorecriteria = this.aY();
+         return scorecriteria != null && p_e_1_ != null && p_e_1_.aY() == scorecriteria && scorecriteria.h() ? false : this.aX();
+      }
+   }
+
+   @Nullable
+   public ScoreCriteria aY() {
+      return this.l.af().g(this.bn());
+   }
+
+   public boolean r(EntityList p_r_1_) {
+      return this.a(p_r_1_.aY());
+   }
+
+   public boolean a(ScoreCriteria p_a_1_) {
+      return this.aY() != null ? this.aY().a(p_a_1_) : false;
+   }
+
+   public void h(boolean p_h_1_) {
+      this.b(5, p_h_1_);
+   }
+
+   protected boolean k(int p_k_1_) {
+      return (((Byte)this.Y.a(Z)).byteValue() & 1 << p_k_1_) != 0;
+   }
+
+   protected void b(int p_b_1_, boolean p_b_2_) {
+      byte b0 = ((Byte)this.Y.a(Z)).byteValue();
+      if (p_b_2_) {
+         this.Y.b(Z, Byte.valueOf((byte)(b0 | 1 << p_b_1_)));
+      } else {
+         this.Y.b(Z, Byte.valueOf((byte)(b0 & ~(1 << p_b_1_))));
+      }
+
+   }
+
+   public int aZ() {
+      return ((Integer)this.Y.a(aA)).intValue();
+   }
+
+   public void l(int p_l_1_) {
+      this.Y.b(aA, Integer.valueOf(p_l_1_));
+   }
+
+   public void a(EntityFallingBlock p_a_1_) {
+      this.a(EntityDamageSourceIndirect.b, 5.0F);
+      ++this.az;
+      if (this.az == 0) {
+         this.i(8);
+      }
+
+   }
+
+   public void b(EnumCreatureType p_b_1_) {
+   }
+
+   protected boolean i(double p_i_1_, double p_i_3_, double p_i_5_) {
+      BlockPos blockpos = new BlockPos(p_i_1_, p_i_3_, p_i_5_);
+      double d0 = p_i_1_ - (double)blockpos.func_177958_n();
+      double d1 = p_i_3_ - (double)blockpos.func_177956_o();
+      double d2 = p_i_5_ - (double)blockpos.func_177952_p();
+      if (!this.l.a(this.bw())) {
+         return false;
+      } else {
+         EnumFacing enumfacing = EnumFacing.UP;
+         double d3 = Double.MAX_VALUE;
+         if (!this.l.t(blockpos.func_177976_e()) && d0 < d3) {
+            d3 = d0;
+            enumfacing = EnumFacing.WEST;
+         }
+
+         if (!this.l.t(blockpos.func_177974_f()) && 1.0D - d0 < d3) {
+            d3 = 1.0D - d0;
+            enumfacing = EnumFacing.EAST;
+         }
+
+         if (!this.l.t(blockpos.func_177978_c()) && d2 < d3) {
+            d3 = d2;
+            enumfacing = EnumFacing.NORTH;
+         }
+
+         if (!this.l.t(blockpos.func_177968_d()) && 1.0D - d2 < d3) {
+            d3 = 1.0D - d2;
+            enumfacing = EnumFacing.SOUTH;
+         }
+
+         if (!this.l.t(blockpos.func_177984_a()) && 1.0D - d1 < d3) {
+            d3 = 1.0D - d1;
+            enumfacing = EnumFacing.UP;
+         }
+
+         float f = this.S.nextFloat() * 0.2F + 0.1F;
+         float f1 = (float)enumfacing.func_176743_c().func_179524_a();
+         if (enumfacing.func_176740_k() == EnumFacing.Axis.X) {
+            this.s = (double)(f1 * f);
+            this.t *= 0.75D;
+            this.u *= 0.75D;
+         } else if (enumfacing.func_176740_k() == EnumFacing.Axis.Y) {
+            this.s *= 0.75D;
+            this.t = (double)(f1 * f);
+            this.u *= 0.75D;
+         } else if (enumfacing.func_176740_k() == EnumFacing.Axis.Z) {
+            this.s *= 0.75D;
+            this.t *= 0.75D;
+            this.u = (double)(f1 * f);
+         }
+
+         return true;
+      }
+   }
+
+   public void ba() {
+      this.E = true;
+      this.L = 0.0F;
+   }
+
+   public String func_70005_c_() {
+      if (this.n_()) {
+         return this.bq();
+      } else {
+         String s = EntitySelectors.b(this);
+         if (s == null) {
+            s = "generic";
+         }
+
+         return I18n.func_74838_a("entity." + s + ".name");
+      }
+   }
+
+   @Nullable
+   public EntityList[] bb() {
+      return null;
+   }
+
+   public boolean s(EntityList p_s_1_) {
+      return this == p_s_1_;
+   }
+
+   public float bc() {
+      return 0.0F;
+   }
+
+   public void g(float p_g_1_) {
+   }
+
+   public void h(float p_h_1_) {
+   }
+
+   public boolean bd() {
+      return true;
+   }
+
+   public boolean t(EntityList p_t_1_) {
+      return false;
+   }
+
+   public String toString() {
+      return String.format("%s['%s'/%d, l='%s', x=%.2f, y=%.2f, z=%.2f]", this.getClass().getSimpleName(), this.func_70005_c_(), this.h, this.l == null ? "~NULL~" : this.l.V().j(), this.p, this.q, this.r);
+   }
+
+   public boolean b(EntityDamageSourceIndirect p_b_1_) {
+      return this.aF && p_b_1_ != EntityDamageSourceIndirect.m && !p_b_1_.u();
+   }
+
+   public boolean be() {
+      return this.aF;
+   }
+
+   public void i(boolean p_i_1_) {
+      this.aF = p_i_1_;
+   }
+
+   public void u(EntityList p_u_1_) {
+      this.b(p_u_1_.p, p_u_1_.q, p_u_1_.r, p_u_1_.v, p_u_1_.w);
+   }
+
+   private void a(EntityList p_a_1_) {
+      NBTTagCompound nbttagcompound = p_a_1_.e(new NBTTagCompound());
+      nbttagcompound.func_82580_o("Dimension");
+      this.f(nbttagcompound);
+      this.aj = p_a_1_.aj;
+      this.an = p_a_1_.an;
+      this.ao = p_a_1_.ao;
+      this.ap = p_a_1_.ap;
+   }
+
+   @Nullable
+   public EntityList b(int p_b_1_) {
+      if (!this.l.G && !this.F) {
+         this.l.E.a("changeDimension");
+         MinecraftServer minecraftserver = this.func_184102_h();
+         int i = this.am;
+         EntityPlayerMP entityplayermp = minecraftserver.a(i);
+         EntityPlayerMP entityplayermp1 = minecraftserver.a(p_b_1_);
+         this.am = p_b_1_;
+         if (i == 1 && p_b_1_ == 1) {
+            entityplayermp1 = minecraftserver.a(0);
+            this.am = 0;
+         }
+
+         this.l.e(this);
+         this.F = false;
+         this.l.E.a("reposition");
+         BlockPos blockpos;
+         if (p_b_1_ == 1) {
+            blockpos = entityplayermp1.p();
+         } else {
+            double d0 = this.p;
+            double d1 = this.r;
+            double d2 = 8.0D;
+            if (p_b_1_ == -1) {
+               d0 = IProgressUpdate.a(d0 / 8.0D, entityplayermp1.al().b() + 16.0D, entityplayermp1.al().d() - 16.0D);
+               d1 = IProgressUpdate.a(d1 / 8.0D, entityplayermp1.al().c() + 16.0D, entityplayermp1.al().e() - 16.0D);
+            } else if (p_b_1_ == 0) {
+               d0 = IProgressUpdate.a(d0 * 8.0D, entityplayermp1.al().b() + 16.0D, entityplayermp1.al().d() - 16.0D);
+               d1 = IProgressUpdate.a(d1 * 8.0D, entityplayermp1.al().c() + 16.0D, entityplayermp1.al().e() - 16.0D);
+            }
+
+            d0 = (double)IProgressUpdate.a((int)d0, -29999872, 29999872);
+            d1 = (double)IProgressUpdate.a((int)d1, -29999872, 29999872);
+            float f = this.v;
+            this.b(d0, this.q, d1, 90.0F, 0.0F);
+            WeightedSpawnerEntity weightedspawnerentity = entityplayermp1.x();
+            weightedspawnerentity.b(this, f);
+            blockpos = new BlockPos(this);
+         }
+
+         entityplayermp.a(this, false);
+         this.l.E.c("reloading");
+         EntityList entitylist = EntitySelectors.a(this.getClass(), entityplayermp1);
+         if (entitylist != null) {
+            entitylist.a(this);
+            if (i == 1 && p_b_1_ == 1) {
+               BlockPos blockpos1 = entityplayermp1.q(entityplayermp1.T());
+               entitylist.a(blockpos1, entitylist.v, entitylist.w);
+            } else {
+               entitylist.a(blockpos, entitylist.v, entitylist.w);
+            }
+
+            boolean flag = entitylist.k;
+            entitylist.k = true;
+            entityplayermp1.a(entitylist);
+            entitylist.k = flag;
+            entityplayermp1.a(entitylist, false);
+         }
+
+         this.F = true;
+         this.l.E.b();
+         entityplayermp.m();
+         entityplayermp1.m();
+         this.l.E.b();
+         return entitylist;
+      } else {
+         return null;
+      }
+   }
+
+   public boolean bf() {
+      return true;
+   }
+
+   public float a(GameRules p_a_1_, IWorldEventListener p_a_2_, BlockPos p_a_3_, awt p_a_4_) {
+      return p_a_4_.u().a(this);
+   }
+
+   public boolean a(GameRules p_a_1_, IWorldEventListener p_a_2_, BlockPos p_a_3_, awt p_a_4_, float p_a_5_) {
+      return true;
+   }
+
+   public int bg() {
+      return 3;
+   }
+
+   public ScoreObjective bi() {
+      return this.ao;
+   }
+
+   public EnumFacing bj() {
+      return this.ap;
+   }
+
+   public boolean bk() {
+      return false;
+   }
+
+   public void a(CrashReportCategory p_a_1_) {
+      p_a_1_.func_189529_a("Entity Type", new ICrashReportDetail<String>() {
+         public String a() throws Exception {
+            return EntitySelectors.a(EntityList.this) + " (" + EntityList.this.getClass().getCanonicalName() + ")";
+         }
+      });
+      p_a_1_.func_71507_a("Entity ID", Integer.valueOf(this.h));
+      p_a_1_.func_189529_a("Entity Name", new ICrashReportDetail<String>() {
+         public String a() throws Exception {
+            return EntityList.this.func_70005_c_();
+         }
+      });
+      p_a_1_.func_71507_a("Entity's Exact location", String.format("%.2f, %.2f, %.2f", this.p, this.q, this.r));
+      p_a_1_.func_71507_a("Entity's Block location", CrashReportCategory.func_184876_a(IProgressUpdate.c(this.p), IProgressUpdate.c(this.q), IProgressUpdate.c(this.r)));
+      p_a_1_.func_71507_a("Entity's Momentum", String.format("%.2f, %.2f, %.2f", this.s, this.t, this.u));
+      p_a_1_.func_189529_a("Entity's Passengers", new ICrashReportDetail<String>() {
+         public String a() throws Exception {
+            return EntityList.this.bF().toString();
+         }
+      });
+      p_a_1_.func_189529_a("Entity's Vehicle", new ICrashReportDetail<String>() {
+         public String a() throws Exception {
+            return EntityList.this.bJ().toString();
+         }
+      });
+   }
+
+   public boolean bl() {
+      return this.aR();
+   }
+
+   public void a(UUID p_a_1_) {
+      this.aq = p_a_1_;
+      this.ar = this.aq.toString();
+   }
+
+   public UUID bm() {
+      return this.aq;
+   }
+
+   public String bn() {
+      return this.ar;
+   }
+
+   public boolean bo() {
+      return true;
+   }
+
+   public static double bp() {
+      return field_151516_b;
+   }
+
+   public static void b(double p_b_0_) {
+      field_151516_b = p_b_0_;
+   }
+
+   public ITextComponent func_145748_c_() {
+      TextComponentString textcomponentstring = new TextComponentString(bhh.a(this.aY(), this.func_70005_c_()));
+      textcomponentstring.func_150256_b().func_150209_a(this.bv());
+      textcomponentstring.func_150256_b().func_179989_a(this.bn());
+      return textcomponentstring;
+   }
+
+   public void c(String p_c_1_) {
+      this.Y.b(aB, p_c_1_);
+   }
+
+   public String bq() {
+      return (String)this.Y.a(aB);
+   }
+
+   public boolean n_() {
+      return !((String)this.Y.a(aB)).isEmpty();
+   }
+
+   public void j(boolean p_j_1_) {
+      this.Y.b(aC, Boolean.valueOf(p_j_1_));
+   }
+
+   public boolean br() {
+      return ((Boolean)this.Y.a(aC)).booleanValue();
+   }
+
+   public void a(double p_a_1_, double p_a_3_, double p_a_5_) {
+      this.aI = true;
+      this.b(p_a_1_, p_a_3_, p_a_5_, this.v, this.w);
+      this.l.a(this, false);
+   }
+
+   public boolean bs() {
+      return this.br();
+   }
+
+   public void a(DataSerializer<?> p_a_1_) {
+   }
+
+   public EnumFacing bt() {
+      return EnumFacing.func_176731_b(IProgressUpdate.c((double)(this.v * 4.0F / 360.0F) + 0.5D) & 3);
+   }
+
+   public EnumFacing bu() {
+      return this.bt();
+   }
+
+   protected HoverEvent bv() {
+      NBTTagCompound nbttagcompound = new NBTTagCompound();
+      BehaviorProjectileDispense behaviorprojectiledispense = EntitySelectors.a(this);
+      nbttagcompound.func_74778_a("id", this.bn());
+      if (behaviorprojectiledispense != null) {
+         nbttagcompound.func_74778_a("type", behaviorprojectiledispense.toString());
+      }
+
+      nbttagcompound.func_74778_a("name", this.func_70005_c_());
+      return new HoverEvent(HoverEvent.Action.SHOW_ENTITY, new TextComponentString(nbttagcompound.toString()));
+   }
+
+   public boolean a(EntityTrackerEntry p_a_1_) {
+      return true;
+   }
+
+   public Vec2f bw() {
+      return this.av;
+   }
+
+   public Vec2f bx() {
+      return this.bw();
+   }
+
+   public void a(Vec2f p_a_1_) {
+      this.av = p_a_1_;
+   }
+
+   public float by() {
+      return this.H * 0.85F;
+   }
+
+   public boolean bz() {
+      return this.aw;
+   }
+
+   public void k(boolean p_k_1_) {
+      this.aw = p_k_1_;
+   }
+
+   public boolean c(int p_c_1_, Items p_c_2_) {
+      return false;
+   }
+
+   public void func_145747_a(ITextComponent p_145747_1_) {
+   }
+
+   public boolean func_70003_b(int p_70003_1_, String p_70003_2_) {
+      return true;
+   }
+
+   public BlockPos func_180425_c() {
+      return new BlockPos(this.p, this.q + 0.5D, this.r);
+   }
+
+   public ScoreObjective d() {
+      return new ScoreObjective(this.p, this.q, this.r);
+   }
+
+   public IWorldEventListener e() {
+      return this.l;
+   }
+
+   public EntityList f() {
+      return this;
+   }
+
+   public boolean func_174792_t_() {
+      return false;
+   }
+
+   public void func_174794_a(CommandResultStats.Type p_174794_1_, int p_174794_2_) {
+      if (this.l != null && !this.l.G) {
+         this.aG.func_184932_a(this.l.u(), this, p_174794_1_, p_174794_2_);
+      }
+
+   }
+
+   @Nullable
+   public MinecraftServer func_184102_h() {
+      return this.l.u();
+   }
+
+   public CommandResultStats bA() {
+      return this.aG;
+   }
+
+   public void v(EntityList p_v_1_) {
+      this.aG.func_179671_a(p_v_1_.bA());
+   }
+
+   public ud a(RecipeItemHelper p_a_1_, ScoreObjective p_a_2_, EnumActionResult p_a_3_) {
+      return ud.b;
+   }
+
+   public boolean bB() {
+      return false;
+   }
+
+   protected void a(EnumCreatureType p_a_1_, EntityList p_a_2_) {
+      if (p_a_2_ instanceof EnumCreatureType) {
+         Enchantments.a((EnumCreatureType)p_a_2_, p_a_1_);
+      }
+
+      Enchantments.b(p_a_1_, p_a_2_);
+   }
+
+   public void b(EntityTrackerEntry p_b_1_) {
+   }
+
+   public void c(EntityTrackerEntry p_c_1_) {
+   }
+
+   public float a(BlockSandStone p_a_1_) {
+      float f = IProgressUpdate.g(this.v);
+      switch(p_a_1_) {
+      case c:
+         return f + 180.0F;
+      case d:
+         return f + 270.0F;
+      case b:
+         return f + 90.0F;
+      default:
+         return f;
+      }
+   }
+
+   public float a(BlockSilverfish p_a_1_) {
+      float f = IProgressUpdate.g(this.v);
+      switch(p_a_1_) {
+      case b:
+         return -f;
+      case c:
+         return 180.0F - f;
+      default:
+         return f;
+      }
+   }
+
+   public boolean bC() {
+      return false;
+   }
+
+   public boolean bD() {
+      boolean flag = this.aI;
+      this.aI = false;
+      return flag;
+   }
+
+   @Nullable
+   public EntityList bE() {
+      return null;
+   }
+
+   public List<EntityList> bF() {
+      return (List<EntityList>)(this.at.isEmpty() ? Collections.emptyList() : Lists.newArrayList(this.at));
+   }
+
+   public boolean w(EntityList p_w_1_) {
+      for(EntityList entitylist : this.bF()) {
+         if (entitylist.equals(p_w_1_)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public Collection<EntityList> bG() {
+      Set<EntityList> set = Sets.<EntityList>newHashSet();
+      this.a(EntityList.class, set);
+      return set;
+   }
+
+   public <T extends EntityList> Collection<T> b(Class<T> p_b_1_) {
+      Set<T> set = Sets.<T>newHashSet();
+      this.a(p_b_1_, set);
+      return set;
+   }
+
+   private <T extends EntityList> void a(Class<T> p_a_1_, Set<T> p_a_2_) {
+      for(EntityList entitylist : this.bF()) {
+         if (p_a_1_.isAssignableFrom(entitylist.getClass())) {
+            p_a_2_.add(entitylist);
+         }
+
+         entitylist.a(p_a_1_, p_a_2_);
+      }
+
+   }
+
+   public EntityList bH() {
+      EntityList entitylist;
+      for(entitylist = this; entitylist.aS(); entitylist = entitylist.bJ()) {
+         ;
+      }
+
+      return entitylist;
+   }
+
+   public boolean x(EntityList p_x_1_) {
+      return this.bH() == p_x_1_.bH();
+   }
+
+   public boolean y(EntityList p_y_1_) {
+      for(EntityList entitylist : this.bF()) {
+         if (entitylist.equals(p_y_1_)) {
+            return true;
+         }
+
+         if (entitylist.y(p_y_1_)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public boolean bI() {
+      EntityList entitylist = this.bE();
+      if (entitylist instanceof RecipeItemHelper) {
+         return ((RecipeItemHelper)entitylist).cZ();
+      } else {
+         return !this.l.G;
+      }
+   }
+
+   @Nullable
+   public EntityList bJ() {
+      return this.au;
+   }
+
+   public GenLayerDeepOcean o_() {
+      return GenLayerDeepOcean.a;
+   }
+
+   public qg bK() {
+      return qg.g;
+   }
+
+   protected int bL() {
+      return 1;
+   }
+}

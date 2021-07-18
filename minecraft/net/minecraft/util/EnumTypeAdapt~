@@ -1,0 +1,17 @@
+package net.minecraft.util;
+
+public abstract class EnumTypeAdapterFactory<T> {
+   private T a;
+   private boolean b;
+
+   public T c() {
+      if (!this.b) {
+         this.b = true;
+         this.a = (T)this.b();
+      }
+
+      return this.a;
+   }
+
+   protected abstract T b();
+}

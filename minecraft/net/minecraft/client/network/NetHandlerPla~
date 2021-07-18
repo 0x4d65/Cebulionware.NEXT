@@ -1,0 +1,82 @@
+package net.minecraft.client.network;
+
+import com.google.common.base.MoreObjects;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import javax.annotation.Nullable;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.chunk.BlockStatePaletteHashMap;
+import net.minecraft.world.chunk.BlockStatePaletteLinear;
+import net.minecraft.world.chunk.EmptyChunk;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class NetHandlerPlayClient implements EmptyChunk {
+   private static final Logger field_147304_c = LogManager.getLogger();
+   private final BlockStatePaletteLinear field_147301_d;
+   private final Long2ObjectMap<BlockStatePaletteLinear> field_147302_e = new Long2ObjectOpenHashMap<BlockStatePaletteLinear>(8192) {
+      protected void rehash(int p_rehash_1_) {
+         if (p_rehash_1_ > this.key.length) {
+            super.rehash(p_rehash_1_);
+         }
+
+      }
+   };
+   private final IWorldEventListener field_175107_d;
+
+   public NetHandlerPlayClient(IWorldEventListener p_i21_1_) {
+      this.field_147301_d = new BlockStatePaletteHashMap(p_i21_1_, 0, 0);
+      this.field_175107_d = p_i21_1_;
+   }
+
+   public void b(int p_b_1_, int p_b_2_) {
+      BlockStatePaletteLinear blockstatepalettelinear = this.c(p_b_1_, p_b_2_);
+      if (!blockstatepalettelinear.f()) {
+         blockstatepalettelinear.d();
+      }
+
+      this.field_147302_e.remove(Explosion.a(p_b_1_, p_b_2_));
+   }
+
+   @Nullable
+   public BlockStatePaletteLinear a(int p_a_1_, int p_a_2_) {
+      return (BlockStatePaletteLinear)this.field_147302_e.get(Explosion.a(p_a_1_, p_a_2_));
+   }
+
+   public BlockStatePaletteLinear d(int p_d_1_, int p_d_2_) {
+      BlockStatePaletteLinear blockstatepalettelinear = new BlockStatePaletteLinear(this.field_175107_d, p_d_1_, p_d_2_);
+      this.field_147302_e.put(Explosion.a(p_d_1_, p_d_2_), blockstatepalettelinear);
+      blockstatepalettelinear.c(true);
+      return blockstatepalettelinear;
+   }
+
+   public BlockStatePaletteLinear c(int p_c_1_, int p_c_2_) {
+      return (BlockStatePaletteLinear)MoreObjects.firstNonNull(this.a(p_c_1_, p_c_2_), this.field_147301_d);
+   }
+
+   public boolean d() {
+      long i = System.currentTimeMillis();
+      ObjectIterator objectiterator = this.field_147302_e.values().iterator();
+
+      while(objectiterator.hasNext()) {
+         BlockStatePaletteLinear blockstatepalettelinear = (BlockStatePaletteLinear)objectiterator.next();
+         blockstatepalettelinear.b(System.currentTimeMillis() - i > 5L);
+      }
+
+      if (System.currentTimeMillis() - i > 100L) {
+         field_147304_c.info("Warning: Clientside chunk ticking took {} ms", (long)(System.currentTimeMillis() - i));
+      }
+
+      return false;
+   }
+
+   public String f() {
+      return "MultiplayerChunkCache: " + this.field_147302_e.size() + ", " + this.field_147302_e.size();
+   }
+
+   public boolean e(int p_e_1_, int p_e_2_) {
+      return this.field_147302_e.containsKey(Explosion.a(p_e_1_, p_e_2_));
+   }
+}

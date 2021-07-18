@@ -1,0 +1,8 @@
+package net.minecraft.client.util;
+
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.src.cgt;
+
+public interface SearchTree extends cgt, DedicatedServer {
+   boolean func_71225_e();
+}

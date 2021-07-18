@@ -1,0 +1,113 @@
+package net.minecraft.network.play.server;
+
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.INetHandlerPlayClient;
+
+public class SPacketCombatEvent implements Packet<INetHandlerPlayClient> {
+   private boolean field_179776_a;
+   private boolean field_179774_b;
+   private boolean field_179775_c;
+   private boolean field_179772_d;
+   private float field_179773_e;
+   private float f;
+
+   public SPacketCombatEvent() {
+   }
+
+   public SPacketCombatEvent(EntityPlayer p_i821_1_) {
+      this.a(p_i821_1_.field_184829_a);
+      this.b(p_i821_1_.field_184830_b);
+      this.c(p_i821_1_.field_71076_b);
+      this.d(p_i821_1_.field_71077_c);
+      this.a(p_i821_1_.a());
+      this.b(p_i821_1_.b());
+   }
+
+   public void func_148837_a(PacketBuffer p_148837_1_) throws IOException {
+      byte b0 = p_148837_1_.readByte();
+      this.a((b0 & 1) > 0);
+      this.b((b0 & 2) > 0);
+      this.c((b0 & 4) > 0);
+      this.d((b0 & 8) > 0);
+      this.a(p_148837_1_.readFloat());
+      this.b(p_148837_1_.readFloat());
+   }
+
+   public void func_148840_b(PacketBuffer p_148840_1_) throws IOException {
+      byte b0 = 0;
+      if (this.a()) {
+         b0 = (byte)(b0 | 1);
+      }
+
+      if (this.b()) {
+         b0 = (byte)(b0 | 2);
+      }
+
+      if (this.c()) {
+         b0 = (byte)(b0 | 4);
+      }
+
+      if (this.d()) {
+         b0 = (byte)(b0 | 8);
+      }
+
+      p_148840_1_.writeByte(b0);
+      p_148840_1_.writeFloat(this.field_179773_e);
+      p_148840_1_.writeFloat(this.f);
+   }
+
+   public void func_148833_a(INetHandlerPlayClient p_148833_1_) {
+      p_148833_1_.func_175098_a(this);
+   }
+
+   public boolean a() {
+      return this.field_179776_a;
+   }
+
+   public void a(boolean p_a_1_) {
+      this.field_179776_a = p_a_1_;
+   }
+
+   public boolean b() {
+      return this.field_179774_b;
+   }
+
+   public void b(boolean p_b_1_) {
+      this.field_179774_b = p_b_1_;
+   }
+
+   public boolean c() {
+      return this.field_179775_c;
+   }
+
+   public void c(boolean p_c_1_) {
+      this.field_179775_c = p_c_1_;
+   }
+
+   public boolean d() {
+      return this.field_179772_d;
+   }
+
+   public void d(boolean p_d_1_) {
+      this.field_179772_d = p_d_1_;
+   }
+
+   public float e() {
+      return this.field_179773_e;
+   }
+
+   public void a(float p_a_1_) {
+      this.field_179773_e = p_a_1_;
+   }
+
+   public float f() {
+      return this.f;
+   }
+
+   public void b(float p_b_1_) {
+      this.f = p_b_1_;
+   }
+}

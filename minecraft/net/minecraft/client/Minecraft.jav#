@@ -1,0 +1,60 @@
+***************
+*** 376,384 ****
+  
+        while(true) {
+           try {
+-             if (!this.field_71425_J) {
+-                break;
+-             }
+  
+              if (!this.field_71434_R || this.field_71433_S == null) {
+                 try {
+--- 376,382 ----
+  
+        while(true) {
+           try {
++             while(this.field_71425_J) {
+  
+              if (!this.field_71434_R || this.field_71433_S == null) {
+                 try {
+***************
+*** 388,397 ****
+                    this.func_147108_a(new GuiMemoryErrorScreen());
+                    System.gc();
+                 }
+-                continue;
+-             }
+- 
+              this.func_71377_b(this.field_71433_S);
+           } catch (MinecraftError var12) {
+              break;
+           } catch (ReportedException reportedexception) {
+--- 386,397 ----
+                    this.func_147108_a(new GuiMemoryErrorScreen());
+                    System.gc();
+                 }
++             }
++             else
++             {
+              this.func_71377_b(this.field_71433_S);
++             }
++             }
+           } catch (MinecraftError var12) {
+              break;
+           } catch (ReportedException reportedexception) {
+***************
+*** 1282,1287 ****
+        }
+     }
+  
+     private void func_147121_ag() {
+        if (!this.field_71442_b.func_181040_m()) {
+           this.field_71467_ac = 4;
+--- 1282,1288 ----
+        }
+     }
+  
++    @SuppressWarnings("incomplete-switch")
+     private void func_147121_ag() {
+        if (!this.field_71442_b.func_181040_m()) {
+           this.field_71467_ac = 4;

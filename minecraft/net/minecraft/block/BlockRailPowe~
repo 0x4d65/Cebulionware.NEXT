@@ -1,0 +1,36 @@
+package net.minecraft.block;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemLead;
+import net.minecraft.item.ItemStack;
+import net.minecraft.src.awt;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IWorldEventListener;
+
+public class BlockRailPowered extends BlockDeadBush {
+   private static final Vec2f[] a = new Vec2f[]{new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.1875D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.3125D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.4375D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.5625D, 1.0D)};
+
+   protected ItemStack h() {
+      return ItemLead.cd;
+   }
+
+   protected ItemStack i() {
+      return ItemLead.cd;
+   }
+
+   public void a(IWorldEventListener p_a_1_, BlockPos p_a_2_, awt p_a_3_, float p_a_4_, int p_a_5_) {
+      super.a(p_a_1_, p_a_2_, p_a_3_, p_a_4_, p_a_5_);
+      if (!p_a_1_.G) {
+         if (this.z(p_a_3_) && p_a_1_.r.nextInt(50) == 0) {
+            a(p_a_1_, p_a_2_, new Items(ItemLead.cf));
+         }
+
+      }
+   }
+
+   public Vec2f b(awt p_b_1_, EnumSkyBlock p_b_2_, BlockPos p_b_3_) {
+      return a[((Integer)p_b_1_.c(this.e())).intValue()];
+   }
+}

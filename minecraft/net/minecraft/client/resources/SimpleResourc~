@@ -1,0 +1,416 @@
+package net.minecraft.client.resources;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
+import java.awt.image.BufferedImage;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.texture.ITextureMapPopulator;
+import net.minecraft.client.renderer.texture.ITickableTextureObject;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.data.AnimationMetadataSection;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.src.cfr;
+import net.minecraft.util.IntegerCache;
+import net.minecraft.util.ScreenShotHelper;
+import net.minecraft.util.text.TextFormatting;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class SimpleResource {
+   private static final Logger field_110533_b = LogManager.getLogger();
+   private static final FileFilter field_110534_c = new FileFilter() {
+      public boolean accept(File p_accept_1_) {
+         boolean flag = p_accept_1_.isFile() && p_accept_1_.getName().endsWith(".zip");
+         boolean flag1 = p_accept_1_.isDirectory() && (new File(p_accept_1_, "pack.mcmeta")).isFile();
+         return flag || flag1;
+      }
+   };
+   private static final Pattern field_110531_d = Pattern.compile("^[a-fA-F0-9]{40}$");
+   private static final BehaviorProjectileDispense field_110532_e = new BehaviorProjectileDispense("textures/misc/unknown_pack.png");
+   private final File field_110529_f;
+   public final ResourcePackFileNotFoundException field_110535_a;
+   private final File field_110530_g;
+   public final AnimationMetadataSection field_177242_b;
+   private ResourcePackFileNotFoundException i;
+   private final ReentrantLock j = new ReentrantLock();
+   private ListenableFuture<Object> k;
+   private List<SimpleResource.a> l = Lists.<SimpleResource.a>newArrayList();
+   private final List<SimpleResource.a> m = Lists.<SimpleResource.a>newArrayList();
+
+   public SimpleResource(File p_i298_1_, File p_i298_2_, ResourcePackFileNotFoundException p_i298_3_, AnimationMetadataSection p_i298_4_, ScreenShotHelper p_i298_5_) {
+      this.field_110529_f = p_i298_1_;
+      this.field_110530_g = p_i298_2_;
+      this.field_110535_a = p_i298_3_;
+      this.field_177242_b = p_i298_4_;
+      this.k();
+      this.b();
+      Iterator<String> iterator = p_i298_5_.m.iterator();
+
+      while(iterator.hasNext()) {
+         String s = iterator.next();
+
+         for(SimpleResource.a simpleresource$a : this.l) {
+            if (simpleresource$a.d().equals(s)) {
+               if (simpleresource$a.f() == 3 || p_i298_5_.n.contains(simpleresource$a.d())) {
+                  this.m.add(simpleresource$a);
+                  break;
+               }
+
+               iterator.remove();
+               field_110533_b.warn("Removed selected resource pack {} because it's no longer compatible", (Object)simpleresource$a.d());
+            }
+         }
+      }
+
+   }
+
+   public static Map<String, String> a() {
+      Map<String, String> map = Maps.<String, String>newHashMap();
+      map.put("X-Minecraft-Username", GameSettings.z().K().c());
+      map.put("X-Minecraft-UUID", GameSettings.z().K().b());
+      map.put("X-Minecraft-Version", "1.12.2");
+      return map;
+   }
+
+   private void k() {
+      if (this.field_110529_f.exists()) {
+         if (!this.field_110529_f.isDirectory() && (!this.field_110529_f.delete() || !this.field_110529_f.mkdirs())) {
+            field_110533_b.warn("Unable to recreate resourcepack folder, it exists but is not a directory: {}", (Object)this.field_110529_f);
+         }
+      } else if (!this.field_110529_f.mkdirs()) {
+         field_110533_b.warn("Unable to create resourcepack folder: {}", (Object)this.field_110529_f);
+      }
+
+   }
+
+   private List<File> l() {
+      return this.field_110529_f.isDirectory() ? Arrays.asList(this.field_110529_f.listFiles(field_110534_c)) : Collections.emptyList();
+   }
+
+   private ResourcePackFileNotFoundException b(File p_b_1_) {
+      ResourcePackFileNotFoundException resourcepackfilenotfoundexception;
+      if (p_b_1_.isDirectory()) {
+         resourcepackfilenotfoundexception = new GrassColorReloadListener(p_b_1_);
+      } else {
+         resourcepackfilenotfoundexception = new FoliageColorReloadListener(p_b_1_);
+      }
+
+      try {
+         cfr cfr = (cfr)resourcepackfilenotfoundexception.a(this.field_177242_b, "pack");
+         if (cfr != null && cfr.b() == 2) {
+            return new ResourcePackRepository(resourcepackfilenotfoundexception);
+         }
+      } catch (Exception var4) {
+         ;
+      }
+
+      return resourcepackfilenotfoundexception;
+   }
+
+   public void b() {
+      List<SimpleResource.a> list = Lists.<SimpleResource.a>newArrayList();
+
+      for(File file1 : this.l()) {
+         SimpleResource.a simpleresource$a = new SimpleResource.a(file1);
+         if (this.l.contains(simpleresource$a)) {
+            int i = this.l.indexOf(simpleresource$a);
+            if (i > -1 && i < this.l.size()) {
+               list.add(this.l.get(i));
+            }
+         } else {
+            try {
+               simpleresource$a.a();
+               list.add(simpleresource$a);
+            } catch (Exception var6) {
+               list.remove(simpleresource$a);
+            }
+         }
+      }
+
+      this.l.removeAll(list);
+
+      for(SimpleResource.a simpleresource$a1 : this.l) {
+         simpleresource$a1.b();
+      }
+
+      this.l = list;
+   }
+
+   @Nullable
+   public SimpleResource.a c() {
+      if (this.i != null) {
+         SimpleResource.a simpleresource$a = new SimpleResource.a(this.i);
+
+         try {
+            simpleresource$a.a();
+            return simpleresource$a;
+         } catch (IOException var3) {
+            ;
+         }
+      }
+
+      return null;
+   }
+
+   public List<SimpleResource.a> d() {
+      return ImmutableList.copyOf(this.l);
+   }
+
+   public List<SimpleResource.a> e() {
+      return ImmutableList.copyOf(this.m);
+   }
+
+   public void a(List<SimpleResource.a> p_a_1_) {
+      this.m.clear();
+      this.m.addAll(p_a_1_);
+   }
+
+   public File f() {
+      return this.field_110529_f;
+   }
+
+   public ListenableFuture<Object> a(String p_a_1_, String p_a_2_) {
+      String s = DigestUtils.sha1Hex(p_a_1_);
+      final String s1 = field_110531_d.matcher(p_a_2_).matches() ? p_a_2_ : "";
+      final File file1 = new File(this.field_110530_g, s);
+      this.j.lock();
+
+      try {
+         this.h();
+         if (file1.exists()) {
+            if (this.a(s1, file1)) {
+               ListenableFuture listenablefuture1 = this.a(file1);
+               return listenablefuture1;
+            }
+
+            field_110533_b.warn("Deleting file {}", (Object)file1);
+            FileUtils.deleteQuietly(file1);
+         }
+
+         this.m();
+         final GuiScreen guiscreen = new GuiScreen();
+         Map<String, String> map = a();
+         final GameSettings gamesettings = GameSettings.z();
+         Futures.getUnchecked(gamesettings.a(new Runnable() {
+            public void run() {
+               gamesettings.a(guiscreen);
+            }
+         }));
+         final SettableFuture<Object> settablefuture = SettableFuture.<Object>create();
+         this.k = IntegerCache.a(file1, p_a_1_, map, 52428800, guiscreen, gamesettings.M());
+         Futures.addCallback(this.k, new FutureCallback<Object>() {
+            public void onSuccess(@Nullable Object p_onSuccess_1_) {
+               if (SimpleResource.this.a(s1, file1)) {
+                  SimpleResource.this.a(file1);
+                  settablefuture.set((Object)null);
+               } else {
+                  SimpleResource.field_110533_b.warn("Deleting file {}", (Object)file1);
+                  FileUtils.deleteQuietly(file1);
+               }
+
+            }
+
+            public void onFailure(Throwable p_onFailure_1_) {
+               FileUtils.deleteQuietly(file1);
+               settablefuture.setException(p_onFailure_1_);
+            }
+         });
+         ListenableFuture listenablefuture = this.k;
+         return listenablefuture;
+      } finally {
+         this.j.unlock();
+      }
+   }
+
+   private boolean a(String p_a_1_, File p_a_2_) {
+      try {
+         String s = DigestUtils.sha1Hex((InputStream)(new FileInputStream(p_a_2_)));
+         if (p_a_1_.isEmpty()) {
+            field_110533_b.info("Found file {} without verification hash", (Object)p_a_2_);
+            return true;
+         }
+
+         if (s.toLowerCase(java.util.Locale.ROOT).equals(p_a_1_.toLowerCase(java.util.Locale.ROOT))) {
+            field_110533_b.info("Found file {} matching requested hash {}", p_a_2_, p_a_1_);
+            return true;
+         }
+
+         field_110533_b.warn("File {} had wrong hash (expected {}, found {}).", p_a_2_, p_a_1_, s);
+      } catch (IOException ioexception) {
+         field_110533_b.warn("File {} couldn't be hashed.", p_a_2_, ioexception);
+      }
+
+      return false;
+   }
+
+   private boolean c(File p_c_1_) {
+      SimpleResource.a simpleresource$a = new SimpleResource.a(p_c_1_);
+
+      try {
+         simpleresource$a.a();
+         return true;
+      } catch (Exception exception) {
+         field_110533_b.warn("Server resourcepack is invalid, ignoring it", (Throwable)exception);
+         return false;
+      }
+   }
+
+   private void m() {
+      try {
+         List<File> list = Lists.newArrayList(FileUtils.listFiles(this.field_110530_g, TrueFileFilter.TRUE, (IOFileFilter)null));
+         Collections.sort(list, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+         int i = 0;
+
+         for(File file1 : list) {
+            if (i++ >= 10) {
+               field_110533_b.info("Deleting old server resource pack {}", (Object)file1.getName());
+               FileUtils.deleteQuietly(file1);
+            }
+         }
+      } catch (IllegalArgumentException illegalargumentexception) {
+         field_110533_b.error("Error while deleting old server resource pack : {}", (Object)illegalargumentexception.getMessage());
+      }
+
+   }
+
+   public ListenableFuture<Object> a(File p_a_1_) {
+      if (!this.c(p_a_1_)) {
+         return Futures.<Object>immediateFailedFuture(new RuntimeException("Invalid resourcepack"));
+      } else {
+         this.i = new FoliageColorReloadListener(p_a_1_);
+         return GameSettings.z().A();
+      }
+   }
+
+   @Nullable
+   public ResourcePackFileNotFoundException g() {
+      return this.i;
+   }
+
+   public void h() {
+      this.j.lock();
+
+      try {
+         if (this.k != null) {
+            this.k.cancel(true);
+         }
+
+         this.k = null;
+         if (this.i != null) {
+            this.i = null;
+            GameSettings.z().A();
+         }
+      } finally {
+         this.j.unlock();
+      }
+
+   }
+
+   public class a {
+      private final ResourcePackFileNotFoundException b;
+      private cfr c;
+      private BehaviorProjectileDispense d;
+
+      private a(File p_i299_2_) {
+         this(SimpleResource.this.b(p_i299_2_));
+      }
+
+      private a(ResourcePackFileNotFoundException p_i300_2_) {
+         this.b = p_i300_2_;
+      }
+
+      public void a() throws IOException {
+         this.c = (cfr)this.b.a(SimpleResource.this.field_177242_b, "pack");
+         this.b();
+      }
+
+      public void a(TextureUtil p_a_1_) {
+         BufferedImage bufferedimage = null;
+
+         try {
+            bufferedimage = this.b.a();
+         } catch (IOException var5) {
+            ;
+         }
+
+         if (bufferedimage == null) {
+            try {
+               bufferedimage = ITickableTextureObject.a(GameSettings.z().O().a(SimpleResource.field_110532_e).b());
+            } catch (IOException ioexception) {
+               throw new Error("Couldn't bind resource pack icon", ioexception);
+            }
+         }
+
+         if (this.d == null) {
+            this.d = p_a_1_.a("texturepackicon", new ITextureMapPopulator(bufferedimage));
+         }
+
+         p_a_1_.a(this.d);
+      }
+
+      public void b() {
+         if (this.b instanceof Closeable) {
+            IOUtils.closeQuietly((Closeable)this.b);
+         }
+
+      }
+
+      public ResourcePackFileNotFoundException c() {
+         return this.b;
+      }
+
+      public String d() {
+         return this.b.b();
+      }
+
+      public String e() {
+         return this.c == null ? TextFormatting.RED + "Invalid pack.mcmeta (or missing 'pack' section)" : this.c.a().func_150254_d();
+      }
+
+      public int f() {
+         return this.c == null ? 0 : this.c.b();
+      }
+
+      public boolean equals(Object p_equals_1_) {
+         if (this == p_equals_1_) {
+            return true;
+         } else {
+            return p_equals_1_ instanceof SimpleResource.a ? this.toString().equals(p_equals_1_.toString()) : false;
+         }
+      }
+
+      public int hashCode() {
+         return this.toString().hashCode();
+      }
+
+      public String toString() {
+         return String.format("%s:%s", this.b.b(), this.b instanceof GrassColorReloadListener ? "folder" : "zip");
+      }
+   }
+}

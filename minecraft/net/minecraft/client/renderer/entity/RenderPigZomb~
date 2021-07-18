@@ -1,0 +1,28 @@
+package net.minecraft.client.renderer.entity;
+
+import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.util.IProgressUpdate;
+
+public class RenderPigZombie extends RenderOcelot<EntityPolarBear> {
+   public static final BehaviorProjectileDispense[] field_177120_j = new BehaviorProjectileDispense[]{new BehaviorProjectileDispense("textures/entity/parrot/parrot_red_blue.png"), new BehaviorProjectileDispense("textures/entity/parrot/parrot_blue.png"), new BehaviorProjectileDispense("textures/entity/parrot/parrot_green.png"), new BehaviorProjectileDispense("textures/entity/parrot/parrot_yellow_blue.png"), new BehaviorProjectileDispense("textures/entity/parrot/parrot_grey.png")};
+
+   public RenderPigZombie(RenderEvokerFangs p_i482_1_) {
+      super(p_i482_1_, new ModelPlayer(), 0.3F);
+   }
+
+   protected BehaviorProjectileDispense a(EntityPolarBear p_a_1_) {
+      return field_177120_j[p_a_1_.du()];
+   }
+
+   public float a(EntityPolarBear p_a_1_, float p_a_2_) {
+      return this.b(p_a_1_, p_a_2_);
+   }
+
+   private float b(EntityPolarBear p_b_1_, float p_b_2_) {
+      float f = p_b_1_.field_70869_bD + (p_b_1_.field_189797_bB - p_b_1_.field_70869_bD) * p_b_2_;
+      float f1 = p_b_1_.field_70872_bC + (p_b_1_.field_70871_bB - p_b_1_.field_70872_bC) * p_b_2_;
+      return (IProgressUpdate.a(f) + 1.0F) * f1;
+   }
+}

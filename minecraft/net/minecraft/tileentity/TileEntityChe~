@@ -1,0 +1,262 @@
+package net.minecraft.tileentity;
+
+import javax.annotation.Nullable;
+import net.minecraft.block.BlockBone;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockSilverfish;
+import net.minecraft.block.IGrowable;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ICrashReportDetail;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.src.awf;
+import net.minecraft.src.awg;
+import net.minecraft.src.awm;
+import net.minecraft.src.awt;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IWorldEventListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public abstract class TileEntityChest {
+   private static final Logger field_145984_a = LogManager.getLogger();
+   private static final RegistryNamespaced<BehaviorProjectileDispense, Class<? extends TileEntityChest>> field_145992_i = new RegistryNamespaced<BehaviorProjectileDispense, Class<? extends TileEntityChest>>();
+   protected IWorldEventListener b;
+   protected BlockPos c = BlockPos.field_177992_a;
+   protected boolean d;
+   private int field_145990_j = -1;
+   protected BlockBone e;
+
+   private static void a(String p_a_0_, Class<? extends TileEntityChest> p_a_1_) {
+      field_145992_i.func_82595_a(new BehaviorProjectileDispense(p_a_0_), p_a_1_);
+   }
+
+   @Nullable
+   public static BehaviorProjectileDispense a(Class<? extends TileEntityChest> p_a_0_) {
+      return field_145992_i.func_177774_c(p_a_0_);
+   }
+
+   public IWorldEventListener D() {
+      return this.b;
+   }
+
+   public void a(IWorldEventListener p_a_1_) {
+      this.b = p_a_1_;
+   }
+
+   public boolean u() {
+      return this.b != null;
+   }
+
+   public void func_145839_a(NBTTagCompound p_145839_1_) {
+      this.c = new BlockPos(p_145839_1_.func_74762_e("x"), p_145839_1_.func_74762_e("y"), p_145839_1_.func_74762_e("z"));
+   }
+
+   public NBTTagCompound func_189515_b(NBTTagCompound p_189515_1_) {
+      return this.c(p_189515_1_);
+   }
+
+   private NBTTagCompound c(NBTTagCompound p_c_1_) {
+      BehaviorProjectileDispense behaviorprojectiledispense = field_145992_i.func_177774_c(this.getClass());
+      if (behaviorprojectiledispense == null) {
+         throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
+      } else {
+         p_c_1_.func_74778_a("id", behaviorprojectiledispense.toString());
+         p_c_1_.func_74768_a("x", this.c.func_177958_n());
+         p_c_1_.func_74768_a("y", this.c.func_177956_o());
+         p_c_1_.func_74768_a("z", this.c.func_177952_p());
+         return p_c_1_;
+      }
+   }
+
+   @Nullable
+   public static TileEntityChest a(IWorldEventListener p_a_0_, NBTTagCompound p_a_1_) {
+      TileEntityChest tileentitychest = null;
+      String s = p_a_1_.func_74779_i("id");
+
+      try {
+         Class<? extends TileEntityChest> oclass = (Class)field_145992_i.func_82594_a(new BehaviorProjectileDispense(s));
+         if (oclass != null) {
+            tileentitychest = oclass.newInstance();
+         }
+      } catch (Throwable throwable1) {
+         field_145984_a.error("Failed to create block entity {}", s, throwable1);
+      }
+
+      if (tileentitychest != null) {
+         try {
+            tileentitychest.b(p_a_0_);
+            tileentitychest.func_145839_a(p_a_1_);
+         } catch (Throwable throwable) {
+            field_145984_a.error("Failed to load data for block entity {}", s, throwable);
+            tileentitychest = null;
+         }
+      } else {
+         field_145984_a.warn("Skipping BlockEntity with id {}", (Object)s);
+      }
+
+      return tileentitychest;
+   }
+
+   protected void b(IWorldEventListener p_b_1_) {
+   }
+
+   public int v() {
+      if (this.field_145990_j == -1) {
+         awt awt = this.b.o(this.c);
+         this.field_145990_j = awt.u().e(awt);
+      }
+
+      return this.field_145990_j;
+   }
+
+   public void y_() {
+      if (this.b != null) {
+         awt awt = this.b.o(this.c);
+         this.field_145990_j = awt.u().e(awt);
+         this.b.b(this.c, this);
+         if (this.x() != IGrowable.a) {
+            this.b.d(this.c, this.x());
+         }
+      }
+
+   }
+
+   public double a(double p_a_1_, double p_a_3_, double p_a_5_) {
+      double d0 = (double)this.c.func_177958_n() + 0.5D - p_a_1_;
+      double d1 = (double)this.c.func_177956_o() + 0.5D - p_a_3_;
+      double d2 = (double)this.c.func_177952_p() + 0.5D - p_a_5_;
+      return d0 * d0 + d1 * d1 + d2 * d2;
+   }
+
+   public double t() {
+      return 4096.0D;
+   }
+
+   public BlockPos w() {
+      return this.c;
+   }
+
+   public BlockBone x() {
+      if (this.e == null && this.b != null) {
+         this.e = this.b.o(this.c).u();
+      }
+
+      return this.e;
+   }
+
+   @Nullable
+   public SPacketUpdateTileEntity c() {
+      return null;
+   }
+
+   public NBTTagCompound d() {
+      return this.c(new NBTTagCompound());
+   }
+
+   public boolean y() {
+      return this.d;
+   }
+
+   public void func_145843_s() {
+      this.d = true;
+   }
+
+   public void A() {
+      this.d = false;
+   }
+
+   public boolean func_145842_c(int p_145842_1_, int p_145842_2_) {
+      return false;
+   }
+
+   public void func_145836_u() {
+      this.e = null;
+      this.field_145990_j = -1;
+   }
+
+   public void a(CrashReportCategory p_a_1_) {
+      p_a_1_.func_189529_a("Name", new ICrashReportDetail<String>() {
+         public String a() throws Exception {
+            return TileEntityChest.field_145992_i.func_177774_c(TileEntityChest.this.getClass()) + " // " + TileEntityChest.this.getClass().getCanonicalName();
+         }
+      });
+      if (this.b != null) {
+         CrashReportCategory.a(p_a_1_, this.c, this.x(), this.v());
+         p_a_1_.func_189529_a("Actual block type", new ICrashReportDetail<String>() {
+            public String a() throws Exception {
+               int i = BlockBone.a(TileEntityChest.this.b.o(TileEntityChest.this.c).u());
+
+               try {
+                  return String.format("ID #%d (%s // %s)", i, BlockBone.c(i).a(), BlockBone.c(i).getClass().getCanonicalName());
+               } catch (Throwable var3) {
+                  return "ID #" + i;
+               }
+            }
+         });
+         p_a_1_.func_189529_a("Actual block data value", new ICrashReportDetail<String>() {
+            public String a() throws Exception {
+               awt awt = TileEntityChest.this.b.o(TileEntityChest.this.c);
+               int i = awt.u().e(awt);
+               if (i < 0) {
+                  return "Unknown? (Got " + i + ")";
+               } else {
+                  String s = String.format("%4s", Integer.toBinaryString(i)).replace(" ", "0");
+                  return String.format("%1$d / 0x%1$X / 0b%2$s", i, s);
+               }
+            }
+         });
+      }
+   }
+
+   public void a(BlockPos p_a_1_) {
+      this.c = p_a_1_.func_185334_h();
+   }
+
+   public boolean C() {
+      return false;
+   }
+
+   @Nullable
+   public ITextComponent i_() {
+      return null;
+   }
+
+   public void a(BlockSandStone p_a_1_) {
+   }
+
+   public void a(BlockSilverfish p_a_1_) {
+   }
+
+   static {
+      a("furnace", TileEntityHopper.class);
+      a("chest", TileEntityComparator.class);
+      a("ender_chest", TileEntityFurnace.class);
+      a("jukebox", BlockLeaves.a.class);
+      a("dispenser", TileEntityEnchantmentTable.class);
+      a("dropper", TileEntityEnderChest.class);
+      a("sign", TileEntityStructure.class);
+      a("mob_spawner", TileEntityLockableLoot.class);
+      a("noteblock", TileEntityShulkerBox.class);
+      a("piston", awm.class);
+      a("brewing_stand", TileEntityCommandBlock.class);
+      a("enchanting_table", TileEntityFlowerPot.class);
+      a("end_portal", awg.class);
+      a("beacon", TileEntity.class);
+      a("skull", TileEntityEndGateway.class);
+      a("daylight_detector", TileEntityDropper.class);
+      a("hopper", TileEntityMobSpawner.class);
+      a("comparator", TileEntityDispenser.class);
+      a("flower_pot", IHopper.class);
+      a("banner", TileEntityBeacon.class);
+      a("structure_block", TileEntityEndPortal.class);
+      a("end_gateway", awf.class);
+      a("command_block", TileEntityDaylightDetector.class);
+      a("shulker_box", TileEntitySkull.class);
+      a("bed", TileEntityBrewingStand.class);
+   }
+}

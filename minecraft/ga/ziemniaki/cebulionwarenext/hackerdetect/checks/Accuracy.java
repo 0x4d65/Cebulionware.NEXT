@@ -1,0 +1,58 @@
+package ga.ziemniaki.cebulionwarenext.hackerdetect.checks;
+
+import ga.ziemniaki.cebulionwarenext.client.tools.Utils;
+import ga.ziemniaki.cebulionwarenext.hackerdetect.Hacker;
+import net.minecraft.entity.Entity;
+
+public class Accuracy extends Check {
+	public Accuracy() {
+		super();
+	}
+	@Override
+	public CheckState check(Hacker hacker) {
+		Entity entity = Utils.getClosestEntityToEntity(5f, hacker.player);
+		if(entity == null) {
+			return CheckState.RESET;
+		}
+		if(hacker.player.swingProgress < 0.2f && hacker.player.swingProgress != 0f) {
+			float[] rots = Utils.getFacePosEntityRemote(hacker.player, entity);
+			
+			hacker.updateAccuracyList(Math.abs((hacker.player.rotationYaw - rots[0])));
+			if(hacker.isAccuracyListUsable()) {
+				float sum = 0f;
+				for(float num : hacker.accuracyValues) {
+					sum += num;
+				}
+				hacker.accuracyValue = sum / hacker.accuracyValues.size();
+			}
+			if(Math.abs((hacker.player.rotationYaw - rots[0])) < 30) {
+				if(hacker.accuracyValue < 90 && hacker.accuracyValues.size() >= 50) {
+					return CheckState.VIOLATION;
+				}
+			}
+			else {
+				return CheckState.RESET;
+			}
+		}
+		return CheckState.RESET;
+	}
+	
+	@Override
+	public String getPrefix() {
+		return " may be using ";
+	}
+
+	@Override
+	public String getName() {
+		return "KillAura/Aimbot (Accuracy)";
+	}
+
+	@Override
+	public int getMaxViolations() {
+		return 40;
+	}
+	@Override
+	public int getDecayTime() {
+		return 15000;
+	}
+}

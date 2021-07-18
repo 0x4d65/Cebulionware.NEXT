@@ -1,0 +1,34 @@
+***************
+*** 10,16 ****
+  
+     public static <T extends EntityProperty> void func_186644_a(EntityProperty.Serializer<? extends T> p_186644_0_) {
+        ResourceLocation resourcelocation = p_186644_0_.func_186649_a();
+-       Class<T> oclass = p_186644_0_.func_186651_b();
+        if (field_186647_a.containsKey(resourcelocation)) {
+           throw new IllegalArgumentException("Can't re-register entity property name " + resourcelocation);
+        } else if (field_186648_b.containsKey(oclass)) {
+--- 10,16 ----
+  
+     public static <T extends EntityProperty> void func_186644_a(EntityProperty.Serializer<? extends T> p_186644_0_) {
+        ResourceLocation resourcelocation = p_186644_0_.func_186649_a();
++       Class<T> oclass = (Class<T>)p_186644_0_.func_186651_b();
+        if (field_186647_a.containsKey(resourcelocation)) {
+           throw new IllegalArgumentException("Can't re-register entity property name " + resourcelocation);
+        } else if (field_186648_b.containsKey(oclass)) {
+***************
+*** 35,41 ****
+        if (serializer == null) {
+           throw new IllegalArgumentException("Unknown loot entity property " + p_186645_0_);
+        } else {
+-          return serializer;
+        }
+     }
+  
+--- 35,41 ----
+        if (serializer == null) {
+           throw new IllegalArgumentException("Unknown loot entity property " + p_186645_0_);
+        } else {
++          return (EntityProperty.Serializer<T>)serializer;
+        }
+     }
+  

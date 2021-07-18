@@ -1,0 +1,61 @@
+package net.minecraft.client.settings;
+
+import java.io.File;
+import net.minecraft.client.player.inventory.ContainerLocalMenu;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class KeyBinding {
+   private static final Logger field_74514_b = LogManager.getLogger();
+   protected GameSettings field_74516_a;
+   private final File field_151473_c;
+   private final ContainerLocalMenu[] field_193627_d = new ContainerLocalMenu[9];
+
+   public KeyBinding(GameSettings p_i665_1_, File p_i665_2_) {
+      this.field_74516_a = p_i665_1_;
+      this.field_151473_c = new File(p_i665_2_, "hotbar.nbt");
+
+      for(int i = 0; i < 9; ++i) {
+         this.field_193627_d[i] = new ContainerLocalMenu();
+      }
+
+      this.func_186704_a();
+   }
+
+   public void func_186704_a() {
+      try {
+         NBTTagCompound nbttagcompound = CompressedStreamTools.func_74797_a(this.field_151473_c);
+         if (nbttagcompound == null) {
+            return;
+         }
+
+         for(int i = 0; i < 9; ++i) {
+            this.field_193627_d[i].a(nbttagcompound.func_150295_c(String.valueOf(i), 10));
+         }
+      } catch (Exception exception) {
+         field_74514_b.error("Failed to load creative mode options", (Throwable)exception);
+      }
+
+   }
+
+   public void func_74506_a() {
+      try {
+         NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+         for(int i = 0; i < 9; ++i) {
+            nbttagcompound.func_74782_a(String.valueOf(i), this.field_193627_d[i].a());
+         }
+
+         CompressedStreamTools.func_74795_b(nbttagcompound, this.field_151473_c);
+      } catch (Exception exception) {
+         field_74514_b.error("Failed to save creative mode options", (Throwable)exception);
+      }
+
+   }
+
+   public ContainerLocalMenu a(int p_a_1_) {
+      return this.field_193627_d[p_a_1_];
+   }
+}

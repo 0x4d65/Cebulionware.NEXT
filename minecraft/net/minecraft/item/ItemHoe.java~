@@ -1,0 +1,46 @@
+package net.minecraft.item;
+
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.src.va;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.IWorldEventListener;
+
+public class ItemHoe extends ItemHangingEntity {
+   public ItemHoe(int p_i1524_1_, float p_i1524_2_, boolean p_i1524_3_) {
+      super(p_i1524_1_, p_i1524_2_, p_i1524_3_);
+      this.a(true);
+   }
+
+   public boolean f_(Items p_f__1_) {
+      return super.f_(p_f__1_) || p_f__1_.j() > 0;
+   }
+
+   public ItemRedstone g(Items p_g_1_) {
+      return p_g_1_.j() == 0 ? ItemRedstone.c : ItemRedstone.d;
+   }
+
+   protected void a(Items p_a_1_, IWorldEventListener p_a_2_, RecipeItemHelper p_a_3_) {
+      if (!p_a_2_.G) {
+         if (p_a_1_.j() > 0) {
+            p_a_3_.c(new va(EntityAgeable.j, 400, 1));
+            p_a_3_.c(new va(EntityAgeable.k, 6000, 0));
+            p_a_3_.c(new va(EntityAgeable.l, 6000, 0));
+            p_a_3_.c(new va(EntityAgeable.v, 2400, 3));
+         } else {
+            p_a_3_.c(new va(EntityAgeable.j, 100, 1));
+            p_a_3_.c(new va(EntityAgeable.v, 2400, 0));
+         }
+      }
+
+   }
+
+   public void a(ItemDoor p_a_1_, NonNullList<Items> p_a_2_) {
+      if (this.a(p_a_1_)) {
+         p_a_2_.add(new Items(this));
+         p_a_2_.add(new Items(this, 1, 1));
+      }
+
+   }
+}

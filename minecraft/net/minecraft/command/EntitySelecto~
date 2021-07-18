@@ -1,0 +1,617 @@
+package net.minecraft.command;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityTrackerEntry;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreCriteria;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.World;
+
+public class EntitySelector {
+   private static final Pattern field_82389_a = Pattern.compile("^@([pares])(?:\\[([^ ]*)\\])?$");
+   private static final Splitter field_190828_b = Splitter.on(',').omitEmptyStrings();
+   private static final Splitter field_190829_c = Splitter.on('=').limit(2);
+   private static final Set<String> field_190830_d = Sets.<String>newHashSet();
+   private static final String field_190831_e = func_190826_c("r");
+   private static final String field_190832_f = func_190826_c("rm");
+   private static final String field_190833_g = func_190826_c("l");
+   private static final String field_190834_h = func_190826_c("lm");
+   private static final String field_190835_i = func_190826_c("x");
+   private static final String field_190836_j = func_190826_c("y");
+   private static final String field_190837_k = func_190826_c("z");
+   private static final String field_190838_l = func_190826_c("dx");
+   private static final String field_190839_m = func_190826_c("dy");
+   private static final String field_190840_n = func_190826_c("dz");
+   private static final String field_190841_o = func_190826_c("rx");
+   private static final String field_190842_p = func_190826_c("rxm");
+   private static final String field_190843_q = func_190826_c("ry");
+   private static final String field_190844_r = func_190826_c("rym");
+   private static final String field_190845_s = func_190826_c("c");
+   private static final String field_190846_t = func_190826_c("m");
+   private static final String field_190847_u = func_190826_c("team");
+   private static final String field_190848_v = func_190826_c("name");
+   private static final String field_190849_w = func_190826_c("type");
+   private static final String field_190850_x = func_190826_c("tag");
+   private static final Predicate<String> field_190851_y = new Predicate<String>() {
+      public boolean apply(@Nullable String p_apply_1_) {
+         return p_apply_1_ != null && (EntitySelector.field_190830_d.contains(p_apply_1_) || p_apply_1_.length() > "score_".length() && p_apply_1_.startsWith("score_"));
+      }
+   };
+   private static final Set<String> field_179666_d = Sets.newHashSet(field_190835_i, field_190836_j, field_190837_k, field_190838_l, field_190839_m, field_190840_n, field_190832_f, field_190831_e);
+
+   private static String func_190826_c(String p_190826_0_) {
+      field_190830_d.add(p_190826_0_);
+      return p_190826_0_;
+   }
+
+   @Nullable
+   public static EntityTrackerEntry a(ICommandSender p_a_0_, String p_a_1_) throws CommandException {
+      return (EntityTrackerEntry)a(p_a_0_, p_a_1_, EntityTrackerEntry.class);
+   }
+
+   public static List<EntityTrackerEntry> func_193531_b(ICommandSender p_193531_0_, String p_193531_1_) throws CommandException {
+      return func_179656_b(p_193531_0_, p_193531_1_, EntityTrackerEntry.class);
+   }
+
+   @Nullable
+   public static <T extends EntityList> T a(ICommandSender p_a_0_, String p_a_1_, Class<? extends T> p_a_2_) throws CommandException {
+      List<T> list = func_179656_b(p_a_0_, p_a_1_, p_a_2_);
+      return (T)(list.size() == 1 ? (EntityList)list.get(0) : null);
+   }
+
+   @Nullable
+   public static ITextComponent func_150869_b(ICommandSender p_150869_0_, String p_150869_1_) throws CommandException {
+      List<EntityList> list = func_179656_b(p_150869_0_, p_150869_1_, EntityList.class);
+      if (list.isEmpty()) {
+         return null;
+      } else {
+         List<ITextComponent> list1 = Lists.<ITextComponent>newArrayList();
+
+         for(EntityList entitylist : list) {
+            list1.add(entitylist.func_145748_c_());
+         }
+
+         return CommandBase.func_180530_a(list1);
+      }
+   }
+
+   public static <T extends EntityList> List<T> func_179656_b(ICommandSender p_179656_0_, String p_179656_1_, Class<? extends T> p_179656_2_) throws CommandException {
+      Matcher matcher = field_82389_a.matcher(p_179656_1_);
+      if (matcher.matches() && p_179656_0_.func_70003_b(1, "@")) {
+         Map<String, String> map = func_82381_h(matcher.group(2));
+         if (!func_179655_b(p_179656_0_, map)) {
+            return Collections.<T>emptyList();
+         } else {
+            String s = matcher.group(1);
+            BlockPos blockpos = func_179664_b(map, p_179656_0_.func_180425_c());
+            ScoreObjective scoreobjective = b(map, p_179656_0_.d());
+            List<IWorldEventListener> list = func_179654_a(p_179656_0_, map);
+            List<T> list1 = Lists.<T>newArrayList();
+
+            for(IWorldEventListener iworldeventlistener : list) {
+               if (iworldeventlistener != null) {
+                  List<Predicate<EntityList>> list2 = Lists.<Predicate<EntityList>>newArrayList();
+                  list2.addAll(func_179663_a(map, s));
+                  list2.addAll(func_179648_b(map));
+                  list2.addAll(func_179649_c(map));
+                  list2.addAll(func_179659_d(map));
+                  list2.addAll(func_184952_c(p_179656_0_, map));
+                  list2.addAll(func_179647_f(map));
+                  list2.addAll(func_184951_f(map));
+                  list2.addAll(a(map, scoreobjective));
+                  list2.addAll(func_179662_g(map));
+                  if ("s".equalsIgnoreCase(s)) {
+                     EntityList entitylist = p_179656_0_.f();
+                     if (entitylist != null && p_179656_2_.isAssignableFrom(entitylist.getClass())) {
+                        if (map.containsKey(field_190838_l) || map.containsKey(field_190839_m) || map.containsKey(field_190840_n)) {
+                           int i = func_179653_a(map, field_190838_l, 0);
+                           int j = func_179653_a(map, field_190839_m, 0);
+                           int k = func_179653_a(map, field_190840_n, 0);
+                           Vec2f vec2f = a(blockpos, i, j, k);
+                           if (!vec2f.c(entitylist.bw())) {
+                              return Collections.<T>emptyList();
+                           }
+                        }
+
+                        for(Predicate<EntityList> predicate : list2) {
+                           if (!predicate.apply(entitylist)) {
+                              return Collections.<T>emptyList();
+                           }
+                        }
+
+                        return Lists.newArrayList(entitylist);
+                     }
+
+                     return Collections.<T>emptyList();
+                  }
+
+                  list1.addAll(a(map, p_179656_2_, list2, s, iworldeventlistener, blockpos));
+               }
+            }
+
+            return a(list1, map, p_179656_0_, p_179656_2_, s, scoreobjective);
+         }
+      } else {
+         return Collections.<T>emptyList();
+      }
+   }
+
+   private static List<IWorldEventListener> func_179654_a(ICommandSender p_179654_0_, Map<String, String> p_179654_1_) {
+      List<IWorldEventListener> list = Lists.<IWorldEventListener>newArrayList();
+      if (func_179665_h(p_179654_1_)) {
+         list.add(p_179654_0_.e());
+      } else {
+         Collections.addAll(list, p_179654_0_.func_184102_h().field_71305_c);
+      }
+
+      return list;
+   }
+
+   private static <T extends EntityList> boolean func_179655_b(ICommandSender p_179655_0_, Map<String, String> p_179655_1_) {
+      String s = func_179651_b(p_179655_1_, field_190849_w);
+      if (s == null) {
+         return true;
+      } else {
+         BehaviorProjectileDispense behaviorprojectiledispense = new BehaviorProjectileDispense(s.startsWith("!") ? s.substring(1) : s);
+         if (EntitySelectors.b(behaviorprojectiledispense)) {
+            return true;
+         } else {
+            TextComponentTranslation textcomponenttranslation = new TextComponentTranslation("commands.generic.entity.invalidType", new Object[]{behaviorprojectiledispense});
+            textcomponenttranslation.func_150256_b().func_150238_a(TextFormatting.RED);
+            p_179655_0_.func_145747_a(textcomponenttranslation);
+            return false;
+         }
+      }
+   }
+
+   private static List<Predicate<EntityList>> func_179663_a(Map<String, String> p_179663_0_, String p_179663_1_) {
+      String s = func_179651_b(p_179663_0_, field_190849_w);
+      if (s == null || !p_179663_1_.equals("e") && !p_179663_1_.equals("r") && !p_179663_1_.equals("s")) {
+         return !p_179663_1_.equals("e") && !p_179663_1_.equals("s") ? Collections.singletonList(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               return p_a_1_ instanceof RecipeItemHelper;
+            }
+         }) : Collections.emptyList();
+      } else {
+         final boolean flag = s.startsWith("!");
+         final BehaviorProjectileDispense behaviorprojectiledispense = new BehaviorProjectileDispense(flag ? s.substring(1) : s);
+         return Collections.singletonList(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               return EntitySelectors.a(p_a_1_, behaviorprojectiledispense) != flag;
+            }
+         });
+      }
+   }
+
+   private static List<Predicate<EntityList>> func_179648_b(Map<String, String> p_179648_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      final int i = func_179653_a(p_179648_0_, field_190834_h, -1);
+      final int j = func_179653_a(p_179648_0_, field_190833_g, -1);
+      if (i > -1 || j > -1) {
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (!(p_a_1_ instanceof EntityTrackerEntry)) {
+                  return false;
+               } else {
+                  EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry)p_a_1_;
+                  return (i <= -1 || entitytrackerentry.bP >= i) && (j <= -1 || entitytrackerentry.bP <= j);
+               }
+            }
+         });
+      }
+
+      return list;
+   }
+
+   private static List<Predicate<EntityList>> func_179649_c(Map<String, String> p_179649_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      String s = func_179651_b(p_179649_0_, field_190846_t);
+      if (s == null) {
+         return list;
+      } else {
+         final boolean flag = s.startsWith("!");
+         if (flag) {
+            s = s.substring(1);
+         }
+
+         final World world;
+         try {
+            int i = Integer.parseInt(s);
+            world = World.a(i, World.field_181546_a);
+         } catch (Throwable var6) {
+            world = World.a(s, World.field_181546_a);
+         }
+
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (!(p_a_1_ instanceof EntityTrackerEntry)) {
+                  return false;
+               } else {
+                  EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry)p_a_1_;
+                  World world1 = entitytrackerentry.field_151262_p.b();
+                  return flag ? world1 != world : world1 == world;
+               }
+            }
+         });
+         return list;
+      }
+   }
+
+   private static List<Predicate<EntityList>> func_179659_d(Map<String, String> p_179659_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      final String s = func_179651_b(p_179659_0_, field_190847_u);
+      final boolean flag = s != null && s.startsWith("!");
+      if (flag) {
+         s = s.substring(1);
+      }
+
+      if (s != null) {
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (!(p_a_1_ instanceof EnumCreatureType)) {
+                  return false;
+               } else {
+                  EnumCreatureType enumcreaturetype = (EnumCreatureType)p_a_1_;
+                  ScoreCriteria scorecriteria = enumcreaturetype.aY();
+                  String s1 = scorecriteria == null ? "" : scorecriteria.b();
+                  return s1.equals(s) != flag;
+               }
+            }
+         });
+      }
+
+      return list;
+   }
+
+   private static List<Predicate<EntityList>> func_184952_c(final ICommandSender p_184952_0_, Map<String, String> p_184952_1_) {
+      final Map<String, Integer> map = func_96560_a(p_184952_1_);
+      return (List<Predicate<EntityList>>)(map.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate<EntityList>() {
+         public boolean a(@Nullable EntityList p_a_1_) {
+            if (p_a_1_ == null) {
+               return false;
+            } else {
+               Team team = p_184952_0_.func_184102_h().a(0).af();
+
+               for(Entry<String, Integer> entry : map.entrySet()) {
+                  String s = entry.getKey();
+                  boolean flag = false;
+                  if (s.endsWith("_min") && s.length() > 4) {
+                     flag = true;
+                     s = s.substring(0, s.length() - 4);
+                  }
+
+                  Score score = team.b(s);
+                  if (score == null) {
+                     return false;
+                  }
+
+                  String s1 = p_a_1_ instanceof EntityTrackerEntry ? p_a_1_.func_70005_c_() : p_a_1_.bn();
+                  if (!team.b(s1, score)) {
+                     return false;
+                  }
+
+                  Scoreboard scoreboard = team.c(s1, score);
+                  int i = scoreboard.c();
+                  if (i < ((Integer)entry.getValue()).intValue() && flag) {
+                     return false;
+                  }
+
+                  if (i > ((Integer)entry.getValue()).intValue() && !flag) {
+                     return false;
+                  }
+               }
+
+               return true;
+            }
+         }
+      }));
+   }
+
+   private static List<Predicate<EntityList>> func_179647_f(Map<String, String> p_179647_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      final String s = func_179651_b(p_179647_0_, field_190848_v);
+      final boolean flag = s != null && s.startsWith("!");
+      if (flag) {
+         s = s.substring(1);
+      }
+
+      if (s != null) {
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               return p_a_1_ != null && p_a_1_.func_70005_c_().equals(s) != flag;
+            }
+         });
+      }
+
+      return list;
+   }
+
+   private static List<Predicate<EntityList>> func_184951_f(Map<String, String> p_184951_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      final String s = func_179651_b(p_184951_0_, field_190850_x);
+      final boolean flag = s != null && s.startsWith("!");
+      if (flag) {
+         s = s.substring(1);
+      }
+
+      if (s != null) {
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (p_a_1_ == null) {
+                  return false;
+               } else if ("".equals(s)) {
+                  return p_a_1_.T().isEmpty() != flag;
+               } else {
+                  return p_a_1_.T().contains(s) != flag;
+               }
+            }
+         });
+      }
+
+      return list;
+   }
+
+   private static List<Predicate<EntityList>> a(Map<String, String> p_a_0_, final ScoreObjective p_a_1_) {
+      double d0 = (double)func_179653_a(p_a_0_, field_190832_f, -1);
+      double d1 = (double)func_179653_a(p_a_0_, field_190831_e, -1);
+      final boolean flag = d0 < -0.5D;
+      final boolean flag1 = d1 < -0.5D;
+      if (flag && flag1) {
+         return Collections.<Predicate<EntityList>>emptyList();
+      } else {
+         double d2 = Math.max(d0, 1.0E-4D);
+         final double d3 = d2 * d2;
+         double d4 = Math.max(d1, 1.0E-4D);
+         final double d5 = d4 * d4;
+         return Lists.newArrayList(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_x) {
+               if (p_a_1_ == null) {
+                  return false;
+               } else {
+                  double d6 = p_a_1_.c(p_a_1_.p, p_a_1_.q, p_a_1_.r);
+                  return (flag || d6 >= d3) && (flag1 || d6 <= d5);
+               }
+            }
+         });
+      }
+   }
+
+   private static List<Predicate<EntityList>> func_179662_g(Map<String, String> p_179662_0_) {
+      List<Predicate<EntityList>> list = Lists.<Predicate<EntityList>>newArrayList();
+      if (p_179662_0_.containsKey(field_190844_r) || p_179662_0_.containsKey(field_190843_q)) {
+         final int i = IProgressUpdate.b(func_179653_a(p_179662_0_, field_190844_r, 0));
+         final int j = IProgressUpdate.b(func_179653_a(p_179662_0_, field_190843_q, 359));
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (p_a_1_ == null) {
+                  return false;
+               } else {
+                  int i1 = IProgressUpdate.b(IProgressUpdate.d(p_a_1_.v));
+                  if (i > j) {
+                     return i1 >= i || i1 <= j;
+                  } else {
+                     return i1 >= i && i1 <= j;
+                  }
+               }
+            }
+         });
+      }
+
+      if (p_179662_0_.containsKey(field_190842_p) || p_179662_0_.containsKey(field_190841_o)) {
+         final int k = IProgressUpdate.b(func_179653_a(p_179662_0_, field_190842_p, 0));
+         final int l = IProgressUpdate.b(func_179653_a(p_179662_0_, field_190841_o, 359));
+         list.add(new Predicate<EntityList>() {
+            public boolean a(@Nullable EntityList p_a_1_) {
+               if (p_a_1_ == null) {
+                  return false;
+               } else {
+                  int i1 = IProgressUpdate.b(IProgressUpdate.d(p_a_1_.w));
+                  if (k > l) {
+                     return i1 >= k || i1 <= l;
+                  } else {
+                     return i1 >= k && i1 <= l;
+                  }
+               }
+            }
+         });
+      }
+
+      return list;
+   }
+
+   private static <T extends EntityList> List<T> a(Map<String, String> p_a_0_, Class<? extends T> p_a_1_, List<Predicate<EntityList>> p_a_2_, String p_a_3_, IWorldEventListener p_a_4_, BlockPos p_a_5_) {
+      List<T> list = Lists.<T>newArrayList();
+      String s = func_179651_b(p_a_0_, field_190849_w);
+      s = s != null && s.startsWith("!") ? s.substring(1) : s;
+      boolean flag = !p_a_3_.equals("e");
+      boolean flag1 = p_a_3_.equals("r") && s != null;
+      int i = func_179653_a(p_a_0_, field_190838_l, 0);
+      int j = func_179653_a(p_a_0_, field_190839_m, 0);
+      int k = func_179653_a(p_a_0_, field_190840_n, 0);
+      int l = func_179653_a(p_a_0_, field_190831_e, -1);
+      Predicate<EntityList> predicate = Predicates.and(p_a_2_);
+      Predicate<EntityList> predicate1 = Predicates.<EntityList>and(EntityXPOrb.field_70533_a, predicate);
+      if (!p_a_0_.containsKey(field_190838_l) && !p_a_0_.containsKey(field_190839_m) && !p_a_0_.containsKey(field_190840_n)) {
+         if (l >= 0) {
+            Vec2f vec2f1 = new Vec2f((double)(p_a_5_.func_177958_n() - l), (double)(p_a_5_.func_177956_o() - l), (double)(p_a_5_.func_177952_p() - l), (double)(p_a_5_.func_177958_n() + l + 1), (double)(p_a_5_.func_177956_o() + l + 1), (double)(p_a_5_.func_177952_p() + l + 1));
+            if (flag && !flag1) {
+               list.addAll(p_a_4_.b(p_a_1_, predicate1));
+            } else {
+               list.addAll(p_a_4_.a(p_a_1_, vec2f1, predicate1));
+            }
+         } else if (p_a_3_.equals("a")) {
+            list.addAll(p_a_4_.b(p_a_1_, predicate));
+         } else if (!p_a_3_.equals("p") && (!p_a_3_.equals("r") || flag1)) {
+            list.addAll(p_a_4_.a(p_a_1_, predicate1));
+         } else {
+            list.addAll(p_a_4_.b(p_a_1_, predicate1));
+         }
+      } else {
+         final Vec2f vec2f = a(p_a_5_, i, j, k);
+         if (flag && !flag1) {
+            Predicate<EntityList> predicate2 = new Predicate<EntityList>() {
+               public boolean a(@Nullable EntityList p_a_1_) {
+                  return p_a_1_ != null && vec2f.c(p_a_1_.bw());
+               }
+            };
+            list.addAll(p_a_4_.b(p_a_1_, Predicates.and(predicate1, predicate2)));
+         } else {
+            list.addAll(p_a_4_.a(p_a_1_, vec2f, predicate1));
+         }
+      }
+
+      return list;
+   }
+
+   private static <T extends EntityList> List<T> a(List<T> p_a_0_, Map<String, String> p_a_1_, ICommandSender p_a_2_, Class<? extends T> p_a_3_, String p_a_4_, final ScoreObjective p_a_5_) {
+      int i = func_179653_a(p_a_1_, field_190845_s, !p_a_4_.equals("a") && !p_a_4_.equals("e") ? 1 : 0);
+      if (!p_a_4_.equals("p") && !p_a_4_.equals("a") && !p_a_4_.equals("e")) {
+         if (p_a_4_.equals("r")) {
+            Collections.shuffle(p_a_0_);
+         }
+      } else {
+         Collections.sort(p_a_0_, new Comparator<EntityList>() {
+            public int a(EntityList p_a_1_, EntityList p_a_2_) {
+               return ComparisonChain.start().compare(p_a_1_.d(p_a_5_.field_96684_b, p_a_5_.field_96685_c, p_a_5_.field_178768_d), p_a_2_.d(p_a_5_.field_96684_b, p_a_5_.field_96685_c, p_a_5_.field_178768_d)).result();
+            }
+         });
+      }
+
+      EntityList entitylist = p_a_2_.f();
+      if (entitylist != null && p_a_3_.isAssignableFrom(entitylist.getClass()) && i == 1 && p_a_0_.contains(entitylist) && !"r".equals(p_a_4_)) {
+         p_a_0_ = Lists.newArrayList(entitylist);
+      }
+
+      if (i != 0) {
+         if (i < 0) {
+            Collections.reverse(p_a_0_);
+         }
+
+         p_a_0_ = p_a_0_.subList(0, Math.min(Math.abs(i), p_a_0_.size()));
+      }
+
+      return p_a_0_;
+   }
+
+   private static Vec2f a(BlockPos p_a_0_, int p_a_1_, int p_a_2_, int p_a_3_) {
+      boolean flag = p_a_1_ < 0;
+      boolean flag1 = p_a_2_ < 0;
+      boolean flag2 = p_a_3_ < 0;
+      int i = p_a_0_.func_177958_n() + (flag ? p_a_1_ : 0);
+      int j = p_a_0_.func_177956_o() + (flag1 ? p_a_2_ : 0);
+      int k = p_a_0_.func_177952_p() + (flag2 ? p_a_3_ : 0);
+      int l = p_a_0_.func_177958_n() + (flag ? 0 : p_a_1_) + 1;
+      int i1 = p_a_0_.func_177956_o() + (flag1 ? 0 : p_a_2_) + 1;
+      int j1 = p_a_0_.func_177952_p() + (flag2 ? 0 : p_a_3_) + 1;
+      return new Vec2f((double)i, (double)j, (double)k, (double)l, (double)i1, (double)j1);
+   }
+
+   private static BlockPos func_179664_b(Map<String, String> p_179664_0_, BlockPos p_179664_1_) {
+      return new BlockPos(func_179653_a(p_179664_0_, field_190835_i, p_179664_1_.func_177958_n()), func_179653_a(p_179664_0_, field_190836_j, p_179664_1_.func_177956_o()), func_179653_a(p_179664_0_, field_190837_k, p_179664_1_.func_177952_p()));
+   }
+
+   private static ScoreObjective b(Map<String, String> p_b_0_, ScoreObjective p_b_1_) {
+      return new ScoreObjective(func_189211_a(p_b_0_, field_190835_i, p_b_1_.field_96684_b, true), func_189211_a(p_b_0_, field_190836_j, p_b_1_.field_96685_c, false), func_189211_a(p_b_0_, field_190837_k, p_b_1_.field_178768_d, true));
+   }
+
+   private static double func_189211_a(Map<String, String> p_189211_0_, String p_189211_1_, double p_189211_2_, boolean p_189211_4_) {
+      return p_189211_0_.containsKey(p_189211_1_) ? (double)IProgressUpdate.a(p_189211_0_.get(p_189211_1_), IProgressUpdate.c(p_189211_2_)) + (p_189211_4_ ? 0.5D : 0.0D) : p_189211_2_;
+   }
+
+   private static boolean func_179665_h(Map<String, String> p_179665_0_) {
+      for(String s : field_179666_d) {
+         if (p_179665_0_.containsKey(s)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   private static int func_179653_a(Map<String, String> p_179653_0_, String p_179653_1_, int p_179653_2_) {
+      return p_179653_0_.containsKey(p_179653_1_) ? IProgressUpdate.a(p_179653_0_.get(p_179653_1_), p_179653_2_) : p_179653_2_;
+   }
+
+   @Nullable
+   private static String func_179651_b(Map<String, String> p_179651_0_, String p_179651_1_) {
+      return p_179651_0_.get(p_179651_1_);
+   }
+
+   public static Map<String, Integer> func_96560_a(Map<String, String> p_96560_0_) {
+      Map<String, Integer> map = Maps.<String, Integer>newHashMap();
+
+      for(String s : p_96560_0_.keySet()) {
+         if (s.startsWith("score_") && s.length() > "score_".length()) {
+            map.put(s.substring("score_".length()), Integer.valueOf(IProgressUpdate.a(p_96560_0_.get(s), 1)));
+         }
+      }
+
+      return map;
+   }
+
+   public static boolean func_82377_a(String p_82377_0_) throws CommandException {
+      Matcher matcher = field_82389_a.matcher(p_82377_0_);
+      if (!matcher.matches()) {
+         return false;
+      } else {
+         Map<String, String> map = func_82381_h(matcher.group(2));
+         String s = matcher.group(1);
+         int i = !"a".equals(s) && !"e".equals(s) ? 1 : 0;
+         return func_179653_a(map, field_190845_s, i) != 1;
+      }
+   }
+
+   public static boolean func_82378_b(String p_82378_0_) {
+      return field_82389_a.matcher(p_82378_0_).matches();
+   }
+
+   private static Map<String, String> func_82381_h(@Nullable String p_82381_0_) throws CommandException {
+      Map<String, String> map = Maps.<String, String>newHashMap();
+      if (p_82381_0_ == null) {
+         return map;
+      } else {
+         for(String s : field_190828_b.split(p_82381_0_)) {
+            Iterator<String> iterator = field_190829_c.split(s).iterator();
+            String s1 = iterator.next();
+            if (!field_190851_y.apply(s1)) {
+               throw new CommandException("commands.generic.selector_argument", new Object[]{s});
+            }
+
+            map.put(s1, iterator.hasNext() ? (String)iterator.next() : "");
+         }
+
+         return map;
+      }
+   }
+}

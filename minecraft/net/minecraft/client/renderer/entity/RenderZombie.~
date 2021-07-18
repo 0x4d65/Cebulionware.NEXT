@@ -1,0 +1,59 @@
+package net.minecraft.client.renderer.entity;
+
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.src.bqv;
+
+public class RenderZombie extends RenderEvoker<EntityBoat> {
+   private static final BehaviorProjectileDispense field_110865_p = new BehaviorProjectileDispense("textures/entity/wither/wither_invulnerable.png");
+   private static final BehaviorProjectileDispense f = new BehaviorProjectileDispense("textures/entity/wither/wither.png");
+   private final bqv g = new bqv();
+
+   public RenderZombie(RenderEvokerFangs p_i487_1_) {
+      super(p_i487_1_);
+   }
+
+   private float a(float p_a_1_, float p_a_2_, float p_a_3_) {
+      float f;
+      for(f = p_a_2_ - p_a_1_; f < -180.0F; f += 360.0F) {
+         ;
+      }
+
+      while(f >= 180.0F) {
+         f -= 360.0F;
+      }
+
+      return p_a_1_ + p_a_3_ * f;
+   }
+
+   public void a(EntityBoat p_a_1_, double p_a_2_, double p_a_4_, double p_a_6_, float p_a_8_, float p_a_9_) {
+      ItemRenderer.G();
+      ItemRenderer.r();
+      float f = this.a(p_a_1_.x, p_a_1_.v, p_a_9_);
+      float f1 = p_a_1_.y + (p_a_1_.w - p_a_1_.y) * p_a_9_;
+      ItemRenderer.c((float)p_a_2_, (float)p_a_4_, (float)p_a_6_);
+      float f2 = 0.0625F;
+      ItemRenderer.D();
+      ItemRenderer.b(-1.0F, -1.0F, 1.0F);
+      ItemRenderer.e();
+      this.d(p_a_1_);
+      if (this.e) {
+         ItemRenderer.h();
+         ItemRenderer.e(this.c(p_a_1_));
+      }
+
+      this.g.a(p_a_1_, 0.0F, 0.0F, 0.0F, f, f1, 0.0625F);
+      if (this.e) {
+         ItemRenderer.n();
+         ItemRenderer.i();
+      }
+
+      ItemRenderer.H();
+      super.a(p_a_1_, p_a_2_, p_a_4_, p_a_6_, p_a_8_, p_a_9_);
+   }
+
+   protected BehaviorProjectileDispense a(EntityBoat p_a_1_) {
+      return p_a_1_.n() ? field_110865_p : f;
+   }
+}

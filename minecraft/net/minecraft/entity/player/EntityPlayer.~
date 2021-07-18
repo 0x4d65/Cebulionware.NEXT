@@ -1,0 +1,60 @@
+package net.minecraft.entity.player;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+public class EntityPlayer {
+   public boolean field_184829_a;
+   public boolean field_184830_b;
+   public boolean field_71076_b;
+   public boolean field_71077_c;
+   public boolean field_82248_d = true;
+   private float field_82249_h = 0.05F;
+   private float field_146106_i = 0.1F;
+
+   public void func_70037_a(NBTTagCompound p_70037_1_) {
+      NBTTagCompound nbttagcompound = new NBTTagCompound();
+      nbttagcompound.func_74757_a("invulnerable", this.field_184829_a);
+      nbttagcompound.func_74757_a("flying", this.field_184830_b);
+      nbttagcompound.func_74757_a("mayfly", this.field_71076_b);
+      nbttagcompound.func_74757_a("instabuild", this.field_71077_c);
+      nbttagcompound.func_74757_a("mayBuild", this.field_82248_d);
+      nbttagcompound.func_74776_a("flySpeed", this.field_82249_h);
+      nbttagcompound.func_74776_a("walkSpeed", this.field_146106_i);
+      p_70037_1_.func_74782_a("abilities", nbttagcompound);
+   }
+
+   public void func_70014_b(NBTTagCompound p_70014_1_) {
+      if (p_70014_1_.func_150297_b("abilities", 10)) {
+         NBTTagCompound nbttagcompound = p_70014_1_.func_74775_l("abilities");
+         this.field_184829_a = nbttagcompound.func_74767_n("invulnerable");
+         this.field_184830_b = nbttagcompound.func_74767_n("flying");
+         this.field_71076_b = nbttagcompound.func_74767_n("mayfly");
+         this.field_71077_c = nbttagcompound.func_74767_n("instabuild");
+         if (nbttagcompound.func_150297_b("flySpeed", 99)) {
+            this.field_82249_h = nbttagcompound.func_74760_g("flySpeed");
+            this.field_146106_i = nbttagcompound.func_74760_g("walkSpeed");
+         }
+
+         if (nbttagcompound.func_150297_b("mayBuild", 1)) {
+            this.field_82248_d = nbttagcompound.func_74767_n("mayBuild");
+         }
+      }
+
+   }
+
+   public float a() {
+      return this.field_82249_h;
+   }
+
+   public void func_71020_j(float p_71020_1_) {
+      this.field_82249_h = p_71020_1_;
+   }
+
+   public float b() {
+      return this.field_146106_i;
+   }
+
+   public void b(float p_b_1_) {
+      this.field_146106_i = p_b_1_;
+   }
+}

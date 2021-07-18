@@ -1,0 +1,223 @@
+package net.minecraft.tileentity;
+
+import java.util.List;
+import java.util.Random;
+import javax.annotation.Nullable;
+import net.minecraft.block.BlockBone;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockPistonMoving;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockSilverfish;
+import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockWorldState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.entity.EntityList;
+import net.minecraft.init.Items;
+import net.minecraft.src.awt;
+import net.minecraft.src.ro;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IWorldEventListener;
+import net.minecraft.world.border.IBorderListener;
+
+public class TileEntityPiston extends BlockDispenser {
+   public static final IProperty<TileEntityPiston.a> field_174932_a = IProperty.<TileEntityPiston.a>a("type", TileEntityPiston.a.class);
+   public static final PropertyEnum b = PropertyEnum.a("short");
+   protected static final Vec2f c = new Vec2f(0.75D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+   protected static final Vec2f d = new Vec2f(0.0D, 0.0D, 0.0D, 0.25D, 1.0D, 1.0D);
+   protected static final Vec2f e = new Vec2f(0.0D, 0.0D, 0.75D, 1.0D, 1.0D, 1.0D);
+   protected static final Vec2f field_174931_f = new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.25D);
+   protected static final Vec2f field_145875_k = new Vec2f(0.0D, 0.75D, 0.0D, 1.0D, 1.0D, 1.0D);
+   protected static final Vec2f B = new Vec2f(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
+   protected static final Vec2f C = new Vec2f(0.375D, -0.25D, 0.375D, 0.625D, 0.75D, 0.625D);
+   protected static final Vec2f D = new Vec2f(0.375D, 0.25D, 0.375D, 0.625D, 1.25D, 0.625D);
+   protected static final Vec2f E = new Vec2f(0.375D, 0.375D, -0.25D, 0.625D, 0.625D, 0.75D);
+   protected static final Vec2f F = new Vec2f(0.375D, 0.375D, 0.25D, 0.625D, 0.625D, 1.25D);
+   protected static final Vec2f G = new Vec2f(-0.25D, 0.375D, 0.375D, 0.75D, 0.625D, 0.625D);
+   protected static final Vec2f I = new Vec2f(0.25D, 0.375D, 0.375D, 1.25D, 0.625D, 0.625D);
+   protected static final Vec2f J = new Vec2f(0.375D, 0.0D, 0.375D, 0.625D, 0.75D, 0.625D);
+   protected static final Vec2f K = new Vec2f(0.375D, 0.25D, 0.375D, 0.625D, 1.0D, 0.625D);
+   protected static final Vec2f L = new Vec2f(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 0.75D);
+   protected static final Vec2f M = new Vec2f(0.375D, 0.375D, 0.25D, 0.625D, 0.625D, 1.0D);
+   protected static final Vec2f N = new Vec2f(0.0D, 0.375D, 0.375D, 0.75D, 0.625D, 0.625D);
+   protected static final Vec2f O = new Vec2f(0.25D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
+
+   public TileEntityPiston() {
+      super(MaterialPortal.H);
+      this.w(this.A.b().a(H, EnumFacing.NORTH).a(field_174932_a, TileEntityPiston.a.a).a(b, Boolean.valueOf(false)));
+      this.a(BlockStainedGlass.d);
+      this.c(0.5F);
+   }
+
+   public Vec2f b(awt p_b_1_, EnumSkyBlock p_b_2_, BlockPos p_b_3_) {
+      switch((EnumFacing)p_b_1_.c(H)) {
+      case DOWN:
+      default:
+         return B;
+      case UP:
+         return field_145875_k;
+      case NORTH:
+         return field_174931_f;
+      case SOUTH:
+         return e;
+      case WEST:
+         return d;
+      case EAST:
+         return c;
+      }
+   }
+
+   public void a(awt p_a_1_, IWorldEventListener p_a_2_, BlockPos p_a_3_, Vec2f p_a_4_, List<Vec2f> p_a_5_, @Nullable EntityList p_a_6_, boolean p_a_7_) {
+      a(p_a_3_, p_a_4_, p_a_5_, p_a_1_.e(p_a_2_, p_a_3_));
+      a(p_a_3_, p_a_4_, p_a_5_, this.x(p_a_1_));
+   }
+
+   private Vec2f x(awt p_x_1_) {
+      boolean flag = ((Boolean)p_x_1_.c(b)).booleanValue();
+      switch((EnumFacing)p_x_1_.c(H)) {
+      case DOWN:
+      default:
+         return flag ? K : D;
+      case UP:
+         return flag ? J : C;
+      case NORTH:
+         return flag ? M : F;
+      case SOUTH:
+         return flag ? L : E;
+      case WEST:
+         return flag ? O : I;
+      case EAST:
+         return flag ? N : G;
+      }
+   }
+
+   public boolean k(awt p_k_1_) {
+      return p_k_1_.c(H) == EnumFacing.UP;
+   }
+
+   public void a(IWorldEventListener p_a_1_, BlockPos p_a_2_, awt p_a_3_, RecipeItemHelper p_a_4_) {
+      if (p_a_4_.bO.field_71077_c) {
+         BlockPos blockpos = p_a_2_.func_177972_a(((EnumFacing)p_a_3_.c(H)).func_176734_d());
+         BlockBone blockbone = p_a_1_.o(blockpos).u();
+         if (blockbone == IGrowable.J || blockbone == IGrowable.F) {
+            p_a_1_.g(blockpos);
+         }
+      }
+
+      super.a(p_a_1_, p_a_2_, p_a_3_, p_a_4_);
+   }
+
+   public void b(IWorldEventListener p_b_1_, BlockPos p_b_2_, awt p_b_3_) {
+      super.b(p_b_1_, p_b_2_, p_b_3_);
+      EnumFacing enumfacing = ((EnumFacing)p_b_3_.c(H)).func_176734_d();
+      p_b_2_ = p_b_2_.func_177972_a(enumfacing);
+      awt awt = p_b_1_.o(p_b_2_);
+      if ((awt.u() == IGrowable.J || awt.u() == IGrowable.F) && ((Boolean)awt.c(BlockPistonMoving.field_176426_a)).booleanValue()) {
+         awt.u().b(p_b_1_, p_b_2_, awt, 0);
+         p_b_1_.g(p_b_2_);
+      }
+
+   }
+
+   public boolean b(awt p_b_1_) {
+      return false;
+   }
+
+   public boolean c(awt p_c_1_) {
+      return false;
+   }
+
+   public boolean a(IWorldEventListener p_a_1_, BlockPos p_a_2_) {
+      return false;
+   }
+
+   public boolean b(IWorldEventListener p_b_1_, BlockPos p_b_2_, EnumFacing p_b_3_) {
+      return false;
+   }
+
+   public int a(Random p_a_1_) {
+      return 0;
+   }
+
+   public void a(awt p_a_1_, IWorldEventListener p_a_2_, BlockPos p_a_3_, BlockBone p_a_4_, BlockPos p_a_5_) {
+      EnumFacing enumfacing = (EnumFacing)p_a_1_.c(H);
+      BlockPos blockpos = p_a_3_.func_177972_a(enumfacing.func_176734_d());
+      awt awt = p_a_2_.o(blockpos);
+      if (awt.u() != IGrowable.J && awt.u() != IGrowable.F) {
+         p_a_2_.g(p_a_3_);
+      } else {
+         awt.a(p_a_2_, blockpos, p_a_4_, p_a_5_);
+      }
+
+   }
+
+   public boolean a(awt p_a_1_, EnumSkyBlock p_a_2_, BlockPos p_a_3_, EnumFacing p_a_4_) {
+      return true;
+   }
+
+   @Nullable
+   public static EnumFacing b(int p_b_0_) {
+      int i = p_b_0_ & 7;
+      return i > 5 ? null : EnumFacing.func_82600_a(i);
+   }
+
+   public Items a(IWorldEventListener p_a_1_, BlockPos p_a_2_, awt p_a_3_) {
+      return new Items(p_a_3_.c(field_174932_a) == TileEntityPiston.a.b ? IGrowable.F : IGrowable.J);
+   }
+
+   public awt a(int p_a_1_) {
+      return this.t().a(H, b(p_a_1_)).a(field_174932_a, (p_a_1_ & 8) > 0 ? TileEntityPiston.a.b : TileEntityPiston.a.a);
+   }
+
+   public int e(awt p_e_1_) {
+      int i = 0;
+      i = i | ((EnumFacing)p_e_1_.c(H)).func_176745_a();
+      if (p_e_1_.c(field_174932_a) == TileEntityPiston.a.b) {
+         i |= 8;
+      }
+
+      return i;
+   }
+
+   public awt a(awt p_a_1_, BlockSandStone p_a_2_) {
+      return p_a_1_.a(H, p_a_2_.a((EnumFacing)p_a_1_.c(H)));
+   }
+
+   public awt a(awt p_a_1_, BlockSilverfish p_a_2_) {
+      return p_a_1_.a(p_a_2_.a((EnumFacing)p_a_1_.c(H)));
+   }
+
+   protected BlockWorldState b() {
+      return new BlockWorldState(this, new IBorderListener[]{H, field_174932_a, b});
+   }
+
+   public IBlockState a(EnumSkyBlock p_a_1_, awt p_a_2_, BlockPos p_a_3_, EnumFacing p_a_4_) {
+      return p_a_4_ == p_a_2_.c(H) ? IBlockState.a : IBlockState.i;
+   }
+
+   public static enum a implements ro {
+      a("normal"),
+      b("sticky");
+
+      private final String c;
+
+      private a(String p_i1820_3_) {
+         this.c = p_i1820_3_;
+      }
+
+      public String toString() {
+         return this.c;
+      }
+
+      public String m() {
+         return this.c;
+      }
+   }
+}

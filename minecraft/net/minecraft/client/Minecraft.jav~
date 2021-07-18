@@ -1,0 +1,58 @@
+package net.minecraft.client;
+
+import java.nio.FloatBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.util.MouseHelper;
+
+public class Minecraft {
+   private static final FloatBuffer field_142025_a = MouseHelper.h(4);
+   private static final ScoreObjective field_71444_a = (new ScoreObjective(0.20000000298023224D, 1.0D, -0.699999988079071D)).a();
+   private static final ScoreObjective field_71442_b = (new ScoreObjective(-0.20000000298023224D, 1.0D, 0.699999988079071D)).a();
+
+   public static void func_99999_d() {
+      ItemRenderer.g();
+      ItemRenderer.b(0);
+      ItemRenderer.b(1);
+      ItemRenderer.i();
+   }
+
+   public static void b() {
+      ItemRenderer.f();
+      ItemRenderer.a(0);
+      ItemRenderer.a(1);
+      ItemRenderer.h();
+      ItemRenderer.a(1032, 5634);
+      ItemRenderer.a(16384, 4611, a(field_71444_a.field_96684_b, field_71444_a.field_96685_c, field_71444_a.field_178768_d, 0.0D));
+      float f = 0.6F;
+      ItemRenderer.a(16384, 4609, a(0.6F, 0.6F, 0.6F, 1.0F));
+      ItemRenderer.a(16384, 4608, a(0.0F, 0.0F, 0.0F, 1.0F));
+      ItemRenderer.a(16384, 4610, a(0.0F, 0.0F, 0.0F, 1.0F));
+      ItemRenderer.a(16385, 4611, a(field_71442_b.field_96684_b, field_71442_b.field_96685_c, field_71442_b.field_178768_d, 0.0D));
+      ItemRenderer.a(16385, 4609, a(0.6F, 0.6F, 0.6F, 1.0F));
+      ItemRenderer.a(16385, 4608, a(0.0F, 0.0F, 0.0F, 1.0F));
+      ItemRenderer.a(16385, 4610, a(0.0F, 0.0F, 0.0F, 1.0F));
+      ItemRenderer.j(7424);
+      float f1 = 0.4F;
+      ItemRenderer.a(2899, a(0.4F, 0.4F, 0.4F, 1.0F));
+   }
+
+   private static FloatBuffer a(double p_a_0_, double p_a_2_, double p_a_4_, double p_a_6_) {
+      return a((float)p_a_0_, (float)p_a_2_, (float)p_a_4_, (float)p_a_6_);
+   }
+
+   public static FloatBuffer a(float p_a_0_, float p_a_1_, float p_a_2_, float p_a_3_) {
+      field_142025_a.clear();
+      field_142025_a.put(p_a_0_).put(p_a_1_).put(p_a_2_).put(p_a_3_);
+      field_142025_a.flip();
+      return field_142025_a;
+   }
+
+   public static void c() {
+      ItemRenderer.G();
+      ItemRenderer.b(-30.0F, 0.0F, 1.0F, 0.0F);
+      ItemRenderer.b(165.0F, 1.0F, 0.0F, 0.0F);
+      b();
+      ItemRenderer.H();
+   }
+}

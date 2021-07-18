@@ -1,0 +1,17 @@
+***************
+*** 56,62 ****
+     public int hashCode() {
+        int i = this.field_188050_a.hashCode();
+        i = 31 * i + this.field_188051_b.hashCode();
+-       i = 31 * i + this.field_188052_c.hashCode();
+        i = 31 * i + this.field_188053_d;
+        return i;
+     }
+--- 56,62 ----
+     public int hashCode() {
+        int i = this.field_188050_a.hashCode();
+        i = 31 * i + this.field_188051_b.hashCode();
++       i = 31 * i + Boolean.valueOf(this.field_188052_c).hashCode();
+        i = 31 * i + this.field_188053_d;
+        return i;
+     }

@@ -1,0 +1,42 @@
+package net.minecraft.client.renderer.entity;
+
+import com.google.common.collect.Maps;
+import java.util.Map;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.ai.EntityAISkeletonRiders;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityZombieHorse;
+import net.minecraft.entity.passive.HorseArmorType;
+import net.minecraft.src.aaw;
+
+public class RenderArmorStand extends RenderOcelot<EntityHorse> {
+   private static final Map<Class<?>, BehaviorProjectileDispense> field_177103_a = Maps.<Class<?>, BehaviorProjectileDispense>newHashMap();
+   private final float j;
+
+   public RenderArmorStand(RenderEvokerFangs p_i456_1_) {
+      this(p_i456_1_, 1.0F);
+   }
+
+   public RenderArmorStand(RenderEvokerFangs p_i457_1_, float p_i457_2_) {
+      super(p_i457_1_, new ModelBiped(), 0.75F);
+      this.j = p_i457_2_;
+   }
+
+   protected void a(EntityHorse p_a_1_, float p_a_2_) {
+      ItemRenderer.b(this.j, this.j, this.j);
+      super.a(p_a_1_, p_a_2_);
+   }
+
+   protected BehaviorProjectileDispense a(EntityHorse p_a_1_) {
+      return field_177103_a.get(p_a_1_.getClass());
+   }
+
+   static {
+      field_177103_a.put(HorseArmorType.class, new BehaviorProjectileDispense("textures/entity/horse/donkey.png"));
+      field_177103_a.put(EntityAISkeletonRiders.class, new BehaviorProjectileDispense("textures/entity/horse/mule.png"));
+      field_177103_a.put(aaw.class, new BehaviorProjectileDispense("textures/entity/horse/horse_zombie.png"));
+      field_177103_a.put(EntityZombieHorse.class, new BehaviorProjectileDispense("textures/entity/horse/horse_skeleton.png"));
+   }
+}

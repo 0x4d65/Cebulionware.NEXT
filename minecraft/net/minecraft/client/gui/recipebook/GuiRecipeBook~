@@ -1,0 +1,108 @@
+package net.minecraft.client.gui.recipebook;
+
+import com.google.common.collect.Lists;
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiCustomizeSkin;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderLeashKnot;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.init.Items;
+import net.minecraft.item.crafting.RecipeRepairItem;
+import net.minecraft.item.crafting.RecipesMapExtending;
+import net.minecraft.util.IProgressUpdate;
+
+public class GuiRecipeBook {
+   private RecipeRepairItem field_191894_a;
+   private final List<GuiRecipeBook.a> b = Lists.<GuiRecipeBook.a>newArrayList();
+   private float c;
+
+   public void func_191871_c() {
+      this.field_191894_a = null;
+      this.b.clear();
+      this.c = 0.0F;
+   }
+
+   public void a(RecipesMapExtending p_a_1_, int p_a_2_, int p_a_3_) {
+      this.b.add(new GuiRecipeBook.a(p_a_1_, p_a_2_, p_a_3_));
+   }
+
+   public GuiRecipeBook.a a(int p_a_1_) {
+      return this.b.get(p_a_1_);
+   }
+
+   public int b() {
+      return this.b.size();
+   }
+
+   @Nullable
+   public RecipeRepairItem c() {
+      return this.field_191894_a;
+   }
+
+   public void a(RecipeRepairItem p_a_1_) {
+      this.field_191894_a = p_a_1_;
+   }
+
+   public void a(GameSettings p_a_1_, int p_a_2_, int p_a_3_, boolean p_a_4_, float p_a_5_) {
+      if (!GuiCustomizeSkin.r()) {
+         this.c += p_a_5_;
+      }
+
+      Minecraft.c();
+      ItemRenderer.g();
+
+      for(int i = 0; i < this.b.size(); ++i) {
+         GuiRecipeBook.a guirecipebook$a = this.b.get(i);
+         int j = guirecipebook$a.a() + p_a_2_;
+         int k = guirecipebook$a.b() + p_a_3_;
+         if (i == 0 && p_a_4_) {
+            ScaledResolution.a(j - 4, k - 4, j + 20, k + 20, 822018048);
+         } else {
+            ScaledResolution.a(j, k, j + 16, k + 16, 822018048);
+         }
+
+         ItemRenderer.g();
+         Items items = guirecipebook$a.c();
+         RenderLeashKnot renderleashknot = p_a_1_.ad();
+         renderleashknot.a(p_a_1_.field_151448_g, items, j, k);
+         ItemRenderer.c(516);
+         ScaledResolution.a(j, k, j + 16, k + 16, 822083583);
+         ItemRenderer.c(515);
+         if (i == 0) {
+            renderleashknot.a(p_a_1_.field_74347_j, items, j, k);
+         }
+
+         ItemRenderer.f();
+      }
+
+      Minecraft.func_99999_d();
+   }
+
+   public class a {
+      private final RecipesMapExtending b;
+      private final int c;
+      private final int d;
+
+      public a(RecipesMapExtending p_i134_2_, int p_i134_3_, int p_i134_4_) {
+         this.b = p_i134_2_;
+         this.c = p_i134_3_;
+         this.d = p_i134_4_;
+      }
+
+      public int a() {
+         return this.c;
+      }
+
+      public int b() {
+         return this.d;
+      }
+
+      public Items c() {
+         Items[] aitems = this.b.a();
+         return aitems[IProgressUpdate.d(GuiRecipeBook.this.c / 30.0F) % aitems.length];
+      }
+   }
+}

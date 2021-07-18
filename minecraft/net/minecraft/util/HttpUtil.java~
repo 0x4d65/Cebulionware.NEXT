@@ -1,0 +1,47 @@
+package net.minecraft.util;
+
+import java.io.IOException;
+
+public class HttpUtil {
+   private final long[] field_180193_a = new long[240];
+   private int field_151228_a;
+   private int field_151227_b;
+   private int d;
+
+   public void a(long p_a_1_) {
+      this.field_180193_a[this.d] = p_a_1_;
+      ++this.d;
+      if (this.d == 240) {
+         this.d = 0;
+      }
+
+      if (this.field_151227_b < 240) {
+         this.field_151228_a = 0;
+         ++this.field_151227_b;
+      } else {
+         this.field_151228_a = this.b(this.d + 1);
+      }
+
+   }
+
+   public int a(long p_a_1_, int p_a_3_) {
+      double d0 = (double)p_a_1_ / 1.6666666E7D;
+      return (int)(d0 * (double)p_a_3_);
+   }
+
+   public int func_76181_a() throws IOException {
+      return this.field_151228_a;
+   }
+
+   public int b() {
+      return this.d;
+   }
+
+   public int b(int p_b_1_) {
+      return p_b_1_ % 240;
+   }
+
+   public long[] c() {
+      return this.field_180193_a;
+   }
+}

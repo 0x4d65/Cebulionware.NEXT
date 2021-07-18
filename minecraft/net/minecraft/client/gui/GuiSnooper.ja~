@@ -1,0 +1,79 @@
+package net.minecraft.client.gui;
+
+import net.minecraft.client.resources.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+
+public class GuiSnooper extends GuiCustomizeSkin {
+   private final GuiCustomizeSkin field_146608_a;
+   private GuiUtilRenderComponents field_146603_f;
+   private GuiUtilRenderComponents field_146604_g;
+   private String field_146609_h = "survival";
+   private boolean field_146610_i;
+
+   public GuiSnooper(GuiCustomizeSkin p_i124_1_) {
+      this.field_146608_a = p_i124_1_;
+   }
+
+   public void func_73866_w_() {
+      this.n.clear();
+      this.n.add(new GuiUtilRenderComponents(101, this.l / 2 - 155, this.m - 28, 150, 20, LanguageManager.a("lanServer.start")));
+      this.n.add(new GuiUtilRenderComponents(102, this.l / 2 + 5, this.m - 28, 150, 20, LanguageManager.a("gui.cancel")));
+      this.field_146604_g = this.b(new GuiUtilRenderComponents(104, this.l / 2 - 155, 100, 150, 20, LanguageManager.a("selectWorld.gameMode")));
+      this.field_146603_f = this.b(new GuiUtilRenderComponents(103, this.l / 2 + 5, 100, 150, 20, LanguageManager.a("selectWorld.allowCommands")));
+      this.a();
+   }
+
+   private void a() {
+      this.field_146604_g.j = LanguageManager.a("selectWorld.gameMode") + ": " + LanguageManager.a("selectWorld.gameMode." + this.field_146609_h);
+      this.field_146603_f.j = LanguageManager.a("selectWorld.allowCommands") + " ";
+      if (this.field_146610_i) {
+         this.field_146603_f.j = this.field_146603_f.j + LanguageManager.a("options.on");
+      } else {
+         this.field_146603_f.j = this.field_146603_f.j + LanguageManager.a("options.off");
+      }
+
+   }
+
+   protected void a(GuiUtilRenderComponents p_a_1_) {
+      if (p_a_1_.k == 102) {
+         this.j.a(this.field_146608_a);
+      } else if (p_a_1_.k == 104) {
+         if ("spectator".equals(this.field_146609_h)) {
+            this.field_146609_h = "creative";
+         } else if ("creative".equals(this.field_146609_h)) {
+            this.field_146609_h = "adventure";
+         } else if ("adventure".equals(this.field_146609_h)) {
+            this.field_146609_h = "survival";
+         } else {
+            this.field_146609_h = "spectator";
+         }
+
+         this.a();
+      } else if (p_a_1_.k == 103) {
+         this.field_146610_i = !this.field_146610_i;
+         this.a();
+      } else if (p_a_1_.k == 101) {
+         this.j.a((GuiCustomizeSkin)null);
+         String s = this.j.F().a(World.a(this.field_146609_h), this.field_146610_i);
+         ITextComponent itextcomponent;
+         if (s != null) {
+            itextcomponent = new TextComponentTranslation("commands.publish.started", new Object[]{s});
+         } else {
+            itextcomponent = new TextComponentString("commands.publish.failed");
+         }
+
+         this.j.field_74359_p.d().a(itextcomponent);
+      }
+
+   }
+
+   public void func_73863_a(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
+      this.c();
+      this.a(this.q, LanguageManager.a("lanServer.title"), this.l / 2, 50, 16777215);
+      this.a(this.q, LanguageManager.a("lanServer.otherPlayers"), this.l / 2, 82, 16777215);
+      super.func_73863_a(p_73863_1_, p_73863_2_, p_73863_3_);
+   }
+}

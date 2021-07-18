@@ -1,0 +1,89 @@
+package net.minecraft.world;
+
+import net.minecraft.entity.player.EntityPlayer;
+
+public enum World {
+   field_181546_a(-1, "", ""),
+   field_147484_a(0, "survival", "s"),
+   field_147483_b(1, "creative", "c"),
+   field_72999_e(2, "adventure", "a"),
+   field_72996_f(3, "spectator", "sp");
+
+   int field_72997_g;
+   String field_147482_g;
+   String field_175730_i;
+
+   private World(int p_i1628_3_, String p_i1628_4_, String p_i1628_5_) {
+      this.field_72997_g = p_i1628_3_;
+      this.field_147482_g = p_i1628_4_;
+      this.field_175730_i = p_i1628_5_;
+   }
+
+   public int a() {
+      return this.field_72997_g;
+   }
+
+   public String b() {
+      return this.field_147482_g;
+   }
+
+   public void a(EntityPlayer p_a_1_) {
+      if (this == field_147483_b) {
+         p_a_1_.field_71076_b = true;
+         p_a_1_.field_71077_c = true;
+         p_a_1_.field_184829_a = true;
+      } else if (this == field_72996_f) {
+         p_a_1_.field_71076_b = true;
+         p_a_1_.field_71077_c = false;
+         p_a_1_.field_184829_a = true;
+         p_a_1_.field_184830_b = true;
+      } else {
+         p_a_1_.field_71076_b = false;
+         p_a_1_.field_71077_c = false;
+         p_a_1_.field_184829_a = false;
+         p_a_1_.field_184830_b = false;
+      }
+
+      p_a_1_.field_82248_d = !this.c();
+   }
+
+   public boolean c() {
+      return this == field_72999_e || this == field_72996_f;
+   }
+
+   public boolean d() {
+      return this == field_147483_b;
+   }
+
+   public boolean e() {
+      return this == field_147484_a || this == field_72999_e;
+   }
+
+   public static World a(int p_a_0_) {
+      return a(p_a_0_, field_147484_a);
+   }
+
+   public static World a(int p_a_0_, World p_a_1_) {
+      for(World world : values()) {
+         if (world.field_72997_g == p_a_0_) {
+            return world;
+         }
+      }
+
+      return p_a_1_;
+   }
+
+   public static World a(String p_a_0_) {
+      return a(p_a_0_, field_147484_a);
+   }
+
+   public static World a(String p_a_0_, World p_a_1_) {
+      for(World world : values()) {
+         if (world.field_147482_g.equals(p_a_0_) || world.field_175730_i.equals(p_a_0_)) {
+            return world;
+         }
+      }
+
+      return p_a_1_;
+   }
+}
