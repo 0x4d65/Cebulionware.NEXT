@@ -31,8 +31,8 @@ public class Login {
 	}
 
 	public static void changeName(String newName) {
-		if (newName.equals("NoHaxJustJigsaw") || newName.equals("Robin146") || newName.equals("JigsawClient")
-				|| newName.equals("JigsawDev")) {
+		if (newName.equals("NoHaxJustCebulionware") || newName.equals("Robin146") || newName.equals("CBClient")
+				|| newName.equals("CBDev")) {
 			newName = "succ";
 		}
 		Minecraft.getMinecraft().session = new Session(newName, "", "", "mojang");

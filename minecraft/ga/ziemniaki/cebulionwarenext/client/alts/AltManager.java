@@ -25,7 +25,7 @@ public class AltManager {
 	}
 
 	public void saveAlts() {
-		System.out.println("Saving alts...");
+		System.out.println("zapisywanie altów...");
 		JsonObject json = new JsonObject();
 		int i = 0;
 		for (Alt alt : alts) {
@@ -53,9 +53,9 @@ public class AltManager {
 			for(int i = 0; i < 9999; i++) {
 				JSONObject altObject = (JSONObject) json.get(String.valueOf(i));
 				String email = (String) altObject.get("email");
-				String name = (String) altObject.get("name");
-				String password = (String) altObject.get("password");
-				if((Boolean)altObject.get("cracked")) {
+				String name = (String) altObject.get("nazwa");
+				String password = (String) altObject.get("has-³o");
+				if((Boolean)altObject.get("skrekowane")) {
 					Alt newAlt = new Alt(name, null);
 					Jigsaw.getAltManager().addAlt(newAlt);
 				}

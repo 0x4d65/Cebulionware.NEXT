@@ -23,10 +23,10 @@ public class Alt {
 	}
 	
 	public JsonObject saveToJson(JsonObject obj) {
-		obj.addProperty("name", name);
-		obj.addProperty("password", password);
+		obj.addProperty("nazwa", name);
+		obj.addProperty("has-³o", password);
 		obj.addProperty("email", email);
-		obj.addProperty("cracked", cracked);
+		obj.addProperty("skrekowane", cracked);
 		return obj;
 	}
 
