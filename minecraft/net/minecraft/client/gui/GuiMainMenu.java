@@ -534,22 +534,22 @@ public class GuiMainMenu extends GuiScreen
 		if (button.id == 420) {
 			this.mc.displayGuiScreen(new GuiJigsawChangelog(this));
 		}
-		if (button.id == 421) {
+		/*if (button.id == 421) {
 			try {
 				this.openWebLink(new URI("http://jigsawclient.weebly.com/submit-a-bug.html"));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
-		}
-		if (button.id == 422) {
-			try {
+		}*/
+		/*if (button.id == 422) {
+		 *	try {
 				this.openWebLink(new URI("http://jigsawclient.weebly.com/suggestions.html"));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		if (button.id == 423) {
-			this.mc.displayGuiScreen(new GuiJigsawCredits(this));
+			//this.mc.displayGuiScreen(new GuiJigsawCredits(this));
 		}
 		if (button.id == 427) {
 			mc.displayGuiScreen(new GuiMCLeaksRedeemToken(false));

@@ -19,12 +19,12 @@ public class GuiJigsaw extends GuiScreen {
 	}
 
 	public void initGui() {
-		this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 2, 98, 20, "Client Settings"));
-		this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 2 + 22, 98, 20, "Client Tools"));
-		this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + 44, 98, 20, "Advanced"));
-		this.buttonList.add(new GuiButton(4, this.width / 2 + 2, this.height / 2 + 44, 98, 20, "Credits"));
-		this.buttonList.add(new GuiButton(5, this.width / 2 + 2, this.height / 2 + 22, 98, 20, "YouTube"));
-		this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 2, 98, 20, "Changelog"));
+		this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 2, 200, 20, "Client Settings"));
+//		this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 2 + 22, 98, 20, "Client Tools"));
+//		this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + 44, 98, 20, "Advanced"));
+//		this.buttonList.add(new GuiButton(4, this.width / 2 + 2, this.height / 2 + 44, 98, 20, "Credits"));
+		this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + 22, 200, 20, "Advanced"));
+		this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 2 + 44, 200, 20, "Client tools"));
 //		this.buttonList.add(new GuiButton(426, width - 170, 0, 170, 20, "How to Use Infinite Reach"));
 		this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + 66, 200, 20, "Done"));
 	}
