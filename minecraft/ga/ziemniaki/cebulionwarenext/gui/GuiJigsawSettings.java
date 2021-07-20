@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import ga.ziemniaki.cebulionwarenext.client.main.Jigsaw;
 import ga.ziemniaki.cebulionwarenext.client.settings.ClientSettings;
-import ga.ziemniaki.cebulionwarenext.cracker.gui.GuiJigsawAccHacker;
+//import ga.ziemniaki.cebulionwarenext.cracker.gui.GuiJigsawAccHacker;
 import ga.ziemniaki.cebulionwarenext.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -67,9 +67,9 @@ public class GuiJigsawSettings extends GuiScreen {
 		if (button.id == 4) {
 			mc.displayGuiScreen(new GuiJigsawKeyBind(Jigsaw.getModuleByName("ClickGUI"), this));
 		}
-		if (button.id == 6) {
+		/*if (button.id == 6) {
 			mc.displayGuiScreen(new GuiJigsawAccHacker(this));
-		}
+		}*/
 		if (button.id == 5) {
 			ClientSettings.bigWaterMark = !ClientSettings.bigWaterMark;
 			mc.displayGuiScreen(new GuiJigsawSettings(before));

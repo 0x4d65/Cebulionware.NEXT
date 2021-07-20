@@ -3,7 +3,7 @@ package ga.ziemniaki.cebulionwarenext.gui;
 import java.io.IOException;
 
 import ga.ziemniaki.cebulionwarenext.client.main.Jigsaw;
-import ga.ziemniaki.cebulionwarenext.cracker.gui.GuiJigsawAccHacker;
+//import ga.ziemniaki.cebulionwarenext.cracker.gui.GuiJigsawAccHacker;
 import ga.ziemniaki.cebulionwarenext.hackerdetect.gui.GuiJigsawHackerDetect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -22,7 +22,7 @@ public class GuiJigsawTools extends GuiScreen {
 
 	public void initGui() {
 		this.buttonList.add(new GuiButton(0, this.width / 2 - 100, height - 50, 200, 20, "Done"));
-		this.buttonList.add(new GuiButton(1, this.width / 2 - 80, this.height / 2 - offset, 160, 20, "Account Cracker"));
+		/*this.buttonList.add(new GuiButton(1, this.width / 2 - 80, this.height / 2 - offset, 160, 20, "Account Cracker"));*/
 		this.buttonList.add(new GuiButton(2, this.width / 2 - 80, this.height / 2 + 22 - offset, 160, 20, "IP Resolver"));
 		this.buttonList.add(new GuiButton(7, this.width / 2 - 80, this.height / 2 + 44 - offset, 160, 20, "HackerDetector"));
 		//this.buttonList.add(new GuiButton(8, this.width / 2 - 80, this.height / 2 + 66 - offset, 160, 20, "Use a Proxy"));
@@ -33,9 +33,9 @@ public class GuiJigsawTools extends GuiScreen {
 		if (button.id == 0) {
 			mc.displayGuiScreen(before);
 		}
-		if (button.id == 1) {
+		/*if (button.id == 1) {
 			mc.displayGuiScreen(new GuiJigsawAccHacker(this));
-		}
+		}*/
 		if (button.id == 2) {
 			mc.displayGuiScreen(new GuiJigsawIpResolver(this));
 		}

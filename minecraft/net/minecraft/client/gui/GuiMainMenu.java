@@ -224,8 +224,7 @@ public class GuiMainMenu extends GuiScreen
 			drawRect(0, 0, width, height, 0x2a000000);
 			
 			
-			drawCenteredString(Fonts.font19, "Â§rJigsaw currently has Â§j" + Jigsaw.getModuleCount() + "Â§r hacks!", width / 2, 5, 0xffffffff);
-			
+			drawCenteredString(Fonts.font19, "§rCebulionware.NEXT currently has §j" + Jigsaw.getModuleCount() + "§r hacks!", width / 2, 5, 0xffffffff);
 			
 			
 			{
@@ -297,8 +296,7 @@ public class GuiMainMenu extends GuiScreen
 
 			GlStateManager.popMatrix();
 			
-			Fonts.font18.drawStringWithShadow(" - Exploiting Minecraft, with style.", j + 133, 112, 0xffffffff);
-			
+			Fonts.font18.drawStringWithShadow(" - get good get cebulionware.", j + 133, 112, 0xffffffff);
 	    	
 	    	super.drawScreen(mouseX, mouseY, partialTicks);
 	    	
@@ -427,8 +425,7 @@ public class GuiMainMenu extends GuiScreen
         	
         	this.buttonList.add(new GuiButton(5, width - 75, 5 + offset, 70, 20, "Language", true));
 			this.buttonList.add(new GuiButton(428, width - 75, 30 + offset, 70, 20, "Click GUI", true));
-			this.buttonList.add(new GuiButton(427, width - 75, 55 + offset, 70, 20, "MCLeaks", true));
-			this.buttonList.add(new GuiButton(1337, width - 75, 80 + offset, 70, 20, "Jigsaw", true));
+			this.buttonList.add(new GuiButton(1337, width - 75, 55 + offset, 70, 20, "Cebulionware", true));
         }
         if(!Jigsaw.triedConnectToUpdate) {
     		LoadTools.serverInfoFetcher.run();

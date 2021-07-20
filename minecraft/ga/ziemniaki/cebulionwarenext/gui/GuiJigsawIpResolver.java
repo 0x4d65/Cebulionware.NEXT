@@ -6,7 +6,7 @@ import java.net.URI;
 import org.lwjgl.input.Keyboard;
 
 import ga.ziemniaki.cebulionwarenext.client.main.Jigsaw;
-import ga.ziemniaki.cebulionwarenext.client.tools.IPGetter;
+//import ga.ziemniaki.cebulionwarenext.client.tools.IPGetter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -46,7 +46,7 @@ public class GuiJigsawIpResolver extends GuiScreen {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					result = IPGetter.getIpForPlayer(userField.getText());
+					//result = IPGetter.getIpForPlayer(userField.getText());
 					buttonList.get(1).enabled = true;
 					buttonList.get(2).enabled = !result.isEmpty() && !result.contains("related to");
 				}
