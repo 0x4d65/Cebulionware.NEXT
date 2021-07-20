@@ -20,8 +20,8 @@ public class GuiJigsawUpdate extends GuiScreen {
 	@Override
 	public void initGui() {
 
-		this.buttonList.add(new GuiButton(0, width / 2 - 100, 90 - scroll, 98, 20, "Update!", true));
-		this.buttonList.add(new GuiButton(1, width / 2 + 2, 90 - scroll, 98, 20, "I want bugs...", true));
+		//this.buttonList.add(new GuiButton(0, width / 2 - 100, 90 - scroll, 98, 20, "Update!", true));
+		this.buttonList.add(new GuiButton(1, width / 2 - 100, 90 - scroll, 200, 20, "I want bugs...", true));
 
 	}
 
@@ -30,21 +30,21 @@ public class GuiJigsawUpdate extends GuiScreen {
 //		drawRect(0, 0, width, height, 0xff500030);
 		drawDefaultBackground();
 
-		drawCenteredString(Fonts.font55, "Your Jigsaw version is outdated!", width / 2, 40 - scroll, 0xffffff);
+		drawCenteredString(Fonts.font55, "Your Cebulionware.NEXT version is outdated!", width / 2, 40 - scroll, 0xffffff);
 
 		drawCenteredString(Fonts.font19, "Your version is: §c" + Jigsaw.getClientVersion(), width / 2, 60 - scroll,
 				0xffffff);
 
-		drawCenteredString(Fonts.font19, "Recommended version is: §6" + Jigsaw.serverVersion, width / 2, 70 - scroll,
+		drawCenteredString(Fonts.font19, "Recommended version is: §6" + "YES" , width / 2, 70 - scroll,
 				0xffffff);
 		
-		drawRect(width / 2 - 300, 120 - scroll, width / 2 + 300, height, 0x40000000);
+		//drawRect(width / 2 - 300, 120 - scroll, width / 2 + 300, height, 0x40000000);
 		
-		drawHorizontalLine(width / 2 - 300, width / 2 + 300, 120 - scroll, 0xffffffff);
+		//drawHorizontalLine(width / 2 - 300, width / 2 + 300, 120 - scroll, 0xffffffff);
 		
-		drawCenteredString(Fonts.font55, "Changelog:", width / 2, 140 - scroll, 0xffffffff);
+		//drawCenteredString(Fonts.font55, "Changelog:", width / 2, 140 - scroll, 0xffffffff);
 		
-		if (!Jigsaw.changelogFailed) {
+		/*if (!Jigsaw.changelogFailed) {
 			if (Jigsaw.changeLineElmts != null) {
 				
 				int sub = 160;
@@ -61,7 +61,7 @@ public class GuiJigsawUpdate extends GuiScreen {
 					}
 
 					sub += 20;
-					for (Element elmtChild : elmt.child(0).children()) {
+					/*for (Element elmtChild : elmt.child(0).children()) {
 						drawCenteredString(Fonts.font18,
 								elmtChild.text()
 										.replaceAll("Removed", "§cRemoved§r")
@@ -83,7 +83,7 @@ public class GuiJigsawUpdate extends GuiScreen {
 			}
 		} else {
 			drawCenteredString(Fonts.font18, "§cCould not get changelog!", 4, height / 2 - 30 - scroll, 0xffffff);
-		}
+		}*/
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

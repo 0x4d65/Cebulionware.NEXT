@@ -36,7 +36,7 @@ import ga.ziemniaki.cebulionwarenext.client.tools.LoadTools;
 import ga.ziemniaki.cebulionwarenext.client.tools.Utils;
 import ga.ziemniaki.cebulionwarenext.client.waypoints.WaypointManager;
 import ga.ziemniaki.cebulionwarenext.console.ConsoleManager;
-import ga.ziemniaki.cebulionwarenext.cracker.CrackManager;
+//import ga.ziemniaki.cebulionwarenext.cracker.CrackManager;
 import ga.ziemniaki.cebulionwarenext.files.FileMananger;
 import ga.ziemniaki.cebulionwarenext.font.Fonts;
 import ga.ziemniaki.cebulionwarenext.framebuffer.FramebufferHandler;
@@ -79,7 +79,7 @@ public class Jigsaw {
 	public static String motd = null;
 	public static boolean devVersion = false;
 	private static String clientName = "Cebulionware.NEXT";
-	private static String clientVersion = "1.12.2>A1";
+	private static String clientVersion = "A2";
 	public static final String fakeClientVersion = "1.12.2-OptiFine_HD_U_C6";
 	public static String serverVersion = null;
 	private static String clientAuthor = "PexorGeng";
@@ -92,7 +92,7 @@ public class Jigsaw {
 	private static ChatMananger chatMananger;
 	private static ModuleGroupMananger moduleGroupMananger;
 	private static CommandManager commandManager;
-	private static CrackManager crackManager;
+//	private static CrackManager crackManager;
 	private static PresetManager presetManager;
 	private static NotificationManager notificationManager;
 	private static AltManager altManager;
@@ -119,7 +119,7 @@ public class Jigsaw {
 	public static final ResourceLocation jigsawTexture512 = new ResourceLocation("jigsaw/jigsaw512.png");
 	public static final ResourceLocation jigsawTexture1024x512 = new ResourceLocation("jigsaw/jigsaw1024x512.png");
 
-	public static final ResourceLocation menuImage = new ResourceLocation("jigsaw/mainmenu.png");
+	public static final ResourceLocation menuImage = new ResourceLocation("jigsaw/mainmenu.jpg");
 
 	private static WaitTimer tpsTimer = new WaitTimer();
 	public static double lastTps = 20.0;
@@ -251,7 +251,7 @@ public class Jigsaw {
 		getFileMananger().loadAlts();
 
 		if (Jigsaw.firstStart) {
-			System.out.println("Jigsaw first start!");
+			System.out.println("Cebulionware.NEXT first start!");
 		}
 
 		ClientSettings.hackerDetectAutoNotify = false;
@@ -464,13 +464,13 @@ public class Jigsaw {
 		return moduleGroupMananger;
 	}
 
-	public static CrackManager getCrackManager() {
+	/*public static CrackManager getCrackManager() {
 		return crackManager;
 	}
 
 	public static void setCrackManager(CrackManager crackManager) {
 		Jigsaw.crackManager = crackManager;
-	}
+	}*/
 
 	public static void onError(Exception e, ErrorState errorState, Module module) {
 		try {
@@ -605,9 +605,9 @@ public class Jigsaw {
 		}
 
 		Utils.updateLastGroundLocation();
-		if (getCrackManager() != null) {
+		/*if (getCrackManager() != null) {
 			getCrackManager().onUpdate();
-		}
+		}*/
 		getUIManager().update();
 		getFramebufferHandler().update();
 		if (!(mc.currentScreen instanceof DisplayClickGui)) {
@@ -647,9 +647,9 @@ public class Jigsaw {
 		if (mc == null) {
 			return;
 		}
-		if (getCrackManager() != null) {
+		/*if (getCrackManager() != null) {
 			getCrackManager().onGui();
-		}
+		}*/
 		// if(getTabGui() != null && !ghostMode && !mc.gameSettings.showDebugInfo) {
 		// getTabGui().render();
 		// }
